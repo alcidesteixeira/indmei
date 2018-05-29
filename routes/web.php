@@ -18,3 +18,12 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+
+//Roles
+Route::get('/roles/list', 'RoleController@index');
+Route::get('/roles/create', 'RoleController@create');
+Route::post('/roles/create', 'RoleController@store');
+Route::get('/roles/edit/{id}', 'RoleController@edit');
+Route::post('/roles/update/{id}', 'RoleController@update');
+Route::get('/roles/delete/{id}', 'RoleController@destroy');
