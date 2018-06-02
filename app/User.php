@@ -27,6 +27,15 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+    /**
+     * Relationship with sample articles
+     */
+    public function sampleArticles()
+    {
+        return $this->hasMany('App\SampleArticle');
+    }
+
+
     public function roles()
     {
         return $this->belongsToMany(Role::class);
@@ -51,7 +60,7 @@ class User extends Authenticatable
      */
     public function hasAnyRole($roles)
     {
-        return null !== $this->roles()->whereIn('name', $roles)->first();
+        return null !== $this->roles()->whereIn('role_id', $roles)->first();
     }
 
     /**
@@ -60,7 +69,7 @@ class User extends Authenticatable
      */
     public function hasRole($role)
     {
-        return null !== $this->roles()->where('name', $role)->first();
+        return null !== $this->roles()->where('role_id', $role)->first();
     }
 
     /**
@@ -77,14 +86,5 @@ class User extends Authenticatable
 
         return $users;
 
-    }
-
-
-    /**
-     * Relationship with sample articles
-     */
-    public function sampleArticles()
-    {
-        return $this->hasMany('App\SampleArticle');
     }
 }

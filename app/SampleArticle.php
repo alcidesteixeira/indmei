@@ -20,9 +20,9 @@ class SampleArticle extends Model
         return $this->belongsTo('App\User');
     }
 
-    public function SampleArticlesStatus()
+    public function sampleArticleStatus()
     {
-        return $this->belongsTo('App\SampleArticlesStatus');
+        return $this->belongsTo('App\SampleArticleStatus');
     }
 
     public function sampleArticleWires()

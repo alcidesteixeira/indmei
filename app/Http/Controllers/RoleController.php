@@ -17,7 +17,7 @@ class RoleController extends Controller
      */
     public function index()
     {
-        Auth::user()->authorizeRoles(['Admin']);
+        Auth::user()->authorizeRoles(['1']);
 
         $roles = Role::all();
 
@@ -31,7 +31,7 @@ class RoleController extends Controller
      */
     public function create()
     {
-        Auth::user()->authorizeRoles(['Admin']);
+        Auth::user()->authorizeRoles(['1']);
 
         return view('roles.create');
     }
@@ -44,7 +44,7 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
-        Auth::user()->authorizeRoles(['Admin']);
+        Auth::user()->authorizeRoles(['1']);
 
         $role= new Role();
         $role->name = $request->get('name');
@@ -64,7 +64,7 @@ class RoleController extends Controller
      */
     public function edit($id)
     {
-        Auth::user()->authorizeRoles(['Admin']);
+        Auth::user()->authorizeRoles(['1']);
 
         $role = Role::find($id);
         return view('roles.create',compact('role','id'));
@@ -79,7 +79,7 @@ class RoleController extends Controller
      */
     public function update(Request $request, $id)
     {
-        Auth::user()->authorizeRoles(['Admin']);
+        Auth::user()->authorizeRoles(['1']);
 
         $role= Role::find($id);
         $role->name = $request->get('name');
@@ -100,7 +100,7 @@ class RoleController extends Controller
      */
     public function destroy($id)
     {
-        Auth::user()->authorizeRoles(['Admin']);
+        Auth::user()->authorizeRoles(['1']);
 
         $role = Role::find($id);
 
@@ -127,7 +127,7 @@ class RoleController extends Controller
     public function attributeRoles ()
     {
 
-        Auth::user()->authorizeRoles(['Admin']);
+        Auth::user()->authorizeRoles(['1']);
 
         $user = new User();
         $users = $user->getAllUser();
@@ -141,7 +141,7 @@ class RoleController extends Controller
     public function editAttributeRoles ($id)
     {
 
-        Auth::user()->authorizeRoles(['Admin']);
+        Auth::user()->authorizeRoles(['1']);
 
         $user = User::find($id);
         $roles = Role::all();
@@ -162,7 +162,7 @@ class RoleController extends Controller
     public function storeAttributeRoles (Request $request, $id)
     {
 
-        Auth::user()->authorizeRoles(['Admin']);
+        Auth::user()->authorizeRoles(['1']);
 
         $user = User::find($id);
         $user->name = $request->get('name');
@@ -192,7 +192,7 @@ class RoleController extends Controller
     public function deleteAttributeRoles($id)
     {
 
-        Auth::user()->authorizeRoles(['Admin']);
+        Auth::user()->authorizeRoles(['1']);
 
         $user = User::find($id);
 

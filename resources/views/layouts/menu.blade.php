@@ -5,7 +5,7 @@
         <li><a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a></li>
         <li><a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a></li>
     @else
-        @if (Auth::user()->hasRole('Admin'))
+        @if (Auth::user()->hasRole('1'))
             <li class="nav-item dropdown">
                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                     Roles <span class="caret"></span>
@@ -17,7 +17,7 @@
                 </div>
             </li>
         @endif
-        @if (Auth::user()->hasAnyRole(['Admin', 'Gestor de Encomenda']))
+        @if (Auth::user()->hasAnyRole(['1', '4']))
                 <li class="nav-item dropdown">
                     <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                         Encomendas <span class="caret"></span>
@@ -28,7 +28,7 @@
                     </div>
                 </li>
         @endif
-        @if (Auth::user()->hasAnyRole(['Admin', 'Gestor de Armazém']))
+        @if (Auth::user()->hasAnyRole(['1', '5']))
             <li class="nav-item dropdown">
                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                     Armazém <span class="caret"></span>
@@ -41,18 +41,18 @@
                 </div>
             </li>
         @endif
-        @if (Auth::user()->hasAnyRole(['Admin', 'Gestor de Artigo']))
+        @if (Auth::user()->hasAnyRole(['1', '3']))
             <li class="nav-item dropdown">
                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                    Artigo <span class="caret"></span>
+                    Gestão de Amostra de Artigos <span class="caret"></span>
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="{{ url('roles/create') }}">Criar Novo Artigo</a>
-                    <a class="dropdown-item" href="{{ url('roles/list') }}">Listar Artigos</a>
+                    <a class="dropdown-item" href="{{ url('samples/create') }}">Criar Nova Amostra de Artigo</a>
+                    <a class="dropdown-item" href="{{ url('samples/list') }}">Listar Amostras de Artigos</a>
                 </div>
             </li>
         @endif
-        @if (Auth::user()->hasAnyRole(['Admin', 'Operário']))
+        @if (Auth::user()->hasAnyRole(['1', '6']))
             <li class="nav-item dropdown">
                 <a id="navbarDropdown" class="nav-link" href="{{ url('roles/create') }}" role="button" aria-haspopup="true" aria-expanded="false" v-pre>
                     Listar Encomendas </span>

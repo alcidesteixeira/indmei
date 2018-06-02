@@ -14,82 +14,82 @@ class SampleArticleColorTableSeeder extends Seeder
     {
         $wireColor = new SampleArticleColor();
         $wireColor->wire_id = '1';
-        $wireColor->color = 'pt101e';
+        $wireColor->wire_color = 'pt101e';
         $wireColor->save();
 
         $wireColor = new SampleArticleColor();
         $wireColor->wire_id = '1';
-        $wireColor->wire_id = 'az3505f';
+        $wireColor->wire_color = 'az3505f';
         $wireColor->save();
 
         $wireColor = new SampleArticleColor();
         $wireColor->wire_id = '1';
-        $wireColor->wire_id = 'az3505f';
+        $wireColor->wire_color = 'az3505f';
         $wireColor->save();
 
         $wireColor = new SampleArticleColor();
         $wireColor->wire_id = '1';
-        $wireColor->wire_id = 'az3505f';
+        $wireColor->wire_color = 'az3505f';
         $wireColor->save();
 
         $wireColor = new SampleArticleColor();
         $wireColor->wire_id = '2';
-        $wireColor->color = 'pt101e';
+        $wireColor->wire_color = 'pt101e';
         $wireColor->save();
 
         $wireColor = new SampleArticleColor();
         $wireColor->wire_id = '2';
-        $wireColor->wire_id = 'az3505f';
+        $wireColor->wire_color = 'az3505f';
         $wireColor->save();
 
         $wireColor = new SampleArticleColor();
         $wireColor->wire_id = '2';
-        $wireColor->wire_id = 'az3505f';
+        $wireColor->wire_color = 'az3505f';
         $wireColor->save();
 
         $wireColor = new SampleArticleColor();
         $wireColor->wire_id = '2';
-        $wireColor->wire_id = 'az3505f';
+        $wireColor->wire_color = 'az3505f';
         $wireColor->save();
 
         $wireColor = new SampleArticleColor();
         $wireColor->wire_id = '3';
-        $wireColor->color = 'pt101e';
+        $wireColor->wire_color = 'pt101e';
         $wireColor->save();
 
         $wireColor = new SampleArticleColor();
         $wireColor->wire_id = '3';
-        $wireColor->wire_id = 'az3505f';
+        $wireColor->wire_color = 'az3505f';
         $wireColor->save();
 
         $wireColor = new SampleArticleColor();
         $wireColor->wire_id = '3';
-        $wireColor->wire_id = 'az3505f';
+        $wireColor->wire_color = 'az3505f';
         $wireColor->save();
 
         $wireColor = new SampleArticleColor();
         $wireColor->wire_id = '3';
-        $wireColor->wire_id = 'az3505f';
+        $wireColor->wire_color = 'az3505f';
         $wireColor->save();
 
         $wireColor = new SampleArticleColor();
         $wireColor->wire_id = '4';
-        $wireColor->color = 'pt101e';
+        $wireColor->wire_color = 'pt101e';
         $wireColor->save();
 
         $wireColor = new SampleArticleColor();
         $wireColor->wire_id = '4';
-        $wireColor->wire_id = 'az3505f';
+        $wireColor->wire_color = 'az3505f';
         $wireColor->save();
 
         $wireColor = new SampleArticleColor();
         $wireColor->wire_id = '4';
-        $wireColor->wire_id = 'az3505f';
+        $wireColor->wire_color = 'az3505f';
         $wireColor->save();
 
         $wireColor = new SampleArticleColor();
         $wireColor->wire_id = '4';
-        $wireColor->wire_id = 'az3505f';
+        $wireColor->wire_color = 'az3505f';
         $wireColor->save();
     }
 }

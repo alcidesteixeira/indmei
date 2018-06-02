@@ -12,7 +12,7 @@ class SampleArticleStatus extends Model
      * @var array
      */
     protected $fillable = [
-        'id', 'status'
+        'id', 'status',
     ];
 
     /**

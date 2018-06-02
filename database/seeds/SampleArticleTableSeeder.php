@@ -17,7 +17,7 @@ class SampleArticleTableSeeder extends Seeder
         $sampleArticle->reference = '5866';
         $sampleArticle->description = 'Meia de trail';
         $sampleArticle->image_url = 'meia_trai.jpg';
-        $sampleArticle->status_id = '1';
+        $sampleArticle->sample_article_status_id = '1';
         $sampleArticle->pe = '33';
         $sampleArticle->perna = '40';
         $sampleArticle->punho = '9,5';

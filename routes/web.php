@@ -28,8 +28,16 @@ Route::get('/roles/edit/{id}', 'RoleController@edit');
 Route::post('/roles/update/{id}', 'RoleController@update');
 Route::get('/roles/delete/{id}', 'RoleController@destroy');
 
-
 Route::get('/roles/attribute', 'RoleController@attributeRoles');
 Route::get('/roles/attribute/edit/{id}', 'RoleController@editAttributeRoles');
 Route::post('/roles/attribute/edit/{id}', 'RoleController@storeAttributeRoles');
 Route::get('/roles/attribute/delete/{id}', 'RoleController@deleteAttributeRoles');
+
+
+//SampleArticles
+Route::get('/samples/list', 'SampleArticleController@index');
+Route::get('/samples/create', 'SampleArticleController@create');
+Route::post('/samples/create', 'SampleArticleController@store');
+Route::get('/samples/edit/{id}', 'SampleArticleController@edit');
+Route::post('/samples/update/{id}', 'SampleArticleController@update');
+Route::get('/samples/delete/{id}', 'SampleArticleController@destroy');

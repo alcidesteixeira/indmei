@@ -5,6 +5,8 @@
 <div class="container">
     @include('flash::message')
 
+
+
     <h2>Lista de Roles disponíveis</h2>
     <table class="table table-striped thead-dark">
         <thead>
