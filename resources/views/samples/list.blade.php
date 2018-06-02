@@ -68,6 +68,13 @@
     <script>
 
         $( document ).ready( function () {
+            //Filter and order table
+            $('table').DataTable({
+                columnDefs: [ { orderable: false, targets: [-1, -2] } ],
+                "pageLength": 25
+            });
+
+
             $('.apagarform').click(function() {
                 let id = $( this ).data('id');
                 let name = $( this ).data('role');

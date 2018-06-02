@@ -11,6 +11,11 @@ class SampleArticlesWire extends Model
         return $this->belongsTo('App\SampleArticle');
     }
 
+    public function warehouseProduct()
+    {
+        return $this->belongsTo('App\WarehouseProduct');
+    }
+
     public function wireColors()
     {
         return $this->hasMany('App\SampleArticleColor');

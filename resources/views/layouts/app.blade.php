@@ -62,12 +62,6 @@
 <script>
 
     $( document ).ready( function () {
-
-        $('table').DataTable({
-            columnDefs: [ { orderable: false, targets: [-1, -2] } ],
-            "pageLength": 25
-        });
-
         $('div.alert').delay(3000).fadeOut(350);
     });
 

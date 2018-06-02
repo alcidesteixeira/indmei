@@ -81,13 +81,15 @@
                                 @endforeach
                             </select>
                         </td>
-                        <td><input type="text" id="row-{{$i}}-grams" name="row-{{$i}}-grams" value="">
+                        <td><input type="text" id="row-{{$i}}-grams" name="row-{{$i}}-grams" value="" required>
                         </td>
                         <td>
                             <select size="1" id="row-{{$i}}-reference" name="row-{{$i}}-reference">
-                                <option value="Edinburgh" selected="selected">
-                                    Edinburgh
+                                @foreach($warehouseProducts as $product)
+                                <option value="{{$product->id}}" selected="selected">
+                                    {{$product->reference}}
                                 </option>
+                                @endforeach
                             </select>
                         </td>
                         <td>
@@ -126,11 +128,26 @@
             <div class="row">
                 <div class="col-md-3"></div>
                 <div class="submit-buttons form-group col-md-6" style="margin-top:60px">
-                    <button type="submit" class="btn btn-success">{{@$sampleArticle->name ? 'Atualizar' : 'Criar'}}</button>
+                    <button type="submit" onclick="beforeInput();" class="btn btn-success">{{@$sampleArticle->name ? 'Atualizar' : 'Criar'}}</button>
                     <button type="button" onclick="window.history.back();" class="btn btn-info">Voltar</button>
                 </div>
             </div>
         </form>
     </div>
+
+
+    <script>
+        //Filter and order table
+        $('table').DataTable({
+            "ordering": false,
+            "pageLength": 25
+        });
+
+        function beforeInput () {
+            let rowCount = $('table tr').length - 1;
+            $("form").append('<input type="hidden" name="rowCount" value="'+rowCount+'">');
+        }
+
+    </script>
 
 @endsection

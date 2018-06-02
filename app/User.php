@@ -35,6 +35,14 @@ class User extends Authenticatable
         return $this->hasMany('App\SampleArticle');
     }
 
+    /**
+     * Relationship with WarehouseProduct
+     */
+    public function warehouseProducts()
+    {
+        return $this->hasMany('App\WarehouseProduct');
+    }
+
 
     public function roles()
     {
