@@ -78,4 +78,13 @@ class User extends Authenticatable
         return $users;
 
     }
+
+
+    /**
+     * Relationship with sample articles
+     */
+    public function sampleArticles()
+    {
+        return $this->hasMany('App\SampleArticle');
+    }
 }
