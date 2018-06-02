@@ -39,10 +39,10 @@ class User extends Authenticatable
     {
         if (is_array($roles)) {
             return $this->hasAnyRole($roles) ||
-                abort(401, 'This action is unauthorized.');
+                abort(401, 'O seu Role não permite aceder a esta área.');
         }
         return $this->hasRole($roles) ||
-            abort(401, 'This action is unauthorized.');
+            abort(401, 'O seu Role não permite aceder a esta área.');
     }
 
     /**
@@ -61,5 +61,21 @@ class User extends Authenticatable
     public function hasRole($role)
     {
         return null !== $this->roles()->where('name', $role)->first();
+    }
+
+    /**
+     * Get users and Roles associated
+     */
+    public function getAllUser() {
+
+        $users = User::all();
+        //dd($users);
+
+        foreach ($users as $user) {
+            $roles = User::find(1)->roles()->orderBy('name')->get();
+        }
+
+        return $users;
+
     }
 }

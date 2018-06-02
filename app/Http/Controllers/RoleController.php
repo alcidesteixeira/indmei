@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use Illuminate\Http\Request;
 use App\Role;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class RoleController extends Controller
 {
@@ -15,6 +17,8 @@ class RoleController extends Controller
      */
     public function index()
     {
+        Auth::user()->authorizeRoles(['Admin']);
+
         $roles = Role::all();
 
         return view('roles.list', compact('roles'));
@@ -27,6 +31,8 @@ class RoleController extends Controller
      */
     public function create()
     {
+        Auth::user()->authorizeRoles(['Admin']);
+
         return view('roles.create');
     }
 
@@ -38,6 +44,7 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
+        Auth::user()->authorizeRoles(['Admin']);
 
         $role= new Role();
         $role->name = $request->get('name');
@@ -57,6 +64,8 @@ class RoleController extends Controller
      */
     public function edit($id)
     {
+        Auth::user()->authorizeRoles(['Admin']);
+
         $role = Role::find($id);
         return view('roles.create',compact('role','id'));
     }
@@ -70,6 +79,8 @@ class RoleController extends Controller
      */
     public function update(Request $request, $id)
     {
+        Auth::user()->authorizeRoles(['Admin']);
+
         $role= Role::find($id);
         $role->name = $request->get('name');
         $role->description = $request->get('description');
@@ -89,6 +100,8 @@ class RoleController extends Controller
      */
     public function destroy($id)
     {
+        Auth::user()->authorizeRoles(['Admin']);
+
         $role = Role::find($id);
 
         $usersWithThisRole = Role::find($id)->users()->first();
@@ -106,5 +119,89 @@ class RoleController extends Controller
         }
 
         return redirect()->action('RoleController@index');
+    }
+
+    /**
+     * Get users and roles associated
+     */
+    public function attributeRoles ()
+    {
+
+        Auth::user()->authorizeRoles(['Admin']);
+
+        $user = new User();
+        $users = $user->getAllUser();
+
+        return view('roles.attribute_roles',compact('users', 'roles'));
+    }
+
+    /**
+     * Edit user and attributed roles
+     */
+    public function editAttributeRoles ($id)
+    {
+
+        Auth::user()->authorizeRoles(['Admin']);
+
+        $user = User::find($id);
+        $roles = Role::all();
+
+        $rolesFromUser = $user->roles()->get();
+        $userRoles = [];
+        foreach ($rolesFromUser as $role) {
+            array_push($userRoles, $role->id);
+        }
+
+        return view('roles.edit_attributes',compact('user', 'roles', 'userRoles'));
+
+    }
+
+    /**
+     * Store user and attributed roles
+     */
+    public function storeAttributeRoles (Request $request, $id)
+    {
+
+        Auth::user()->authorizeRoles(['Admin']);
+
+        $user = User::find($id);
+        $user->name = $request->get('name');
+        $user->email = $request->get('email');
+        $user->updated_at = Carbon::now('Europe/Lisbon');
+        $user->save();
+
+        $countRoles = count(Role::all());
+        $user->roles()->detach();
+        for($i = 1; $i <= $countRoles; $i ++) {
+            if($request->$i) {
+                $user->roles()->attach(Role::where('id', $i)->first());
+            }
+            else {
+                $user->roles()->detach(Role::where('id', $i)->first());
+            }
+        }
+        flash('O utilizador '. $user->name . ' foi atualizado com sucesso!')->success();
+
+
+        return redirect()->action('RoleController@attributeRoles');
+    }
+
+    /**
+     * Delete User
+     */
+    public function deleteAttributeRoles($id)
+    {
+
+        Auth::user()->authorizeRoles(['Admin']);
+
+        $user = User::find($id);
+
+        $user->roles()->detach();
+
+        $user->delete();
+
+        flash('O Utilizador '. $user->name . ' foi eliminado com sucesso!')->success();
+
+        return redirect()->action('RoleController@attributeRoles');
     }
 }
