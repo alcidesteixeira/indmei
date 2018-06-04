@@ -14,4 +14,9 @@ class WarehouseProduct extends Model
     {
         return $this->hasMany('App\SampleArticleWire');
     }
+
+    public function warehouseProductSpecs()
+    {
+        return $this->hasMany('App\WarehouseProductSpec');
+    }
 }

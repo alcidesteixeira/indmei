@@ -15,22 +15,16 @@ class WarehouseProductsTableSeeder extends Seeder
         $warehouseProduct = new WarehouseProduct();
         $warehouseProduct->user_id = '1';
         $warehouseProduct->reference = 'e22pa78/1';
-        $warehouseProduct->color = 'pt101e';
-        $warehouseProduct->weight = '2000';
         $warehouseProduct->save();
 
         $warehouseProduct = new WarehouseProduct();
         $warehouseProduct->user_id = '1';
-        $warehouseProduct->reference = 'e22pa78/1';
-        $warehouseProduct->color = 'az3505f';
-        $warehouseProduct->weight = '1000';
+        $warehouseProduct->reference = 'e22abcdef/1';
         $warehouseProduct->save();
 
         $warehouseProduct = new WarehouseProduct();
         $warehouseProduct->user_id = '1';
         $warehouseProduct->reference = 'nylom70/1';
-        $warehouseProduct->color = 'pt101e';
-        $warehouseProduct->weight = '2500';
         $warehouseProduct->save();
 
 

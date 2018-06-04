@@ -15,8 +15,8 @@ class CreateSampleArticleColorsTable extends Migration
     {
         Schema::create('sample_article_colors', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('wire_id');
-            $table->string('wire_color');
+            $table->string('sample_articles_wire_id');
+            $table->string('warehouse_product_spec_id');
             $table->timestamps();
         });
     }

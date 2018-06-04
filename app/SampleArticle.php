@@ -27,6 +27,6 @@ class SampleArticle extends Model
 
     public function sampleArticleWires()
     {
-        return $this->hasMany('App\SampleArticleWire');
+        return $this->hasMany('App\SampleArticlesWire');
     }
 }

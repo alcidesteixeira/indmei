@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\SampleArticle;
+use App\SampleArticleColor;
 use App\SampleArticleStep;
 use App\SampleArticlesWire;
 use App\WarehouseProduct;
@@ -36,7 +37,7 @@ class SampleArticleController extends Controller
 
         $steps = SampleArticleStep::all();
 
-        $warehouseProducts = WarehouseProduct::groupBy('reference')->get();
+        $warehouseProducts = WarehouseProduct::all();
 
         return view('samples.create', compact('steps', 'warehouseProducts'));
     }
@@ -51,56 +52,52 @@ class SampleArticleController extends Controller
     {
         Auth::user()->authorizeRoles(['1', '3']);
 
-        dd($request->all());
+        //dd($request->all());
 
         //Store on SampleArticle Class
         $sampleArticle= new SampleArticle();
         $sampleArticle->user_id = Auth::id();
-        $sampleArticle->reference = $request->get('reference');
-        $sampleArticle->description = $request->get('description');
-        $sampleArticle->image_url = $request->get('image_url');
-        $sampleArticle->sample_article_status_id = $request->get('sample_article_status_id');
-        $sampleArticle->pe = $request->get('pe');
-        $sampleArticle->perna = $request->get('perna');
-        $sampleArticle->punho = $request->get('punho');
-        $sampleArticle->malha = $request->get('malha');
-        $sampleArticle->maq = $request->get('maq');
-        $sampleArticle->forma = $request->get('forma');
+        $sampleArticle->reference = $request->reference;
+        $sampleArticle->description = $request->description;
+        $sampleArticle->image_url = $request->image_url;
+        $sampleArticle->sample_article_status_id = $request->status_id;
+        $sampleArticle->pe = $request->pe;
+        $sampleArticle->perna = $request->perna;
+        $sampleArticle->punho = $request->punho;
+        $sampleArticle->malha = $request->malha;
+        $sampleArticle->maq = $request->maq;
+        $sampleArticle->forma = $request->forma;
         $sampleArticle->save();
 
         //Store on SampleArticleWire Class
+        //Run for each row of the table
         for($i = 1; $i <= $request->rowCount; $i++) {
             $step = 'row-'.$i.'-step';
-            $step = 'row-'.$i.'-step';
+            $grams = 'row-'.$i.'-grams';
+            $reference = 'row-'.$i.'-reference';
+
             $wire = new sampleArticlesWire();
             $wire->sample_article_id = $sampleArticle->id;
-            $wire->step_id = $sampleArticle->$step;
+            $wire->step_id = $request->$step;
+            $wire->warehouse_product_id = $request->$reference;
+            $wire->grams = $request->$grams;
+            $wire->save();
 
+            //Store on SampleArticleColor Class
+            //Run for the different number of colors
+            for($j = 1; $j <= $request->colorsCount; $j++) {
+                $colorFromWarehouse = 'row-'.$i.'-color'.$j;
+                $wireColor = new sampleArticleColor();
+                $wireColor->sample_articles_wire_id = $wire->id;
+                $wireColor->warehouse_product_spec_id = $request->$colorFromWarehouse;
+                $wireColor->save();
+            }
         }
 
-
-
-        //Store on SampleArticleColor Class
-
-
-
-
-
-        flash('Amostra de Artigo com a referência '. $sampleArticle->reference . ' foi criada com sucesso!')->success();
+        flash('Amostra de Artigo com a referência: '. $sampleArticle->reference . ', e descrição: '. $sampleArticle->description .' foi criada com sucesso!')->success();
 
         return redirect()->action('SampleArticleController@index');
 
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
     }
 
     /**
@@ -111,7 +108,18 @@ class SampleArticleController extends Controller
      */
     public function edit($id)
     {
-        //
+        Auth::user()->authorizeRoles(['1', '3']);
+
+        $sampleArticle = SampleArticle::find($id);
+
+        $steps = SampleArticleStep::all();
+
+        $warehouseProducts = WarehouseProduct::all();
+
+//        dd($sampleArticle->sampleArticleWires()->get()->values()->get(2)->warehouse_product_id);
+        dd($sampleArticle->sampleArticleWires()->get()->values()->get(2)->warehouseProduct->warehouseProductSpecs()->get());
+
+        return view('samples.create', compact('sampleArticle', 'steps', 'warehouseProducts', 'id'));
     }
 
     /**

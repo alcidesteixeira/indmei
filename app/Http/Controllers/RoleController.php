@@ -67,7 +67,7 @@ class RoleController extends Controller
         Auth::user()->authorizeRoles(['1']);
 
         $role = Role::find($id);
-        return view('roles.create',compact('role','id'));
+        return view('roles.create', compact('role','id'));
     }
 
     /**

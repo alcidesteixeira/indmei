@@ -2,9 +2,15 @@
 
 @section('content')
     <div class="container">
-        <h2>{{@$sampleArticle->name ? 'Atualizar Amostra de Artigo' : 'Criar Nova Amostra de Artigo'}}</h2><br/>
+        <h2>{{@$sampleArticle->reference ? 'Atualizar Amostra de Artigo' : 'Criar Nova Amostra de Artigo'}}</h2><br/>
         <form method="post" action="{{@$sampleArticle->name ? url('samples/update/'.$sampleArticle->id) : url('samples/create')}}" enctype="multipart/form-data">
             @csrf
+            <div class="row">
+                <div class="form-group col-md-3">
+                    <label for="Status">Status:</label>
+                    <input type="text" class="form-control" name="status_id" value="{{@$sampleArticle->sample_article_status_id}}" required>
+                </div>
+            </div>
             <div class="row">
                 <div class="col-md-3"></div>
                 <div class="form-group col-md-3">
@@ -20,7 +26,7 @@
                 <div class="col-md-3"></div>
                 <div class="form-group col-md-3">
                     <label for="Image">Imagem:</label>
-                    <input type="text" class="form-control" name="image" value="{{@$sampleArticle->image_url}}" required>
+                    <input type="text" class="form-control" name="image_url" value="{{@$sampleArticle->image_url}}" required>
                 </div>
             </div>
             <div class="row">
@@ -73,7 +79,8 @@
                 <tbody>
                 @for($i = 1; $i <= sizeof($steps); $i++)
                     <tr>
-                        <td><select size="1" id="row-{{$i}}-step" name="row-{{$i}}-step">
+                        <td>
+                            <select size="1" id="row-{{$i}}-step" name="row-{{$i}}-step">
                                 @foreach($steps as $step)
                                 <option value="{{$step->id}}" {{$step->id == $i ? 'selected' : ''}}>
                                     {{$step->step}}
@@ -81,12 +88,13 @@
                                 @endforeach
                             </select>
                         </td>
-                        <td><input type="text" id="row-{{$i}}-grams" name="row-{{$i}}-grams" value="" required>
+                        <td>
+                            <input type="text" id="row-{{$i}}-grams" name="row-{{$i}}-grams" value="{{@$sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->grams}}" required>
                         </td>
                         <td>
                             <select size="1" id="row-{{$i}}-reference" name="row-{{$i}}-reference">
                                 @foreach($warehouseProducts as $product)
-                                <option value="{{$product->id}}" selected="selected">
+                                <option value="{{$product->id}}" {{$product->id == @$sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->warehouse_product_id ? 'selected' : ''}}>
                                     {{$product->reference}}
                                 </option>
                                 @endforeach
@@ -128,7 +136,7 @@
             <div class="row">
                 <div class="col-md-3"></div>
                 <div class="submit-buttons form-group col-md-6" style="margin-top:60px">
-                    <button type="submit" onclick="beforeInput();" class="btn btn-success">{{@$sampleArticle->name ? 'Atualizar' : 'Criar'}}</button>
+                    <button type="submit" onclick="beforeInput();" class="btn btn-success">{{@$sampleArticle->reference ? 'Atualizar' : 'Criar'}}</button>
                     <button type="button" onclick="window.history.back();" class="btn btn-info">Voltar</button>
                 </div>
             </div>
@@ -145,7 +153,9 @@
 
         function beforeInput () {
             let rowCount = $('table tr').length - 1;
-            $("form").append('<input type="hidden" name="rowCount" value="'+rowCount+'">');
+            let colorsCount = $('table tr th').length - 3;
+            $("form").append('<input type="hidden" name="rowCount" value="'+rowCount+'">' +
+                '<input type="hidden" name="colorsCount" value="'+colorsCount+'">');
         }
 
     </script>
