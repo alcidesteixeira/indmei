@@ -3,7 +3,7 @@
 @section('content')
     <div class="container">
         <h2>{{@$sampleArticle->reference ? 'Atualizar Amostra de Artigo' : 'Criar Nova Amostra de Artigo'}}</h2><br/>
-        <form method="post" action="{{@$sampleArticle->name ? url('samples/update/'.$sampleArticle->id) : url('samples/create')}}" enctype="multipart/form-data">
+        <form method="post" action="{{@$sampleArticle->reference ? url('samples/update/'.$sampleArticle->id) : url('samples/create')}}" enctype="multipart/form-data">
             @csrf
             <div class="row">
                 <div class="form-group col-md-3">
@@ -89,42 +89,91 @@
                             </select>
                         </td>
                         <td>
-                            <input type="text" id="row-{{$i}}-grams" name="row-{{$i}}-grams" value="{{@$sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->grams}}" required>
+                            <input type="text" id="row-{{$i}}-grams" name="row-{{$i}}-grams" value="{{@$sampleArticle && $sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->grams ?
+                            $sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->grams : ''}}" required>
                         </td>
                         <td>
-                            <select size="1" id="row-{{$i}}-reference" name="row-{{$i}}-reference">
+                            <select size="1" class="referenceChanged" data-row="{{$i}}" id="row-{{$i}}-reference" name="row-{{$i}}-reference">
                                 @foreach($warehouseProducts as $product)
-                                <option value="{{$product->id}}" {{$product->id == @$sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->warehouse_product_id ? 'selected' : ''}}>
-                                    {{$product->reference}}
+                                <option value="{{@$product->id}}" {{@$sampleArticle && $product->id == $sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->warehouse_product_id ? 'selected' : ''}}>
+                                    {{@$product->reference}}
                                 </option>
                                 @endforeach
                             </select>
                         </td>
                         <td>
                             <select size="1" id="row-{{$i}}-color1" name="row-{{$i}}-color1">
-                                <option value="Edinburgh" selected="selected">
-                                    Edinburgh
-                                </option>
+                                @if(@$sampleArticle)
+                                    @foreach(@$sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->warehouseProduct->warehouseProductSpecs()->get() as $wireSpecs)
+                                    <option value="{{$wireSpecs->id}}"
+                                            {{$wireSpecs->id == $sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->wireColors()->get()->values()->get(0)->warehouse_product_spec_id
+                                            ? 'selected' : ''}}>
+                                        {{$wireSpecs->color}}
+                                    </option>
+                                    @endforeach
+                                @else
+                                    @foreach(@$warehouseFirstWireSpecs as $firstWireSpecs)
+                                        <option value="{{$firstWireSpecs->id}}">
+                                            {{$firstWireSpecs->color}}
+                                        </option>
+                                    @endforeach
+                                @endif
                             </select>
                         </td>
                         <td>
                             <select size="1" id="row-{{$i}}-color2" name="row-{{$i}}-color2">
-                                <option value="Edinburgh" selected="selected">
-                                    Edinburgh
-                                </option>
+                                @if(@$sampleArticle)
+                                    @foreach(@$sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->warehouseProduct->warehouseProductSpecs()->get() as $wireSpecs)
+                                        <option value="{{$wireSpecs->id}}"
+                                        {{$wireSpecs->id == $sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->wireColors()->get()->values()->get(1)->warehouse_product_spec_id
+                                        ? 'selected' : ''}}>
+                                            {{$wireSpecs->color}}
+                                        </option>
+                                    @endforeach
+                                @else
+                                    @foreach(@$warehouseFirstWireSpecs as $firstWireSpecs)
+                                        <option value="{{$firstWireSpecs->id}}">
+                                            {{$firstWireSpecs->color}}
+                                        </option>
+                                    @endforeach
+                                @endif
                             </select></td>
                         <td>
                             <select size="1" id="row-{{$i}}-color3" name="row-{{$i}}-color3">
-                                <option value="Edinburgh" selected="selected">
-                                    Edinburgh
-                                </option>
+                                @if(@$sampleArticle)
+                                    @foreach(@$sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->warehouseProduct->warehouseProductSpecs()->get() as $wireSpecs)
+                                        <option value="{{$wireSpecs->id}}"
+                                        {{$wireSpecs->id == $sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->wireColors()->get()->values()->get(2)->warehouse_product_spec_id
+                                        ? 'selected' : ''}}>
+                                            {{$wireSpecs->color}}
+                                        </option>
+                                    @endforeach
+                                @else
+                                    @foreach(@$warehouseFirstWireSpecs as $firstWireSpecs)
+                                        <option value="{{$firstWireSpecs->id}}">
+                                            {{$firstWireSpecs->color}}
+                                        </option>
+                                    @endforeach
+                                @endif
                             </select>
                         </td>
                         <td>
                             <select size="1" id="row-{{$i}}-color4" name="row-{{$i}}-color4">
-                                <option value="Edinburgh" selected="selected">
-                                    Edinburgh
-                                </option>
+                                @if(@$sampleArticle)
+                                    @foreach(@$sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->warehouseProduct->warehouseProductSpecs()->get() as $wireSpecs)
+                                        <option value="{{$wireSpecs->id}}"
+                                        {{$wireSpecs->id == $sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->wireColors()->get()->values()->get(3)->warehouse_product_spec_id
+                                        ? 'selected' : ''}}>
+                                            {{$wireSpecs->color}}
+                                        </option>
+                                    @endforeach
+                                @else
+                                    @foreach(@$warehouseFirstWireSpecs as $firstWireSpecs)
+                                        <option value="{{$firstWireSpecs->id}}">
+                                            {{$firstWireSpecs->color}}
+                                        </option>
+                                    @endforeach
+                                @endif
                             </select>
                         </td>
                     </tr>
@@ -151,12 +200,28 @@
             "pageLength": 25
         });
 
-        function beforeInput () {
+        function beforeInput ()
+        {
             let rowCount = $('table tr').length - 1;
             let colorsCount = $('table tr th').length - 3;
             $("form").append('<input type="hidden" name="rowCount" value="'+rowCount+'">' +
                 '<input type="hidden" name="colorsCount" value="'+colorsCount+'">');
         }
+
+        //Whenever user changes wire, queries database to output correct wire colors
+        $(" .referenceChanged ").change( function () {
+            let wireSelectedId = $( ' option:selected', this).val();
+            let rowSelected = $( this ).data('row');
+            $.ajax({
+                url: "/samples/updatewirespecs/"+wireSelectedId,
+                success: function(result){
+                    $( "#row-"+rowSelected+"-color1, #row-"+rowSelected+"-color2, #row-"+rowSelected+"-color3, #row-"+rowSelected+"-color4").empty();
+                    $.each(result, function (key, value) {
+                        $( "#row-"+rowSelected+"-color1, #row-"+rowSelected+"-color2, #row-"+rowSelected+"-color3, #row-"+rowSelected+"-color4")
+                            .append('<option value="'+key+'">'+value+'</option>');
+                    });
+                }});
+        });
 
     </script>
 

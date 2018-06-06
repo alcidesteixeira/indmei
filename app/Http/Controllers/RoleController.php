@@ -82,8 +82,8 @@ class RoleController extends Controller
         Auth::user()->authorizeRoles(['1']);
 
         $role= Role::find($id);
-        $role->name = $request->get('name');
-        $role->description = $request->get('description');
+        $role->name = $request->name;
+        $role->description = $request->description;
         $role->updated_at = Carbon::now('Europe/Lisbon');
         $role->save();
 
@@ -165,8 +165,8 @@ class RoleController extends Controller
         Auth::user()->authorizeRoles(['1']);
 
         $user = User::find($id);
-        $user->name = $request->get('name');
-        $user->email = $request->get('email');
+        $user->name = $request->name;
+        $user->email = $request->email;
         $user->updated_at = Carbon::now('Europe/Lisbon');
         $user->save();
 

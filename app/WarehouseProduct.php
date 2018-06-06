@@ -6,8 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class WarehouseProduct extends Model
 {
-    public function user () {
-        $this->belongsTo('App\User');
+    public function user()
+    {
+        return $this->belongsTo('App\User');
     }
 
     public function sampleArticleWires()

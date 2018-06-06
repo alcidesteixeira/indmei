@@ -62,7 +62,7 @@
 <script>
 
     $( document ).ready( function () {
-        $('div.alert').delay(3000).fadeOut(350);
+        $('div.alert').delay(10000).fadeOut(350);
     });
 
 </script>
