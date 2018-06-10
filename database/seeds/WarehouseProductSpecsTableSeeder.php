@@ -15,52 +15,61 @@ class WarehouseProductSpecsTableSeeder extends Seeder
         $warehouseProduct = new WarehouseProductSpec();
         $warehouseProduct->warehouse_product_id = '1';
         $warehouseProduct->color = 'pt101e1';
+        $warehouseProduct->description = 'description abc';
         $warehouseProduct->weight = '2000';
         $warehouseProduct->save();
 
         $warehouseProduct = new WarehouseProductSpec();
         $warehouseProduct->warehouse_product_id = '1';
         $warehouseProduct->color = 'az3505f1';
+        $warehouseProduct->description = 'description abc';
         $warehouseProduct->weight = '1000';
         $warehouseProduct->save();
 
         $warehouseProduct = new WarehouseProductSpec();
         $warehouseProduct->warehouse_product_id = '1';
         $warehouseProduct->color = 'pt101f1';
+        $warehouseProduct->description = 'description abc';
         $warehouseProduct->weight = '2500';
         $warehouseProduct->save();
         $warehouseProduct = new WarehouseProductSpec();
         $warehouseProduct->warehouse_product_id = '2';
         $warehouseProduct->color = 'pt101e2';
+        $warehouseProduct->description = 'description abc';
         $warehouseProduct->weight = '2000';
         $warehouseProduct->save();
 
         $warehouseProduct = new WarehouseProductSpec();
         $warehouseProduct->warehouse_product_id = '2';
         $warehouseProduct->color = 'az3505f2';
+        $warehouseProduct->description = 'description abc';
         $warehouseProduct->weight = '1000';
         $warehouseProduct->save();
 
         $warehouseProduct = new WarehouseProductSpec();
         $warehouseProduct->warehouse_product_id = '2';
         $warehouseProduct->color = 'pt101f2';
+        $warehouseProduct->description = 'description abc';
         $warehouseProduct->weight = '2500';
         $warehouseProduct->save();
         $warehouseProduct = new WarehouseProductSpec();
         $warehouseProduct->warehouse_product_id = '3';
         $warehouseProduct->color = 'pt101e3';
+        $warehouseProduct->description = 'description abc';
         $warehouseProduct->weight = '2000';
         $warehouseProduct->save();
 
         $warehouseProduct = new WarehouseProductSpec();
         $warehouseProduct->warehouse_product_id = '3';
         $warehouseProduct->color = 'az3505f3';
+        $warehouseProduct->description = 'description abc';
         $warehouseProduct->weight = '1000';
         $warehouseProduct->save();
 
         $warehouseProduct = new WarehouseProductSpec();
         $warehouseProduct->warehouse_product_id = '3';
         $warehouseProduct->color = 'pt101f3';
+        $warehouseProduct->description = 'description abc';
         $warehouseProduct->weight = '2500';
         $warehouseProduct->save();
     }

@@ -6,13 +6,14 @@
         @include('flash::message')
 
         <h2>Stock de produtos disponíveis</h2>
-        <table class="table table-striped thead-dark">
+        <table class="table table-striped thead-dark" id="stock">
             <thead>
             <tr>
                 <th>Referencia</th>
                 <th>Cor</th>
                 <th>Quantidade (gramas)</th>
                 <th>Atualizado Por</th>
+                <th>Descrição</th>
                 <th>Última Atualização</th>
                 <th></th>
                 <th></th>
@@ -25,14 +26,53 @@
                     <td>{{$product->color}}</td>
                     <td>{{$product->weight}}</td>
                     <td>{{$product->product->user->name}}</td>
+                    <td>{{$product->description}}</td>
                     <td>{{$product->updated_at}}</td>
                     <td>
-                        <form method="get" action="{{url('samples/edit/'.$product->id)}}" enctype="multipart/form-data">
+                        <form method="get" action="{{url('stock/edit/'.$product->id)}}" enctype="multipart/form-data">
                             <button type="submit" class="btn btn-warning">Editar</button>
                         </form>
                     </td>
                     <td>
-                        <button type="button" data-id="{{$product->id}}" data-role="{{$product->reference}}"  class="apagarform btn btn-danger">Apagar</button>
+                        <button type="button" data-id="{{$product->id}}" data-role="{{$product->product->reference}}"  class="apagarform btn btn-danger">Apagar</button>
+                    </td>
+                </tr>
+            @endforeach
+            </tbody>
+        </table>
+    </div>
+
+    <div class="container stock-history">
+        <h4>Histórico de Matéria-Prima</h4>
+        <table class="table table-striped thead-dark">
+            <thead>
+            <tr>
+                <th>Referencia</th>
+                <th>Cor</th>
+                <th>Quantidade (gramas)</th>
+                <th>Atualizado Por</th>
+                <th>Descrição</th>
+                <th>Última Atualização</th>
+                <th></th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach($stock as $product)
+                <tr>
+                    <td>{{$product->product->reference}}</td>
+                    <td>{{$product->color}}</td>
+                    <td>{{$product->weight}}</td>
+                    <td>{{$product->product->user->name}}</td>
+                    <td>{{$product->description}}</td>
+                    <td>{{$product->updated_at}}</td>
+                    <td>
+                        <form method="get" action="{{url('stock/edit/'.$product->id)}}" enctype="multipart/form-data">
+                            <button type="submit" class="btn btn-warning">Editar</button>
+                        </form>
+                    </td>
+                    <td>
+                        <button type="button" data-id="{{$product->id}}" data-role="{{$product->product->reference}}"  class="apagarform btn btn-danger">Apagar</button>
                     </td>
                 </tr>
             @endforeach
@@ -82,6 +122,18 @@
                 $("#modalApagar").modal('show');
             });
         });
+
+        //Select table row from stock to show details
+        $(".stock-history").css('display', 'none');
+
+        $("#stock tr").click(function(){
+            $(this).addClass('selected').siblings().removeClass('selected');
+            let value=$(this).find('td:first').html();
+            alert(value);
+            $(".stock-history").css('display', 'inherit');
+        });
+
+
     </script>
 
 @endsection

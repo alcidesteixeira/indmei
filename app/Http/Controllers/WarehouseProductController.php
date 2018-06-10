@@ -43,18 +43,26 @@ class WarehouseProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
+        Auth::user()->authorizeRoles(['1', '5']);
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
+        //Store on WarehouseProduct Class
+        $warehouseProduct= new WarehouseProduct();
+        $warehouseProduct->user_id = Auth::id();
+        $warehouseProduct->reference = $request->reference;
+        $warehouseProduct->save();
+
+        //Store on WarehouseProductSpec Class
+
+        $spec = new WarehouseProductSpec();
+        $spec->warehouse_product_id = $warehouseProduct->id;
+        $spec->description = $request->description;
+        $spec->color = $request->color;
+        $spec->weight = $request->weight;
+        $spec->save();
+
+        flash('Matéria-Prima com a referência: "'. $warehouseProduct->reference . '", e descrição: "'. $spec->description .'" foi criada com sucesso!')->success();
+
+        return redirect()->action('WarehouseProductController@index');
     }
 
     /**
@@ -65,7 +73,11 @@ class WarehouseProductController extends Controller
      */
     public function edit($id)
     {
-        //
+        Auth::user()->authorizeRoles(['1', '5']);
+
+        $stock = WarehouseProductSpec::find($id);
+
+        return view('warehouse.create', compact('stock'));
     }
 
     /**
@@ -77,7 +89,25 @@ class WarehouseProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        Auth::user()->authorizeRoles(['1', '5']);
+
+        //Store on WarehouseProductSpec Class
+        $spec = WarehouseProductSpec::find($id);
+        $spec->warehouse_product_id = $spec->product->id;
+        $spec->description = $request->description;
+        $spec->color = $request->color;
+        $spec->weight = $request->weight;
+        $spec->save();
+
+
+        //Store on WarehouseProduct Class
+        $warehouseProduct = WarehouseProduct::find($spec->product->id);
+        $warehouseProduct->reference = $request->reference;
+        $warehouseProduct->save();
+
+        flash('A Matéria-Prima com a referência: '. $warehouseProduct->reference . ', e a descrição: '. $spec->description .' foi atualizada com sucesso!')->success();
+
+        return redirect()->action('WarehouseProductController@index');
     }
 
     /**
@@ -88,6 +118,16 @@ class WarehouseProductController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Auth::user()->authorizeRoles(['1', '5']);
+
+        $spec = WarehouseProductSpec::find($id);
+
+        $ref = $spec->product->warehouse_product_id;
+
+        $spec->delete();
+
+        flash('O Artigo com a referência: '. $ref . ', e a descrição: '. $spec->description .' foi eliminado com sucesso!')->success();
+
+        return redirect()->action('WarehouseProductController@index');
     }
 }

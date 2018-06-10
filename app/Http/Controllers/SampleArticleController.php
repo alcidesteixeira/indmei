@@ -96,7 +96,7 @@ class SampleArticleController extends Controller
             }
         }
 
-        flash('Amostra de Artigo com a referência: '. $sampleArticle->reference . ', e descrição: '. $sampleArticle->description .' foi criada com sucesso!')->success();
+        flash('A Amostra de Artigo com a referência: "'. $sampleArticle->reference . '", e descrição: "'. $sampleArticle->description .'" foi criada com sucesso!')->success();
 
         return redirect()->action('SampleArticleController@index');
 
@@ -188,7 +188,7 @@ class SampleArticleController extends Controller
             }
         }
 
-        flash('O Artigo com a referência: '. $sampleArticle->reference . ', e a descrição: '. $sampleArticle->description .' foi atualizado com sucesso!')->success();
+        flash('A Amostra de Artigo com a referência: '. $sampleArticle->reference . ', e a descrição: '. $sampleArticle->description .' foi atualizada com sucesso!')->success();
 
         return redirect()->action('SampleArticleController@index');
     }

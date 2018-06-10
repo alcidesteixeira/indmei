@@ -28,6 +28,7 @@
     <link href="{{ asset('css/index.css') }}" rel="stylesheet">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/footer.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/stock.css') }}" rel="stylesheet">
 
 </head>
 <body>

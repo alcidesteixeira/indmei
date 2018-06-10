@@ -8,11 +8,11 @@
         @if (Auth::user()->hasRole('1'))
             <li class="nav-item dropdown">
                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                    Roles <span class="caret"></span>
+                    Gerir Permissões <span class="caret"></span>
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="{{ url('roles/create') }}">Criar Role</a>
-                    <a class="dropdown-item" href="{{ url('roles/list') }}">Listar Roles</a>
+                    <a class="dropdown-item" href="{{ url('roles/create') }}">Criar Permissão</a>
+                    <a class="dropdown-item" href="{{ url('roles/list') }}">Listar Permissões</a>
                     <a class="dropdown-item" href="{{ url('roles/attribute') }}">Listar Utilizadores</a>
                 </div>
             </li>
@@ -20,7 +20,7 @@
         @if (Auth::user()->hasAnyRole(['1', '4']))
                 <li class="nav-item dropdown">
                     <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                        Encomendas <span class="caret"></span>
+                        Gestão de Encomendas <span class="caret"></span>
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="{{ url('roles/create') }}">Criar Encomenda</a>
@@ -44,7 +44,7 @@
         @if (Auth::user()->hasAnyRole(['1', '3']))
             <li class="nav-item dropdown">
                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                    Gestão de Amostra de Artigos <span class="caret"></span>
+                    Gestão de Amostras <span class="caret"></span>
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item" href="{{ url('samples/create') }}">Criar Nova Amostra de Artigo</a>
@@ -55,7 +55,7 @@
         @if (Auth::user()->hasAnyRole(['1', '6']))
             <li class="nav-item dropdown">
                 <a id="navbarDropdown" class="nav-link" href="{{ url('roles/create') }}" role="button" aria-haspopup="true" aria-expanded="false" v-pre>
-                    Listar Encomendas </span>
+                    Encomendas em Produção </span>
                 </a>
             </li>
         @endif
