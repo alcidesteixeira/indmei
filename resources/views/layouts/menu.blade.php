@@ -34,6 +34,7 @@
                     Gestão de Armazém <span class="caret"></span>
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="{{ url('stock/receipt') }}">Entrada de Encomenda</a>
                     <a class="dropdown-item" href="{{ url('stock/create') }}">Inserir Nova Matéria-Prima</a>
                     <a class="dropdown-item" href="{{ url('stock/list') }}">Listar Matérias-Primas</a>
                     <a class="dropdown-item" href="{{ url('stock/request') }}">Solicitar Matéria-Prima</a>

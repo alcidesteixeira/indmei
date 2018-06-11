@@ -11,9 +11,10 @@
             <tr>
                 <th>Referencia</th>
                 <th>Cor</th>
-                <th>Quantidade (gramas)</th>
+                <th>Qtd (g)</th>
                 <th>Atualizado Por</th>
                 <th>Descrição</th>
+                <th>Alerta mínimo (g)</th>
                 <th>Última Atualização</th>
                 <th></th>
                 <th></th>
@@ -21,20 +22,21 @@
             </thead>
             <tbody>
             @foreach($stock as $product)
-                <tr>
+                <tr style="background-color: {{$product->threshold >= $product->weight ? '#f9a9a9' : ''}}" data-specid="{{$product->id}}">
                     <td>{{$product->product->reference}}</td>
                     <td>{{$product->color}}</td>
                     <td>{{$product->weight}}</td>
                     <td>{{$product->product->user->name}}</td>
                     <td>{{$product->description}}</td>
+                    <td>{{$product->threshold}}</td>
                     <td>{{$product->updated_at}}</td>
                     <td>
-                        <form method="get" action="{{url('stock/edit/'.$product->id)}}" enctype="multipart/form-data">
+                        <form method="get" action="{{url('stock/edit/'.$product->id)}}" id="edit" enctype="multipart/form-data">
                             <button type="submit" class="btn btn-warning">Editar</button>
                         </form>
                     </td>
                     <td>
-                        <button type="button" data-id="{{$product->id}}" data-role="{{$product->product->reference}}"  class="apagarform btn btn-danger">Apagar</button>
+                        <button type="button" data-id="{{$product->id}}" data-role="{{$product->product->reference}}" id="delete" class="apagarform btn btn-danger">Apagar</button>
                     </td>
                 </tr>
             @endforeach
@@ -49,7 +51,7 @@
             <tr>
                 <th>Referencia</th>
                 <th>Cor</th>
-                <th>Quantidade (gramas)</th>
+                <th>Qtd (g)</th>
                 <th>Atualizado Por</th>
                 <th>Descrição</th>
                 <th>Última Atualização</th>
@@ -128,9 +130,13 @@
 
         $("#stock tr").click(function(){
             $(this).addClass('selected').siblings().removeClass('selected');
-            let value=$(this).find('td:first').html();
+            let value=$(this).data('specid');
             alert(value);
             $(".stock-history").css('display', 'inherit');
+        });
+
+        $('#edit, #delete').click(function(event){
+            event.stopPropagation();
         });
 
 

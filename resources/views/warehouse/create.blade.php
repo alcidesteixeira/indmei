@@ -6,16 +6,10 @@
         <form method="post" action="{{@$stock->product->reference ? url('stock/update/'.$stock->id) : url('stock/create')}}" enctype="multipart/form-data">
             @csrf
             <div class="row">
-                <div class="form-group col-md-3">
-                    <label for="EntradaSaida">Entrada/Saída:</label>
-                    <select class="form-control" id="inout" name="inout">
-                        <option value="IN" {{@$stock->inout == 'IN' ? 'selected' : ''}}>
-                            Entrada
-                        </option>
-                        <option value="OUT" {{@$stock->inout == 'OUT' ? 'selected' : ''}}>
-                            Saída
-                        </option>
-                    </select>
+                <div class="col-md-3"></div>
+                <div class="form-group col-md-6">
+                    <label for="Description">Descrição:</label>
+                    <input type="text" class="form-control" name="description" value="{{@$stock->description}}" required>
                 </div>
             </div>
             <div class="row">
@@ -28,21 +22,24 @@
             <div class="row">
                 <div class="col-md-3"></div>
                 <div class="form-group col-md-6">
-                    <label for="Description">Descrição:</label>
-                    <input type="text" class="form-control" name="description" value="{{@$stock->description}}" required>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-3"></div>
-                <div class="form-group col-md-6">
                     <label for="color">Cor:</label>
                     <input type="text" class="form-control" name="color" value="{{@$stock->color}}" required>
-                </div></div>
+                </div>
+            </div>
+
             <div class="row">
                 <div class="col-md-3"></div>
                 <div class="form-group col-md-6">
                     <label for="weight">Peso (gramas):</label>
                     <input type="text" class="form-control" name="weight" value="{{@$stock->weight}}" required>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3"></div>
+                <div class="form-group col-md-6">
+                    <label for="threshold">Valor de aviso mínimo:</label>
+                    <input type="text" class="form-control" name="threshold" value="{{@$stock->threshold}}" required>
                 </div>
             </div>
 

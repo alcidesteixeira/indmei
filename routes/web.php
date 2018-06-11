@@ -34,6 +34,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/roles/attribute/delete/{id}', 'RoleController@deleteAttributeRoles');
 
 //WarehouseProducts
+    Route::get('/stock/receipt', 'WarehouseProductController@receipt');
+    Route::post('/stock/receipt', 'WarehouseProductController@enterReceipt');
     Route::get('/stock/list', 'WarehouseProductController@index');
     Route::get('/stock/create', 'WarehouseProductController@create');
     Route::post('/stock/create', 'WarehouseProductController@store');

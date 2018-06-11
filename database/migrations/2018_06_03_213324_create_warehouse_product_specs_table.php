@@ -19,6 +19,7 @@ class CreateWarehouseProductSpecsTable extends Migration
             $table->string('description');
             $table->string('color');
             $table->string('weight');
+            $table->string('threshold');
             $table->timestamps();
         });
     }

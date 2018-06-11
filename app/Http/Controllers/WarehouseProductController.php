@@ -58,6 +58,7 @@ class WarehouseProductController extends Controller
         $spec->description = $request->description;
         $spec->color = $request->color;
         $spec->weight = $request->weight;
+        $spec->threshold = $request->threshold;
         $spec->save();
 
         flash('Matéria-Prima com a referência: "'. $warehouseProduct->reference . '", e descrição: "'. $spec->description .'" foi criada com sucesso!')->success();
@@ -97,6 +98,7 @@ class WarehouseProductController extends Controller
         $spec->description = $request->description;
         $spec->color = $request->color;
         $spec->weight = $request->weight;
+        $spec->threshold = $request->threshold;
         $spec->save();
 
 
@@ -129,5 +131,12 @@ class WarehouseProductController extends Controller
         flash('O Artigo com a referência: '. $ref . ', e a descrição: '. $spec->description .' foi eliminado com sucesso!')->success();
 
         return redirect()->action('WarehouseProductController@index');
+    }
+
+    public function receipt()
+    {
+        Auth::user()->authorizeRoles(['1', '5']);
+
+        return view('warehouse.receipt');
     }
 }
