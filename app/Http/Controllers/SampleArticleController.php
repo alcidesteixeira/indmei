@@ -222,13 +222,13 @@ class SampleArticleController extends Controller
             //Delete Wire Specs
             $wireColorsIds = $sampleArticle->sampleArticleWires()->get()->pluck('id')->toArray();
             SampleArticleColor::whereIn('sample_articles_wire_id', $wireColorsIds)->delete();
-dump("apagou colors");
+            //dump("apagou colors");
             //Delete wires
             SampleArticlesWire::where('sample_article_id', $id)->delete();
-            dump("apagou wires");
+            //dump("apagou wires");
             //Delete Sample Article
             $sampleArticle->delete();
-            dump("apagou artigo");
+            //dump("apagou artigo");
             flash('O Artigo com a referência: '. $sampleArticle->reference . ', e a descrição: '. $sampleArticle->description .' foi eliminado com sucesso!')->success();
         }
 

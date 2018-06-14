@@ -20,4 +20,12 @@ class WarehouseProduct extends Model
     {
         return $this->hasMany('App\WarehouseProductSpec');
     }
+
+    public function getProducts () {
+
+        $products = WarehouseProduct::all();
+
+        return $products;
+    }
+
 }

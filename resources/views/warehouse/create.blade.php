@@ -53,14 +53,4 @@
         </form>
     </div>
 
-
-    <script>
-        //Filter and order table
-        $('table').DataTable({
-            "ordering": false,
-            "pageLength": 25
-        });
-
-    </script>
-
 @endsection

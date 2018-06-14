@@ -137,6 +137,36 @@ class WarehouseProductController extends Controller
     {
         Auth::user()->authorizeRoles(['1', '5']);
 
-        return view('warehouse.receipt');
+        $products = new WarehouseProduct();
+        $allProducts = $products->getProducts()->pluck('reference')->toArray();
+
+        $colors = new WarehouseProductSpec();
+        $allColors = $colors->getColors()->pluck('color')->toArray();
+
+        return view('warehouse.receipt', compact('allProducts', 'allColors'));
+    }
+
+    public function enterReceipt(Request $request)
+    {
+        Auth::user()->authorizeRoles(['1', '5']);
+
+        dd($request->all());
+
+        for($i = 1; $i <= $request->rowCount; $i++) {
+            DB::table('users')->insert(
+                ['email' => 'john@example.com', 'votes' => 0]
+            );
+
+            $warehouseHistory= new SampleArticle();
+            $step = 'row-' . $i . '-step';
+            $grams = 'row-' . $i . '-grams';
+            $reference = 'row-' . $i . '-reference';
+
+            $wire = $sampleArticle->sampleArticleWires()->get()->values()->get($i - 1);
+            $wire->step_id = $request->$step;
+            $wire->warehouse_product_id = $request->$reference;
+            $wire->grams = $request->$grams;
+            $wire->save();
+        }
     }
 }

@@ -15,4 +15,11 @@ class WarehouseProductSpec extends Model
     {
         return $this->belongsTo('App\WarehouseProduct','warehouse_product_id', 'id');
     }
+
+    public function getColors () {
+
+        $products = WarehouseProductSpec::groupBy('color')->get();
+
+        return $products;
+    }
 }

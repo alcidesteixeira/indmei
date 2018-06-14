@@ -5,3 +5,11 @@
 select {
     min-width: 91px;
 }
+
+.hide {
+    display: none !important;
+}
+
+.receipt-table {
+    margin-bottom: 50px !important;
+}
