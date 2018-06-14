@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
     <h2>Entrada de Encomenda</h2><br/>
-    <form method="post" action="{{url('stock/enterReceipt/')}}" enctype="multipart/form-data">
+    <form method="post" action="{{url('stock/receipt/')}}" enctype="multipart/form-data">
         @csrf
         <div class="row">
             <div class="form-group col-md-3">
