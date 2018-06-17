@@ -5,13 +5,15 @@
     <div class="container">
         @include('flash::message')
 
+
         <h2>Stock de produtos disponíveis</h2>
         <table class="table table-striped thead-dark" id="stock">
             <thead>
             <tr>
-                <th>Referencia</th>
+                <th>Referência</th>
                 <th>Cor</th>
-                <th>Qtd (g)</th>
+                <th>Stock Bruto (g)</th>
+                <th>Stock Líquido (g)</th>
                 <th>Atualizado Por</th>
                 <th>Descrição</th>
                 <th>Alerta mínimo (g)</th>
@@ -25,6 +27,7 @@
                 <tr style="background-color: {{$product->threshold >= $product->weight ? '#f9a9a9' : ''}}" data-specid="{{$product->id}}">
                     <td>{{$product->product->reference}}</td>
                     <td>{{$product->color}}</td>
+                    <td>{{$product->weight}}</td>
                     <td>{{$product->weight}}</td>
                     <td>{{$product->product->user->name}}</td>
                     <td>{{$product->description}}</td>
@@ -49,35 +52,15 @@
         <table class="table table-striped thead-dark">
             <thead>
             <tr>
-                <th>Referencia</th>
-                <th>Cor</th>
-                <th>Qtd (g)</th>
-                <th>Atualizado Por</th>
+                <th>Entrada/Saída</th>
+                <th>Quantidade (g)</th>
                 <th>Descrição</th>
+                <th>Atualizado Por</th>
                 <th>Última Atualização</th>
-                <th></th>
-                <th></th>
+                <th>Fatura</th>
             </tr>
             </thead>
             <tbody>
-            @foreach($stock as $product)
-                <tr>
-                    <td>{{$product->product->reference}}</td>
-                    <td>{{$product->color}}</td>
-                    <td>{{$product->weight}}</td>
-                    <td>{{$product->product->user->name}}</td>
-                    <td>{{$product->description}}</td>
-                    <td>{{$product->updated_at}}</td>
-                    <td>
-                        <form method="get" action="{{url('stock/edit/'.$product->id)}}" enctype="multipart/form-data">
-                            <button type="submit" class="btn btn-warning">Editar</button>
-                        </form>
-                    </td>
-                    <td>
-                        <button type="button" data-id="{{$product->id}}" data-role="{{$product->product->reference}}"  class="apagarform btn btn-danger">Apagar</button>
-                    </td>
-                </tr>
-            @endforeach
             </tbody>
         </table>
     </div>
@@ -109,7 +92,7 @@
 
         $( document ).ready( function () {
             //Filter and order table
-            $('table').DataTable({
+            $('#stock').DataTable({
                 columnDefs: [ { orderable: false, targets: [-1, -2] } ],
                 "pageLength": 25
             });
@@ -132,6 +115,18 @@
             $(this).addClass('selected').siblings().removeClass('selected');
             let value=$(this).data('specid');
             alert(value);
+            $.ajax({
+                url: "/stock/list/historic/"+value,
+            }).done(function(data) {
+                console.log(data);
+                let toAppend = '';
+                $.each(data, function(k,v) {
+                    toAppend = toAppend + '<tr><td>'+v["inout"]+'</td><td>'+v["weight"]+'</td><td>'+v["description"]+'</td>' +
+                        '<td>'+v["user_id"]+'</td><td>'+v["updated_at"]+'</td><td><img src="'+v["receipt"]+'"></td></tr>';
+                });
+                $(".stock-history tbody").append('');
+                $(".stock-history tbody").append(toAppend);
+            });
             $(".stock-history").css('display', 'inherit');
         });
 

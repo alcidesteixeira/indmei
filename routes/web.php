@@ -34,9 +34,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/roles/attribute/delete/{id}', 'RoleController@deleteAttributeRoles');
 
 //WarehouseProducts
+    //Entrada de stock em armazém através de uma fatura
     Route::get('/stock/receipt', 'WarehouseProductController@receipt');
     Route::post('/stock/receipt', 'WarehouseProductController@enterReceipt');
+    //CRUD de gestão do Stock
     Route::get('/stock/list', 'WarehouseProductController@index');
+    Route::get('/stock/list/historic/{id}', 'WarehouseProductController@returnHistoric');
     Route::get('/stock/create', 'WarehouseProductController@create');
     Route::post('/stock/create', 'WarehouseProductController@store');
     Route::get('/stock/edit/{id}', 'WarehouseProductController@edit');

@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
     <h2>Entrada de Encomenda</h2><br/>
-    <form method="post" action="{{url('stock/receipt/')}}" enctype="multipart/form-data">
+    <form id="addRow" method="" action="" enctype="multipart/form-data">
         @csrf
         <div class="row">
             <div class="form-group col-md-3">
@@ -13,7 +13,13 @@
                     <option value="OUT">Saída</option>
                 </select>
             </div>
-            <div class="form-group col-md-9">
+
+            <div class="form-group col-md-6">
+                <label for="receipt">Carregar Fatura:</label>
+                <input type="text" class="form-control" id="receipt" required>
+            </div>
+
+            <div class="form-group col-md-3">
                 <button type="button" id="newMaterial" class="btn btn-default" style="margin-top: 31px; float:right;">Criar nova Matéria-Prima</button>
             </div>
         </div>
@@ -29,7 +35,7 @@
             <div class="col-md-3"></div>
             <div class="form-group col-md-6">
                 <label for="Description">Descrição:</label>
-                <input type="text" class="form-control" id="description">
+                <input type="text" class="form-control" id="description" required>
             </div>
         </div>
 
@@ -37,7 +43,7 @@
             <div class="col-md-3"></div>
             <div class="form-group col-md-6">
                 <label for="Reference">Referência:</label>
-                <input type="text" class="form-control" id="reference">
+                <input type="text" class="form-control" id="reference" required>
             </div>
         </div>
 
@@ -45,7 +51,7 @@
             <div class="col-md-3"></div>
             <div class="form-group col-md-6">
                 <label for="color">Cor:</label>
-                <input type="text" class="form-control" id="color">
+                <input type="text" class="form-control" id="color" required>
             </div>
         </div>
 
@@ -53,7 +59,7 @@
             <div class="col-md-3"></div>
             <div class="form-group col-md-6">
                 <label for="weight">Peso (gramas):</label>
-                <input type="text" class="form-control" id="qtd">
+                <input type="text" class="form-control" id="qtd" required>
             </div>
         </div>
 
@@ -67,55 +73,48 @@
 
         <div class="row">
             <div class="col-md-3"></div>
-            <div class="form-group col-md-6">
-                <label for="receipt">Carregar Fatura:</label>
-                <input type="text" class="form-control" id="receipt">
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-3"></div>
             <div class="submit-buttons form-group col-md-6" style="margin-top:60px">
-                <button type="button" id="add" class="btn btn-warning">Adicionar</button>
-                <button type="submit" class="btn btn-success" onclick="beforeInput();">Finalizar</button>
+                <button type="submit" class="btn btn-warning">Adicionar</button>
                 <button type="button" onclick="window.history.back();" class="btn btn-info">Voltar</button>
             </div>
         </div>
     </form>
 
-    <table class="table table-striped thead-dark receipt-table">
-        <thead>
-        <tr>
-            <th>Entrada/Saída</th>
-            <th>Referencia</th>
-            <th>Cor</th>
-            <th>Qtd (g)</th>
-            <th>Descrição</th>
-            <th>Limite mínimo</th>
-            <th>Fatura</th>
-        </tr>
-        </thead>
-        <tbody>
+    <form method="post" id="saveReceipt" action="{{url('stock/receipt/')}}" enctype="multipart/form-data">
+        @csrf
+        <table class="table table-striped thead-dark receipt-table">
+            <thead>
+            <tr>
+                <th>Entrada/Saída</th>
+                <th>Referencia</th>
+                <th>Cor</th>
+                <th>Qtd (g)</th>
+                <th>Descrição</th>
+                <th>Limite mínimo</th>
+                <th>Fatura</th>
+            </tr>
+            </thead>
+            <tbody>
 
-        </tbody>
-    </table>
+            </tbody>
+        </table>
+        <div class="row">
+            <div class="col-md-9"></div>
+            <div class="submit-buttons form-group col-md-3" style="margin-top:60px">
+                <button type="submit" class="btn btn-success" onclick="beforeInput();">Finalizar</button>
+            </div>
+        </div>
+    </form>
 
 </div>
 
 
 <script>
 
-    //Filter and order table
-    // $('table').DataTable({
-    //     "ordering": false,
-    //     "pageLength": 25
-    // });
-
     function beforeInput ()
     {
         let rowCount = $('table tr').length - 1;
-        $("form").append('<input type="hidden" name="rowCount" value="'+rowCount+'">' +
-            '<input type="hidden" name="colorsCount" value="'+colorsCount+'">');
+        $("#saveReceipt").append('<input type="hidden" name="rowCount" value="'+rowCount+'">');
     }
 
     $( function() {
@@ -138,7 +137,10 @@
 
     //Add stock to table
     let i = 1;
-    $( "#add" ).click( function () {
+    $( "#addRow" ).submit( function (e) {
+
+        e.preventDefault(e);
+
         let inout = $("#inout").val(); let description = $("#description").val();
         let reference = $("#reference").val(); let color = $("#color").val();
         let qtd = $("#qtd").val(); let threshold = $("#threshold").val();
@@ -157,7 +159,8 @@
         i++;
         //Empty values
         $("#description").val(""); $("#reference").val(""); $("#color").val("");
-        $("#qtd").val(""); $("#threshold").val(""); $("#receipt").val("");
+        $("#qtd").val(""); $("#threshold").val("");
+
     });
 
 </script>

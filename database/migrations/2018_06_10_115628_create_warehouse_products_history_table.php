@@ -20,6 +20,7 @@ class CreateWarehouseProductsHistoryTable extends Migration
             $table->string('inout');
             $table->string('weight');
             $table->string('description');
+            $table->string('receipt');
             $table->timestamps();
         });
     }

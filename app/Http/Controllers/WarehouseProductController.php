@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\WarehouseProduct;
 use App\WarehouseProductSpec;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Auth;
+use Illuminate\Support\Facades\DB;
 
 class WarehouseProductController extends Controller
 {
@@ -21,6 +23,17 @@ class WarehouseProductController extends Controller
         $stock = WarehouseProductSpec::all();
 
         return view('warehouse.list', compact('stock'));
+    }
+
+    public function returnHistoric($id)
+    {
+
+        $historic = DB::table('warehouse_products_history')
+            ->select('user_id', 'inout', 'weight', 'description', 'receipt', 'updated_at')
+            ->where('warehouse_product_spec_id', $id)
+            ->get();
+
+        return $historic;
     }
 
     /**
@@ -150,23 +163,63 @@ class WarehouseProductController extends Controller
     {
         Auth::user()->authorizeRoles(['1', '5']);
 
-        dd($request->all());
+//        dd($request->all());
 
         for($i = 1; $i <= $request->rowCount; $i++) {
-            DB::table('users')->insert(
-                ['email' => 'john@example.com', 'votes' => 0]
+
+            //ir buscar warehouseproduct onde reference seja igual a inserida e obter id
+            //verificar nos warehouse product specs existe um id com warehouseproductid igual ao em cima e color igual à inserida na tabela
+            $inout = 'inout-'.$i;
+            $reference = 'reference-'.$i;
+            $color = 'color-'.$i;
+            $qtd = 'qtd-'.$i;
+            $description = 'description-'.$i;
+            $threshold = 'threshold-'.$i;
+            $receipt = 'receipt-'.$i;
+
+            $warehouseProduct = WarehouseProduct::where('reference', $request->$reference)->first();
+
+            //se retornar id, fazer o insert no histórico; senão tem de inserir linha na warehouse product, ou na warehouse product e na warehouse product spec
+            //se não existir fio:
+            if(!($warehouseProduct)) {
+                $warehouseProduct = new WarehouseProduct();
+                $warehouseProduct->user_id = Auth::id();
+                $warehouseProduct->reference = $request->$reference;
+                $warehouseProduct->save();
+            }
+            //se não existir cor nem fio
+            $warehouseProductSpec = WarehouseProductSpec::where('warehouse_product_id', $warehouseProduct->id)->where('color',$request->$color)->first();
+
+            if(!($warehouseProduct) || !($warehouseProductSpec)) {
+                if($warehouseProduct) {
+                    $warehouseProduct= WarehouseProduct::find($warehouseProduct->id);
+                }
+                $warehouseProductSpec = new WarehouseProductSpec();
+                $warehouseProductSpec->warehouse_product_id = $warehouseProduct->id;
+                $warehouseProductSpec->description = $request->$description;
+                $warehouseProductSpec->color = $request->$color;
+                $warehouseProductSpec->weight = $request->$qtd;
+                $warehouseProductSpec->threshold = $request->$threshold ? $request->$threshold : 1000;
+                $warehouseProductSpec->save();
+            }
+            //Em qualquer caso, adiciona sempre no histórico: caso nao exista fio; caso não exista cor; caso exista fio e cor
+            DB::table('warehouse_products_history')->insert(
+                [
+                    'warehouse_product_spec_id' => $warehouseProductSpec->id,
+                    'user_id' => Auth::id(),
+                    'inout' => $request->$inout,
+                    'weight' => $request->$qtd,
+                    'description' => $request->$description,
+                    'receipt' => $request->$receipt,
+                    'created_at' => Carbon::now()->timezone('Europe/London'),
+                    'updated_at' => Carbon::now()->timezone('Europe/London')
+                ]
             );
 
-            $warehouseHistory= new SampleArticle();
-            $step = 'row-' . $i . '-step';
-            $grams = 'row-' . $i . '-grams';
-            $reference = 'row-' . $i . '-reference';
-
-            $wire = $sampleArticle->sampleArticleWires()->get()->values()->get($i - 1);
-            $wire->step_id = $request->$step;
-            $wire->warehouse_product_id = $request->$reference;
-            $wire->grams = $request->$grams;
-            $wire->save();
         }
+
+        flash('Stock corretamente inserido!')->success();
+
+        return redirect()->action('WarehouseProductController@index');
     }
 }

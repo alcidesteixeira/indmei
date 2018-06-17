@@ -19,6 +19,7 @@ class WarehouseProductsHistoryTableSeeder extends Seeder
                 'inout' => 'in',
                 'weight' => '300',
                 'description' => 'fornecedor x',
+                'receipt' => 'fatura.jpg',
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
             ]
