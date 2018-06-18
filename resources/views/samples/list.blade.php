@@ -6,34 +6,34 @@
         @include('flash::message')
 
         <h2>Lista de Amostras de Artigos disponíveis</h2>
-        <table class="table table-striped thead-dark">
-            <thead>
-            <tr>
-                <th>Referencia</th>
-                <th>Descrição</th>
-                <th>Imagem</th>
-                <th>Executante</th>
-                <th>Última Atualização</th>
-                <th>Status</th>
-                <th></th>
-                <th></th>
+        <table class="table table-striped thead-dark" role="table">
+            <thead role="rowgroup">
+            <tr role="row">
+                <th role="columnheader">Referencia</th>
+                <th role="columnheader">Descrição</th>
+                <th role="columnheader">Imagem</th>
+                <th role="columnheader">Executante</th>
+                <th role="columnheader">Última Atualização</th>
+                <th role="columnheader">Status</th>
+                <th role="columnheader"></th>
+                <th role="columnheader"></th>
             </tr>
             </thead>
-            <tbody>
+            <tbody role="rowgroup">
             @foreach($sampleArticles as $sample)
-                <tr>
-                    <td>{{$sample->reference}}</td>
-                    <td>{{$sample->description}}</td>
-                    <td><img src="{{$sample->image_url}}" width="200"></td>
-                    <td>{{$sample->user->name}}</td>
-                    <td>{{$sample->updated_at}}</td>
-                    <td>{{$sample->sampleArticleStatus->status}}</td>
-                    <td>
+                <tr role="row">
+                    <td role="columnheader">{{$sample->reference}}</td>
+                    <td role="columnheader">{{$sample->description}}</td>
+                    <td role="columnheader"><img src="../../storage/{{$sample->image_url}}" width="50"></td>
+                    <td role="columnheader">{{$sample->user->name}}</td>
+                    <td role="columnheader">{{$sample->updated_at}}</td>
+                    <td role="columnheader">{{$sample->sampleArticleStatus->status}}</td>
+                    <td role="columnheader">
                         <form method="get" action="{{url('samples/edit/'.$sample->id)}}" enctype="multipart/form-data">
                             <button type="submit" class="btn btn-warning">Editar</button>
                         </form>
                     </td>
-                    <td>
+                    <td role="columnheader">
                         <button type="button" data-id="{{$sample->id}}" data-role="{{$sample->description}}"  class="apagarform btn btn-danger">Apagar</button>
                     </td>
                 </tr>
@@ -71,7 +71,11 @@
             //Filter and order table
             $('table').DataTable({
                 columnDefs: [ { orderable: false, targets: [-1, -2] } ],
-                "pageLength": 25
+                "pageLength": 25,
+                dom: 'lBfrtip',
+                buttons: [
+                    'copy', 'csv', 'excel', 'pdf', 'print'
+                ]
             });
 
 

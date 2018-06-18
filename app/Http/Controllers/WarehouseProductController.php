@@ -8,6 +8,8 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class WarehouseProductController extends Controller
 {
@@ -18,6 +20,7 @@ class WarehouseProductController extends Controller
      */
     public function index()
     {
+
         Auth::user()->authorizeRoles(['1', '5']);
 
         $stock = WarehouseProductSpec::all();
@@ -27,7 +30,6 @@ class WarehouseProductController extends Controller
 
     public function returnHistoric($id)
     {
-
         $historic = DB::table('warehouse_products_history')
             ->select('user_id', 'inout', 'weight', 'description', 'receipt', 'updated_at')
             ->where('warehouse_product_spec_id', $id)
@@ -161,9 +163,8 @@ class WarehouseProductController extends Controller
 
     public function enterReceipt(Request $request)
     {
-        Auth::user()->authorizeRoles(['1', '5']);
 
-//        dd($request->all());
+        Auth::user()->authorizeRoles(['1', '5']);
 
         for($i = 1; $i <= $request->rowCount; $i++) {
 
@@ -175,7 +176,6 @@ class WarehouseProductController extends Controller
             $qtd = 'qtd-'.$i;
             $description = 'description-'.$i;
             $threshold = 'threshold-'.$i;
-            $receipt = 'receipt-'.$i;
 
             $warehouseProduct = WarehouseProduct::where('reference', $request->$reference)->first();
 
@@ -203,6 +203,12 @@ class WarehouseProductController extends Controller
                 $warehouseProductSpec->save();
             }
             //Em qualquer caso, adiciona sempre no histórico: caso nao exista fio; caso não exista cor; caso exista fio e cor
+            $file = $request->file('receipt');
+            if($file) {
+                $filename = 'receipts/' . explode('.', $file->getClientOriginalName())[0] . '-' . Carbon::now('Europe/London')->format('YmdHis') . '.jpg';
+                Storage::disk('public')->put($filename, File::get($file));
+            }
+
             DB::table('warehouse_products_history')->insert(
                 [
                     'warehouse_product_spec_id' => $warehouseProductSpec->id,
@@ -210,7 +216,7 @@ class WarehouseProductController extends Controller
                     'inout' => $request->$inout,
                     'weight' => $request->$qtd,
                     'description' => $request->$description,
-                    'receipt' => $request->$receipt,
+                    'receipt' => $filename,
                     'created_at' => Carbon::now()->timezone('Europe/London'),
                     'updated_at' => Carbon::now()->timezone('Europe/London')
                 ]

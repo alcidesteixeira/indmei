@@ -4,11 +4,15 @@ namespace App\Http\Controllers;
 
 use App\SampleArticle;
 use App\SampleArticleColor;
+use App\SampleArticleStatus;
 use App\SampleArticleStep;
 use App\SampleArticlesWire;
 use App\WarehouseProduct;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class SampleArticleController extends Controller
 {
@@ -41,7 +45,9 @@ class SampleArticleController extends Controller
 
         $warehouseFirstWireSpecs = WarehouseProduct::find(1)->warehouseProductSpecs()->get();
 
-        return view('samples.create', compact('steps', 'warehouseProducts', 'warehouseFirstWireSpecs'));
+        $statuses = SampleArticleStatus::all();
+
+        return view('samples.create', compact('steps', 'warehouseProducts', 'warehouseFirstWireSpecs', 'statuses'));
     }
 
     /**
@@ -54,14 +60,19 @@ class SampleArticleController extends Controller
     {
         Auth::user()->authorizeRoles(['1', '3']);
 
-        //dd($request->all());
-
         //Store on SampleArticle Class
         $sampleArticle= new SampleArticle();
         $sampleArticle->user_id = Auth::id();
         $sampleArticle->reference = $request->reference;
         $sampleArticle->description = $request->description;
-        $sampleArticle->image_url = $request->image_url;
+        //Store Image
+        $file = $request->file('image_url');
+        if($file) {
+            $filename = 'sampleArticles/' . explode('.', $file->getClientOriginalName())[0] . '-' . Carbon::now('Europe/London')->format('YmdHis') . '.jpg';
+            Storage::disk('public')->put($filename, File::get($file));
+            $sampleArticle->image_url = $filename;
+        }
+        //End Store Image
         $sampleArticle->sample_article_status_id = $request->status_id;
         $sampleArticle->pe = $request->pe;
         $sampleArticle->perna = $request->perna;
@@ -118,10 +129,12 @@ class SampleArticleController extends Controller
 
         $warehouseProducts = WarehouseProduct::all();
 
+        $statuses = SampleArticleStatus::all();
+
 //        dd($sampleArticle->sampleArticleWires()->get()->values()->get(2)->wireColors()->get()->values()->get(2)->warehouse_product_spec_id);
         //dd($sampleArticle->sampleArticleWires()->get()->values()->get(2)->warehouseProduct->warehouseProductSpecs()->get());
 
-        return view('samples.create', compact('sampleArticle', 'steps', 'warehouseProducts', 'id'));
+        return view('samples.create', compact('sampleArticle', 'steps', 'warehouseProducts', 'statuses', 'id'));
     }
 
     public function updateWireSpecs($id)
@@ -152,7 +165,14 @@ class SampleArticleController extends Controller
         $sampleArticle= SampleArticle::find($id);
         $sampleArticle->reference = $request->reference;
         $sampleArticle->description = $request->description;
-        $sampleArticle->image_url = $request->image_url;
+        //Store Image Updated
+        $file = $request->file('image_url');
+        if($file) {
+            $filename = 'sampleArticles/' . explode('.', $file->getClientOriginalName())[0] . '-' . Carbon::now('Europe/London')->format('YmdHis') . '.jpg';
+            Storage::disk('public')->put($filename, File::get($file));
+            $sampleArticle->image_url = $filename;
+        }
+        //End Store Image Upload
         $sampleArticle->sample_article_status_id = $request->status_id;
         $sampleArticle->pe = $request->pe;
         $sampleArticle->perna = $request->perna;

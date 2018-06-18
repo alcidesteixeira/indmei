@@ -5,40 +5,39 @@
     <div class="container">
         @include('flash::message')
 
-
         <h2>Stock de produtos disponíveis</h2>
-        <table class="table table-striped thead-dark" id="stock">
-            <thead>
-            <tr>
-                <th>Referência</th>
-                <th>Cor</th>
-                <th>Stock Bruto (g)</th>
-                <th>Stock Líquido (g)</th>
-                <th>Atualizado Por</th>
-                <th>Descrição</th>
-                <th>Alerta mínimo (g)</th>
-                <th>Última Atualização</th>
-                <th></th>
-                <th></th>
+        <table class="table table-striped thead-dark" id="stock" role="table">
+            <thead role="rowgroup">
+            <tr role="row">
+                <th role="columnheader">Referência</th>
+                <th role="columnheader">Cor</th>
+                <th role="columnheader">Stock Bruto (g)</th>
+                <th role="columnheader">Stock Líquido (g)</th>
+                <th role="columnheader">Atualizado Por</th>
+                <th role="columnheader">Descrição</th>
+                <th role="columnheader">Alerta mínimo (g)</th>
+                <th role="columnheader">Última Atualização</th>
+                <th role="columnheader"></th>
+                <th role="columnheader"></th>
             </tr>
             </thead>
-            <tbody>
+            <tbody role="rowgroup">
             @foreach($stock as $product)
-                <tr style="background-color: {{$product->threshold >= $product->weight ? '#f9a9a9' : ''}}" data-specid="{{$product->id}}">
-                    <td>{{$product->product->reference}}</td>
-                    <td>{{$product->color}}</td>
-                    <td>{{$product->weight}}</td>
-                    <td>{{$product->weight}}</td>
-                    <td>{{$product->product->user->name}}</td>
-                    <td>{{$product->description}}</td>
-                    <td>{{$product->threshold}}</td>
-                    <td>{{$product->updated_at}}</td>
-                    <td>
+                <tr style="background-color: {{$product->threshold >= $product->weight ? '#f9a9a9' : ''}}" data-specid="{{$product->id}}" role="row">
+                    <td role="columnheader">{{$product->product->reference}}</td>
+                    <td role="columnheader">{{$product->color}}</td>
+                    <td role="columnheader">{{$product->weight}}</td>
+                    <td role="columnheader">{{$product->weight}}</td>
+                    <td role="columnheader">{{$product->product->user->name}}</td>
+                    <td role="columnheader">{{$product->description}}</td>
+                    <td role="columnheader">{{$product->threshold}}</td>
+                    <td role="columnheader">{{$product->updated_at}}</td>
+                    <td role="columnheader">
                         <form method="get" action="{{url('stock/edit/'.$product->id)}}" id="edit" enctype="multipart/form-data">
                             <button type="submit" class="btn btn-warning">Editar</button>
                         </form>
                     </td>
-                    <td>
+                    <td role="columnheader">
                         <button type="button" data-id="{{$product->id}}" data-role="{{$product->product->reference}}" id="delete" class="apagarform btn btn-danger">Apagar</button>
                     </td>
                 </tr>
@@ -47,24 +46,23 @@
         </table>
     </div>
 
-    <div class="container stock-history">
+    <div class="container stock-history" style="margin-top: 50px;margin-bottom: 50px">
         <h4>Histórico de Matéria-Prima</h4>
-        <table class="table table-striped thead-dark">
-            <thead>
-            <tr>
-                <th>Entrada/Saída</th>
-                <th>Quantidade (g)</th>
-                <th>Descrição</th>
-                <th>Atualizado Por</th>
-                <th>Última Atualização</th>
-                <th>Fatura</th>
+        <table class="table table-striped thead-dark" role="table">
+            <thead role="rowgroup">
+            <tr role="row">
+                <th role="columnheader">Entrada/Saída</th>
+                <th role="columnheader">Quantidade (g)</th>
+                <th role="columnheader">Descrição</th>
+                <th role="columnheader">Atualizado Por</th>
+                <th role="columnheader">Última Atualização</th>
+                <th role="columnheader">Fatura</th>
             </tr>
             </thead>
-            <tbody>
+            <tbody role="rowgroup">
             </tbody>
         </table>
     </div>
-
     <div id="modalApagar" class="modal fade" role="dialog">
         <div class="modal-dialog">
 
@@ -94,7 +92,11 @@
             //Filter and order table
             $('#stock').DataTable({
                 columnDefs: [ { orderable: false, targets: [-1, -2] } ],
-                "pageLength": 25
+                "pageLength": 25,
+                dom: 'lBfrtip',
+                buttons: [
+                    'copy', 'csv', 'excel', 'pdf', 'print'
+                ]
             });
 
 
@@ -114,17 +116,22 @@
         $("#stock tr").click(function(){
             $(this).addClass('selected').siblings().removeClass('selected');
             let value=$(this).data('specid');
-            alert(value);
+            //alert(value);
             $.ajax({
                 url: "/stock/list/historic/"+value,
             }).done(function(data) {
                 console.log(data);
                 let toAppend = '';
                 $.each(data, function(k,v) {
-                    toAppend = toAppend + '<tr><td>'+v["inout"]+'</td><td>'+v["weight"]+'</td><td>'+v["description"]+'</td>' +
-                        '<td>'+v["user_id"]+'</td><td>'+v["updated_at"]+'</td><td><img src="'+v["receipt"]+'"></td></tr>';
+                    toAppend = toAppend + '<tr role="row">' +
+                        '<td role="columnheader">'+v["inout"]+'</td>' +
+                        '<td role="columnheader">'+v["weight"]+'</td>' +
+                        '<td role="columnheader">'+v["description"]+'</td>' +
+                        '<td role="columnheader">'+v["user_id"]+'</td>' +
+                        '<td role="columnheader">'+v["updated_at"]+'</td>' +
+                        '<td role="columnheader"><img style="width: 50px" src="../../storage/'+v["receipt"]+'"></td></tr>';
                 });
-                $(".stock-history tbody").append('');
+                $(".stock-history tbody").empty();
                 $(".stock-history tbody").append(toAppend);
             });
             $(".stock-history").css('display', 'inherit');

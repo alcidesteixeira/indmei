@@ -13,16 +13,16 @@ return [
     |
     */
 
-    'accepted'             => 'The :attribute must be accepted.',
-    'active_url'           => 'The :attribute is not a valid URL.',
-    'after'                => 'The :attribute must be a date after :date.',
-    'after_or_equal'       => 'The :attribute must be a date after or equal to :date.',
-    'alpha'                => 'The :attribute may only contain letters.',
-    'alpha_dash'           => 'The :attribute may only contain letters, numbers, and dashes.',
-    'alpha_num'            => 'The :attribute may only contain letters and numbers.',
-    'array'                => 'The :attribute must be an array.',
-    'before'               => 'The :attribute must be a date before :date.',
-    'before_or_equal'      => 'The :attribute must be a date before or equal to :date.',
+    'accepted'             => 'O campo :attribute tem de ser aceite.',
+    'active_url'           => 'O campo :attribute não é um URL válido.',
+    'after'                => 'O campo :attribute deve ser uma data após :date.',
+    'after_or_equal'       => 'O campo :attribute deve ser uma data após ou igual a :date.',
+    'alpha'                => 'O campo :attribute apenas deve conter letras.',
+    'alpha_dash'           => 'O campo :attribute apenas pode conter letras, números e traços.',
+    'alpha_num'            => 'O campo :attribute apenas pode conter letras e números.',
+    'array'                => 'O campo :attribute apenas pode ser um array.',
+    'before'               => 'O campo :attribute deve ser uma data antes de :date.',
+    'before_or_equal'      => 'O campo :attribute deve ser uma data anterior ou igual a :date.',
     'between'              => [
         'numeric' => 'The :attribute must be between :min and :max.',
         'file'    => 'The :attribute must be between :min and :max kilobytes.',

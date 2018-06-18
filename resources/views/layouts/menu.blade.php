@@ -3,7 +3,7 @@
     <!-- Authentication Links -->
     @guest
         <li><a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a></li>
-        <li><a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a></li>
+        <li><a class="nav-link" href="{{ route('register') }}">{{ __('Registar') }}</a></li>
     @else
         @if (Auth::user()->hasRole('1'))
             <li class="nav-item dropdown">

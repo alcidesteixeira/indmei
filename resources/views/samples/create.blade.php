@@ -8,7 +8,12 @@
             <div class="row">
                 <div class="form-group col-md-3">
                     <label for="Status">Status:</label>
-                    <input type="text" class="form-control" name="status_id" value="{{@$sampleArticle->sample_article_status_id}}" required>
+                    {{--<input type="text" class="form-control" name="status_id" value="{{@$sampleArticle->sample_article_status_id}}" required>--}}
+                    <select class="form-control" name="status_id">
+                        @foreach($statuses as $status)
+                        <option value="{{$status->id}}" {{$status->id == @$sampleArticle->sample_article_status_id ? 'selected' : ''}}>{{$status->status}}</option>
+                        @endforeach
+                    </select>
                 </div>
             </div>
             <div class="row">
@@ -26,7 +31,10 @@
                 <div class="col-md-3"></div>
                 <div class="form-group col-md-3">
                     <label for="Image">Imagem:</label>
-                    <input type="text" class="form-control" name="image_url" value="{{@$sampleArticle->image_url}}" required>
+                    <input type="file" class="form-control-file" name="image_url" id="imgInp" {{@$sampleArticle->reference ? '' : 'required'}}>
+                </div>
+                <div class="col-md-3">
+                    <img id="blah" style="width: 200px;" src="../../storage/{{@$sampleArticle->image_url}}" />
                 </div>
             </div>
             <div class="row">
@@ -223,6 +231,24 @@
                 }});
         });
 
+        //Preview image before upload
+        function readURL(input) {
+
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function(e) {
+                    $('#blah').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $("#imgInp").change(function() {
+            readURL(this);
+            $("#blah").css('display', 'block');
+        });
     </script>
 
 @endsection

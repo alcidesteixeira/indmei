@@ -8,15 +8,10 @@
         <div class="row">
             <div class="form-group col-md-3">
                 <label for="EntradaSaida">Entrada/Saída:</label>
-                <select class="form-control" id="inout" name="inout">
+                <select class="form-control " id="inout" name="inout">
                     <option value="IN">Entrada</option>
                     <option value="OUT">Saída</option>
                 </select>
-            </div>
-
-            <div class="form-group col-md-6">
-                <label for="receipt">Carregar Fatura:</label>
-                <input type="text" class="form-control" id="receipt" required>
             </div>
 
             <div class="form-group col-md-3">
@@ -82,25 +77,31 @@
 
     <form method="post" id="saveReceipt" action="{{url('stock/receipt/')}}" enctype="multipart/form-data">
         @csrf
-        <table class="table table-striped thead-dark receipt-table">
-            <thead>
-            <tr>
-                <th>Entrada/Saída</th>
-                <th>Referencia</th>
-                <th>Cor</th>
-                <th>Qtd (g)</th>
-                <th>Descrição</th>
-                <th>Limite mínimo</th>
-                <th>Fatura</th>
-            </tr>
+        <table class="table table-striped thead-dark receipt-table" role="table">
+            <thead role="rowgroup">
+                <tr role="row">
+                    <th role="columnheader">Entrada/Saída</th>
+                    <th role="columnheader">Referencia</th>
+                    <th role="columnheader">Cor</th>
+                    <th role="columnheader">Qtd (g)</th>
+                    <th role="columnheader">Descrição</th>
+                    <th role="columnheader">Limite mínimo</th>
+                </tr>
             </thead>
-            <tbody>
-
+            <tbody role="rowgroup">
             </tbody>
         </table>
-        <div class="row">
-            <div class="col-md-9"></div>
-            <div class="submit-buttons form-group col-md-3" style="margin-top:60px">
+
+
+        <div class="row" style="margin-bottom: 30px;">
+
+            <div class="form-group col-md-6">
+                <label for="receipt">Carregar Fatura:</label>
+                <input type="file" class="form-control-file" name="receipt" id="receipt" required>
+            </div>
+
+            <div class="col-md-3"></div>
+            <div class="submit-buttons form-group col-md-3">
                 <button type="submit" class="btn btn-success" onclick="beforeInput();">Finalizar</button>
             </div>
         </div>
@@ -136,6 +137,7 @@
 
 
     //Add stock to table
+
     let i = 1;
     $( "#addRow" ).submit( function (e) {
 
@@ -146,14 +148,13 @@
         let qtd = $("#qtd").val(); let threshold = $("#threshold").val();
         let receipt = $("#receipt").val();
 
-        $( 'tbody' ).append('<tr>' +
-            '<td><input type="text" name="inout-'+i+'" value="'+inout+'"></td>' +
-            '<td><input type="text" name="reference-'+i+'" value="'+reference+'"></td>' +
-            '<td><input type="text" name="color-'+i+'" value="'+color+'"></td>' +
-            '<td><input type="text" name="qtd-'+i+'" value="'+qtd+'"></td>' +
-            '<td><input type="text" name="description-'+i+'" value="'+description+'"></td>' +
-            '<td><input type="text" name="threshold-'+i+'" value="'+threshold+'"></td>' +
-            '<td><input type="text" name="receipt-'+i+'" value="'+receipt+'"></td>' +
+        $( 'tbody' ).append('<tr role="row">' +
+            '<td role="columnheader"><input type="text" name="inout-'+i+'" value="'+inout+'"></td>' +
+            '<td role="columnheader"><input type="text" name="reference-'+i+'" value="'+reference+'"></td>' +
+            '<td role="columnheader"><input type="text" name="color-'+i+'" value="'+color+'"></td>' +
+            '<td role="columnheader"><input type="text" name="qtd-'+i+'" value="'+qtd+'"></td>' +
+            '<td role="columnheader"><input type="text" name="description-'+i+'" value="'+description+'"></td>' +
+            '<td role="columnheader"><input type="text" name="threshold-'+i+'" value="'+threshold+'"></td>' +
             '</tr>');
 
         i++;

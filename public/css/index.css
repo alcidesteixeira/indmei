@@ -13,3 +13,8 @@ select {
 .receipt-table {
     margin-bottom: 50px !important;
 }
+
+.dataTables_wrapper {
+    margin-top: 50px !important;
+    margin-bottom: 50px !important;
+}

@@ -8,28 +8,28 @@
 
 
     <h2>Lista de Roles disponíveis</h2>
-    <table class="table table-striped thead-dark">
-        <thead>
-        <tr>
-            <th>Nome</th>
-            <th>Descrição</th>
-            <th>Data de Alteração</th>
-            <th></th>
-            <th></th>
+    <table class="table table-striped thead-dark" role="table">
+        <thead role="rowgroup">
+        <tr role="row">
+            <th role="columnheader">Nome</th>
+            <th role="columnheader">Descrição</th>
+            <th role="columnheader">Data de Alteração</th>
+            <th role="columnheader"></th>
+            <th role="columnheader"></th>
         </tr>
         </thead>
-        <tbody>
+        <tbody role="rowgroup">
             @foreach($roles as $role)
-            <tr>
-                <td>{{$role->name}}</td>
-                <td>{{$role->description}}</td>
-                <td>{{$role->updated_at}}</td>
-                <td>
+            <tr role="row">
+                <td role="columnheader">{{$role->name}}</td>
+                <td role="columnheader">{{$role->description}}</td>
+                <td role="columnheader">{{$role->updated_at}}</td>
+                <td role="columnheader">
                     <form method="get" action="{{url('roles/edit/'.$role->id)}}" enctype="multipart/form-data">
                         <button type="submit" class="btn btn-warning">Editar</button>
                     </form>
                 </td>
-                <td>
+                <td role="columnheader">
                     <button type="button" data-id="{{$role->id}}" data-role="{{$role->name}}"  class="apagarform btn btn-danger">Apagar</button>
                 </td>
             </tr>

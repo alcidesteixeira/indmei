@@ -6,30 +6,30 @@
         @include('flash::message')
 
         <h2>Lista de Utilizadores e os seus Roles</h2>
-        <table class="table table-striped thead-dark">
-            <thead>
-            <tr>
-                <th>Nome</th>
-                <th>Email</th>
-                <th>Role</th>
-                <th>Data de Alteração</th>
-                <th></th>
-                <th></th>
+        <table class="table table-striped thead-dark" role="table">
+            <thead role="rowgroup">
+            <tr role="row">
+                <th role="columnheader">Nome</th>
+                <th role="columnheader">Email</th>
+                <th role="columnheader">Role</th>
+                <th role="columnheader">Data de Alteração</th>
+                <th role="columnheader"></th>
+                <th role="columnheader"></th>
             </tr>
             </thead>
-            <tbody>
+            <tbody role="rowgroup">
             @foreach($users as $user)
-                <tr>
-                    <td>{{$user->name}}</td>
-                    <td>{{$user->email}}</td>
-                    <td>@foreach($user->roles()->get() as $role) {{$role->name . ','}} @endforeach</td>
-                    <td>{{$user->updated_at}}</td>
-                    <td>
+                <tr role="row">
+                    <td role="cell">{{$user->name}}</td>
+                    <td role="cell">{{$user->email}}</td>
+                    <td role="cell">@foreach($user->roles()->get() as $role) {{$role->name . ','}} @endforeach</td>
+                    <td role="cell">{{$user->updated_at}}</td>
+                    <td role="cell">
                         <form method="get" action="{{url('/roles/attribute/edit/'.$user->id)}}" enctype="multipart/form-data">
                             <button type="submit" class="btn btn-warning">Editar</button>
                         </form>
                     </td>
-                    <td>
+                    <td role="cell">
                         <button type="button" data-id="{{$user->id}}" data-user="{{$user->name}}" class="apagarform btn btn-danger">Apagar</button>
                     </td>
                 </tr>
