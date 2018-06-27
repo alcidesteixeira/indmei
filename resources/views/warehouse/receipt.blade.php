@@ -91,7 +91,8 @@
                     <th role="columnheader">Entrada/Saída</th>
                     <th role="columnheader">Referencia</th>
                     <th role="columnheader">Cor</th>
-                    <th role="columnheader">Qtd (g)</th>
+                    <th role="columnheader">Qtd (Kg)</th>
+                    <th role="columnheader">Custo (€/Kg)</th>
                     <th role="columnheader">Descrição</th>
                     <th role="columnheader">Limite mínimo</th>
                 </tr>
@@ -153,22 +154,23 @@
 
         let inout = $("#inout").val(); let description = $("#description").val();
         let reference = $("#reference").val(); let color = $("#color").val();
-        let qtd = $("#qtd").val(); let threshold = $("#threshold").val();
-        let receipt = $("#receipt").val();
+        let qtd = $("#qtd").val(); let cost = $("#cost").val();
+        let threshold = $("#threshold").val(); let receipt = $("#receipt").val();
 
         $( 'tbody' ).append('<tr role="row">' +
-            '<td role="columnheader"><input type="text" name="inout-'+i+'" value="'+inout+'"></td>' +
-            '<td role="columnheader"><input type="text" name="reference-'+i+'" value="'+reference+'"></td>' +
-            '<td role="columnheader"><input type="text" name="color-'+i+'" value="'+color+'"></td>' +
-            '<td role="columnheader"><input type="text" name="qtd-'+i+'" value="'+qtd+'"></td>' +
-            '<td role="columnheader"><input type="text" name="description-'+i+'" value="'+description+'"></td>' +
-            '<td role="columnheader"><input type="text" name="threshold-'+i+'" value="'+threshold+'"></td>' +
+            '<td role="columnheader"><input type="text" data-col1="Entrada/Saída" name="inout-'+i+'" value="'+inout+'"></td>' +
+            '<td role="columnheader"><input type="text" data-col2="Referência" name="reference-'+i+'" value="'+reference+'"></td>' +
+            '<td role="columnheader"><input type="text" data-col3="Cor" name="color-'+i+'" value="'+color+'"></td>' +
+            '<td role="columnheader"><input type="text" data-col4="Qtd (Kg)" name="qtd-'+i+'" value="'+qtd+'"></td>' +
+            '<td role="columnheader"><input type="text" data-col5="Custo (€/Kg)" name="cost-'+i+'" value="'+cost+'"></td>' +
+            '<td role="columnheader"><input type="text" data-col6="Descrição" name="description-'+i+'" value="'+description+'"></td>' +
+            '<td role="columnheader"><input type="text" data-col7="Limite mínimo" name="threshold-'+i+'" value="'+threshold+'"></td>' +
             '</tr>');
 
         i++;
         //Empty values
         $("#description").val(""); $("#reference").val(""); $("#color").val("");
-        $("#qtd").val(""); $("#threshold").val("");
+        $("#qtd").val(""); $("#cost").val(""); $("#threshold").val("");
 
     });
 

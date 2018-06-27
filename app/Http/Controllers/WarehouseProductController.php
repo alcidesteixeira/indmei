@@ -32,7 +32,7 @@ class WarehouseProductController extends Controller
     {
         $historic = DB::table('warehouse_products_history')
             ->leftJoin('users', 'warehouse_products_history.user_id', 'users.id')
-            ->select('user_id', 'name', 'inout', 'weight', 'description', 'receipt', 'warehouse_products_history.updated_at')
+            ->select('user_id', 'name', 'inout', 'weight', 'cost', 'description', 'receipt', 'warehouse_products_history.updated_at')
             ->where('warehouse_product_spec_id', $id)
             ->get();
 
@@ -203,7 +203,7 @@ class WarehouseProductController extends Controller
                 $warehouseProductSpec->description = $request->$description;
                 $warehouseProductSpec->color = $request->$color;
                 $warehouseProductSpec->weight = $request->$qtd;
-                $warehouseProductSpec->weight = $request->$cost;
+                $warehouseProductSpec->cost = $request->$cost;
                 $warehouseProductSpec->threshold = $request->$threshold ? $request->$threshold : 1000;
                 $warehouseProductSpec->save();
             }
@@ -220,7 +220,7 @@ class WarehouseProductController extends Controller
                     'user_id' => Auth::id(),
                     'inout' => $request->$inout,
                     'weight' => $request->$qtd,
-                    'cost' => $request->$qtd,
+                    'cost' => $request->$cost,
                     'description' => $request->$description,
                     'receipt' => $filename,
                     'created_at' => Carbon::now()->timezone('Europe/London'),

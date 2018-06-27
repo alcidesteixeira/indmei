@@ -9,8 +9,8 @@ class SampleArticleGuiafio extends Model
     /**
      * Get the comments for the blog post.
      */
-    public function sampleArticles()
+    public function sampleArticleWires()
     {
-        return $this->hasMany('App\SampleArticle');
+        return $this->hasMany('App\SampleArticleWire');
     }
 }

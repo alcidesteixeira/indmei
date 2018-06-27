@@ -117,10 +117,10 @@ class SampleArticleController extends Controller
 
             $wire = new sampleArticlesWire();
             $wire->sample_article_id = $sampleArticle->id;
-            $wire->step_id = $request->$step;
+            $wire->step_id = $request->$step ? $request->$step : '0';
             $wire->warehouse_product_id = $request->$reference;
             $wire->guiafios_id = $request->$guiafios;
-            $wire->grams = $request->$grams;
+            $wire->grams = $request->$grams ? $request->$grams : '0';
             $wire->save();
 
             //Store on SampleArticleColor Class
@@ -129,7 +129,7 @@ class SampleArticleController extends Controller
                 $colorFromWarehouse = 'row-'.$i.'-color'.$j;
                 $wireColor = new sampleArticleColor();
                 $wireColor->sample_articles_wire_id = $wire->id;
-                $wireColor->warehouse_product_spec_id = $request->$colorFromWarehouse;
+                $wireColor->warehouse_product_spec_id = $request->$colorFromWarehouse ? $request->$colorFromWarehouse : '0';
                 $wireColor->save();
             }
         }
@@ -158,10 +158,13 @@ class SampleArticleController extends Controller
 
         $statuses = SampleArticleStatus::all();
 
+        $guiafios = SampleArticleGuiafio::all();
+
+//        dd($sampleArticle->sampleArticleWires()->get()->values()->get(1)->guiafios_id);
 //        dd($sampleArticle->sampleArticleWires()->get()->values()->get(2)->wireColors()->get()->values()->get(2)->warehouse_product_spec_id);
         //dd($sampleArticle->sampleArticleWires()->get()->values()->get(2)->warehouseProduct->warehouseProductSpecs()->get());
 
-        return view('samples.create', compact('sampleArticle', 'steps', 'warehouseProducts', 'statuses', 'id'));
+        return view('samples.create', compact('sampleArticle', 'steps', 'warehouseProducts', 'statuses', 'guiafios', 'id'));
     }
 
     public function updateWireSpecs($id)
@@ -243,10 +246,10 @@ class SampleArticleController extends Controller
             $guiafios = 'row-'.$i.'-guiafios';
 
             $wire = $sampleArticle->sampleArticleWires()->get()->values()->get($i-1);
-            $wire->step_id = $request->$step;
+            $wire->step_id = $request->$step ? $request->$step : '0';
             $wire->warehouse_product_id = $request->$reference;
             $wire->guiafios_id = $request->$guiafios;
-            $wire->grams = $request->$grams;
+            $wire->grams = $request->$grams ? $request->$grams : '0';
             $wire->save();
 
             //Store on SampleArticleColor Class
@@ -254,7 +257,7 @@ class SampleArticleController extends Controller
             for($j = 1; $j <= $request->colorsCount; $j++) {
                 $colorFromWarehouse = 'row-'.$i.'-color'.$j;
                 $wireColor = $wire->wireColors()->get()->values()->get($j-1);
-                $wireColor->warehouse_product_spec_id = $request->$colorFromWarehouse;
+                $wireColor->warehouse_product_spec_id = $request->$colorFromWarehouse ? $request->$colorFromWarehouse : '0';
                 $wireColor->save();
             }
         }

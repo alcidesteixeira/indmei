@@ -25,21 +25,21 @@
             <tbody role="rowgroup">
             @foreach($stock as $product)
                 <tr style="background-color: {{$product->threshold >= $product->weight ? '#f9a9a9' : ''}}" data-specid="{{$product->id}}" role="row">
-                    <td role="columnheader">{{$product->product->reference}}</td>
-                    <td role="columnheader">{{$product->color}}</td>
-                    <td role="columnheader">{{$product->weight}}</td>
-                    <td role="columnheader">{{$product->weight}}</td>
-                    <td role="columnheader">{{$product->cost}}</td>
-                    <td role="columnheader">{{$product->threshold}}</td>
-                    <td role="columnheader">{{$product->description}}</td>
-                    <td role="columnheader">{{$product->product->user->name}}</td>
-                    <td role="columnheader">{{$product->updated_at}}</td>
-                    <td role="columnheader">
+                    <td role="columnheader" data-col1="Referência">{{$product->product->reference}}</td>
+                    <td role="columnheader" data-col2="Cor">{{$product->color}}</td>
+                    <td role="columnheader" data-col3="Stock Bruto (Kg)">{{$product->weight}}</td>
+                    <td role="columnheader" data-col4="Stock Líquido (Kg)">{{$product->weight}}</td>
+                    <td role="columnheader" data-col5="Alerta mínimo (Kg)">{{$product->cost}}</td>
+                    <td role="columnheader" data-col6="Custo (€/Kg)">{{$product->threshold}}</td>
+                    <td role="columnheader" data-col7="Descrição">{{$product->description}}</td>
+                    <td role="columnheader" data-col8="Atualizado Por">{{$product->product->user->name}}</td>
+                    <td role="columnheader" data-col9="Última Atualização">{{$product->updated_at}}</td>
+                    <td role="columnheader" data-col10="">
                         <form method="get" action="{{url('stock/edit/'.$product->id)}}" id="edit" enctype="multipart/form-data">
                             <button type="submit" class="btn btn-warning">Editar</button>
                         </form>
                     </td>
-                    <td role="columnheader">
+                    <td role="columnheader" data-col11="">
                         <button type="button" data-id="{{$product->id}}" data-role="{{$product->product->reference}}" id="delete" class="apagarform btn btn-danger">Apagar</button>
                     </td>
                 </tr>
@@ -49,7 +49,7 @@
     </div>
 
     <div id="history" class="modal fade" role="dialog">
-        <div class="modal-dialog">
+        <div class="modal-dialog" style="max-width: 850px;">
 
             <!-- Modal content-->
             <div class="modal-content">
@@ -65,6 +65,7 @@
                                 <tr role="row">
                                     <th role="columnheader">Entrada/Saída</th>
                                     <th role="columnheader">Quantidade (g)</th>
+                                    <th role="columnheader">Custo (€)</th>
                                     <th role="columnheader">Descrição</th>
                                     <th role="columnheader">Atualizado Por</th>
                                     <th role="columnheader">Última Atualização</th>
@@ -166,12 +167,13 @@
                 let toAppend = '';
                 $.each(data, function(k,v) {
                     toAppend = toAppend + '<tr role="row">' +
-                        '<td role="columnheader">'+v["inout"]+'</td>' +
-                        '<td role="columnheader">'+v["weight"]+'</td>' +
-                        '<td role="columnheader">'+v["description"]+'</td>' +
-                        '<td role="columnheader">'+v["name"]+'</td>' +
-                        '<td role="columnheader">'+v["updated_at"]+'</td>' +
-                        '<td role="columnheader"><img style="width: 50px" src="../../storage/'+v["receipt"]+'"></td></tr>';
+                        '<td role="columnheader" data-col1="Entrada/Saída">'+v["inout"]+'</td>' +
+                        '<td role="columnheader" data-col2="Quantidade (g)">'+v["weight"]+'</td>' +
+                        '<td role="columnheader" data-col3="Custo (€)">'+v["cost"]+'</td>' +
+                        '<td role="columnheader" data-col4="Descrição">'+v["description"]+'</td>' +
+                        '<td role="columnheader" data-col5="Atualizado Por">'+v["name"]+'</td>' +
+                        '<td role="columnheader" data-col6="Última Atualização">'+v["updated_at"]+'</td>' +
+                        '<td role="columnheader" data-col7="Fatura"><img style="width: 50px" src="../../storage/'+v["receipt"]+'"></td></tr>';
                 });
                 $(".stock-history tbody").empty();
                 $(".stock-history tbody").append(toAppend);

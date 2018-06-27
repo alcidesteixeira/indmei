@@ -36,8 +36,8 @@
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="{{ url('roles/create') }}">Criar Encomenda</a>
                         <a class="dropdown-item" href="{{ url('roles/list') }}">Listar Encomendas</a>
-                        <a class="dropdown-item" href="{{ url('supplier/create') }}">Criar Fornecedor</a>
-                        <a class="dropdown-item" href="{{ url('supplier/list') }}">Listar Fornecedores</a>
+                        <a class="dropdown-item" href="{{ url('suppliers/create') }}">Criar Fornecedor</a>
+                        <a class="dropdown-item" href="{{ url('suppliers/list') }}">Listar Fornecedores</a>
                     </div>
                 </li>
         @endif

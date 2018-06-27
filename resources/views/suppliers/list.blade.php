@@ -5,32 +5,34 @@
     <div class="container">
         @include('flash::message')
 
-        <h2>Lista de Utilizadores e os seus Roles</h2>
+
+
+        <h2>Lista de Roles disponíveis</h2>
         <table class="table table-striped thead-dark" role="table">
             <thead role="rowgroup">
             <tr role="row">
-                <th role="columnheader">Nome</th>
-                <th role="columnheader">Email</th>
-                <th role="columnheader">Permissões</th>
+                <th role="columnheader">Fornecedor</th>
+                <th role="columnheader">NIF</th>
+                <th role="columnheader">Descrição</th>
                 <th role="columnheader">Data de Alteração</th>
                 <th role="columnheader"></th>
                 <th role="columnheader"></th>
             </tr>
             </thead>
             <tbody role="rowgroup">
-            @foreach($users as $user)
+            @foreach($suppliers as $supplier)
                 <tr role="row">
-                    <td role="cell" data-col1="Nome">{{$user->name}}</td>
-                    <td role="cell" data-col2="Email">{{$user->email}}</td>
-                    <td role="cell" data-col3="Permissões">@foreach($user->roles()->get() as $role) {{$role->name . ','}} @endforeach</td>
-                    <td role="cell" data-col4="Data de Alteração">{{$user->updated_at}}</td>
-                    <td role="cell" data-col5="">
-                        <form method="get" action="{{url('/roles/attribute/edit/'.$user->id)}}" enctype="multipart/form-data">
+                    <td role="columnheader" data-col1="Fornecedor">{{$supplier->supplier}}</td>
+                    <td role="columnheader" data-col2="NIF">{{$supplier->nif}}</td>
+                    <td role="columnheader" data-col3="Descrição">{{$supplier->description}}</td>
+                    <td role="columnheader" data-col4="Data de Alteração">{{$supplier->updated_at}}</td>
+                    <td role="columnheader" data-col5="">
+                        <form method="get" action="{{url('suppliers/edit/'.$supplier->id)}}" enctype="multipart/form-data">
                             <button type="submit" class="btn btn-warning">Editar</button>
                         </form>
                     </td>
-                    <td role="cell" data-col6="">
-                        <button type="button" data-id="{{$user->id}}" data-user="{{$user->name}}" class="apagarform btn btn-danger">Apagar</button>
+                    <td role="columnheader" data-col6="">
+                        <button type="button" data-id="{{$supplier->id}}" data-role="{{$supplier->supplier}}"  class="apagarform btn btn-danger">Apagar</button>
                     </td>
                 </tr>
             @endforeach
@@ -51,7 +53,7 @@
 
                 </div>
                 <div class="modal-footer">
-                    <form method="get" id="apagar" action="{{url('/roles/attribute/delete/'.$user->id)}}" enctype="multipart/form-data">
+                    <form method="get" id="apagar" action="" enctype="multipart/form-data">
                         <button type="submit" class="btn btn-info">Apagar</button>
                     </form>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -89,10 +91,10 @@
 
             $('.apagarform').click(function() {
                 let id = $( this ).data('id');
-                let name = $( this ).data('user');
+                let name = $( this ).data('role');
                 $(".modal-body").append('');
-                $(".modal-body").append('<p>Utilizador: ' + name + '</p>');
-                $('#apagar').attr('action', '/roles/attribute/delete/'+id);
+                $(".modal-body").append('<p>Fornecedor: ' + name + '</p>');
+                $('#apagar').attr('action', 'delete/'+id);
                 $("#modalApagar").modal('show');
             });
         });

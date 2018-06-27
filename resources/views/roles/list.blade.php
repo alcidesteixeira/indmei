@@ -21,15 +21,15 @@
         <tbody role="rowgroup">
             @foreach($roles as $role)
             <tr role="row">
-                <td role="columnheader">{{$role->name}}</td>
-                <td role="columnheader">{{$role->description}}</td>
-                <td role="columnheader">{{$role->updated_at}}</td>
-                <td role="columnheader">
+                <td role="columnheader" data-col1="Nome">{{$role->name}}</td>
+                <td role="columnheader" data-col2="Descrição">{{$role->description}}</td>
+                <td role="columnheader" data-col3="Data de Alteração">{{$role->updated_at}}</td>
+                <td role="columnheader" data-col4="">
                     <form method="get" action="{{url('roles/edit/'.$role->id)}}" enctype="multipart/form-data">
                         <button type="submit" class="btn btn-warning">Editar</button>
                     </form>
                 </td>
-                <td role="columnheader">
+                <td role="columnheader" data-col5="">
                     <button type="button" data-id="{{$role->id}}" data-role="{{$role->name}}"  class="apagarform btn btn-danger">Apagar</button>
                 </td>
             </tr>

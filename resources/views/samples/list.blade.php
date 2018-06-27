@@ -9,7 +9,7 @@
         <table class="table table-striped thead-dark" role="table">
             <thead role="rowgroup">
             <tr role="row">
-                <th role="columnheader">Referencia</th>
+                <th role="columnheader">Referência</th>
                 <th role="columnheader">Descrição</th>
                 <th role="columnheader">Imagem</th>
                 <th role="columnheader">Executante</th>
@@ -22,18 +22,18 @@
             <tbody role="rowgroup">
             @foreach($sampleArticles as $sample)
                 <tr role="row">
-                    <td role="columnheader">{{$sample->reference}}</td>
-                    <td role="columnheader">{{$sample->description}}</td>
-                    <td role="columnheader"><img src="../../storage/{{$sample->image_url}}" width="50"></td>
-                    <td role="columnheader">{{$sample->user->name}}</td>
-                    <td role="columnheader">{{$sample->updated_at}}</td>
-                    <td role="columnheader">{{$sample->sampleArticleStatus->status}}</td>
-                    <td role="columnheader">
+                    <td role="columnheader" data-col1="Referência">{{$sample->reference}}</td>
+                    <td role="columnheader" data-col2="Descrição">{{$sample->description}}</td>
+                    <td role="columnheader" data-col3="Imagem"><img src="../../storage/{{$sample->image_url}}" width="50"></td>
+                    <td role="columnheader" data-col4="Executante">{{$sample->user->name}}</td>
+                    <td role="columnheader" data-col5="Última Atualização">{{$sample->updated_at}}</td>
+                    <td role="columnheader" data-col6="Status">{{$sample->sampleArticleStatus->status}}</td>
+                    <td role="columnheader" data-col7="">
                         <form method="get" action="{{url('samples/edit/'.$sample->id)}}" enctype="multipart/form-data">
                             <button type="submit" class="btn btn-warning">Editar</button>
                         </form>
                     </td>
-                    <td role="columnheader">
+                    <td role="columnheader" data-col8="">
                         <button type="button" data-id="{{$sample->id}}" data-role="{{$sample->description}}"  class="apagarform btn btn-danger">Apagar</button>
                     </td>
                 </tr>
