@@ -74,8 +74,27 @@
                 "pageLength": 25,
                 dom: 'lBfrtip',
                 buttons: [
-                    'copy', 'csv', 'excel', 'pdf', 'print'
-                ]
+                    { extend: 'csv', text: 'CSV' },
+                    { extend: 'excel', text: 'Excel' },
+                    { extend: 'pdf', text: 'PDF' },
+                    { extend: 'print', text: 'Imprimir' }
+                ],
+                "language": {
+                    "lengthMenu": "Apresentar _MENU_ resultados por página",
+                    "zeroRecords": "Nenhum resultado encontrado.",
+                    "info": "Página _PAGE_ de _PAGES_",
+                    "infoEmpty": "Sem resultados disponíveis",
+                    "infoFiltered": "(Filtrado de _MAX_ resultados totais)",
+                    "paginate": {
+                        "first":      "Primeira",
+                        "last":       "Última",
+                        "next":       "Seguinte",
+                        "previous":   "Anterior"
+                    },
+                    "loadingRecords": "A pesquisar...",
+                    "processing":     "A processar...",
+                    "search":         "Pesquisar:",
+                }
             });
 
 

@@ -31,7 +31,8 @@ class WarehouseProductController extends Controller
     public function returnHistoric($id)
     {
         $historic = DB::table('warehouse_products_history')
-            ->select('user_id', 'inout', 'weight', 'description', 'receipt', 'updated_at')
+            ->leftJoin('users', 'warehouse_products_history.user_id', 'users.id')
+            ->select('user_id', 'name', 'inout', 'weight', 'description', 'receipt', 'warehouse_products_history.updated_at')
             ->where('warehouse_product_spec_id', $id)
             ->get();
 
@@ -73,6 +74,7 @@ class WarehouseProductController extends Controller
         $spec->description = $request->description;
         $spec->color = $request->color;
         $spec->weight = $request->weight;
+        $spec->cost = $request->cost;
         $spec->threshold = $request->threshold;
         $spec->save();
 
@@ -113,6 +115,7 @@ class WarehouseProductController extends Controller
         $spec->description = $request->description;
         $spec->color = $request->color;
         $spec->weight = $request->weight;
+        $spec->cost = $request->cost;
         $spec->threshold = $request->threshold;
         $spec->save();
 
@@ -173,6 +176,7 @@ class WarehouseProductController extends Controller
             $inout = 'inout-'.$i;
             $reference = 'reference-'.$i;
             $color = 'color-'.$i;
+            $cost = 'cost-'.$i;
             $qtd = 'qtd-'.$i;
             $description = 'description-'.$i;
             $threshold = 'threshold-'.$i;
@@ -199,6 +203,7 @@ class WarehouseProductController extends Controller
                 $warehouseProductSpec->description = $request->$description;
                 $warehouseProductSpec->color = $request->$color;
                 $warehouseProductSpec->weight = $request->$qtd;
+                $warehouseProductSpec->weight = $request->$cost;
                 $warehouseProductSpec->threshold = $request->$threshold ? $request->$threshold : 1000;
                 $warehouseProductSpec->save();
             }
@@ -215,6 +220,7 @@ class WarehouseProductController extends Controller
                     'user_id' => Auth::id(),
                     'inout' => $request->$inout,
                     'weight' => $request->$qtd,
+                    'cost' => $request->$qtd,
                     'description' => $request->$description,
                     'receipt' => $filename,
                     'created_at' => Carbon::now()->timezone('Europe/London'),
@@ -228,4 +234,21 @@ class WarehouseProductController extends Controller
 
         return redirect()->action('WarehouseProductController@index');
     }
+
+    public function requestStock()
+    {
+        return view('warehouse.request_stock');
+    }
+
+    public function storeRequestedStock()
+    {
+        return view('warehouse.list_stock_requested');
+    }
+
+    public function StockRequestedHistory()
+    {
+        return view('warehouse.list_stock_requested');
+    }
+
+
 }

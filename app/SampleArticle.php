@@ -29,4 +29,9 @@ class SampleArticle extends Model
     {
         return $this->hasMany('App\SampleArticlesWire');
     }
+
+    public function sampleArticleGuiafio()
+    {
+        return $this->belongsTo('App\SampleArticleGuiafio');
+    }
 }

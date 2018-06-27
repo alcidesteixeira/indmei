@@ -2,18 +2,18 @@
 
 @section('content')
 <div class="container">
-    <h2>Entrada de Encomenda</h2><br/>
+    <h2>Dar Entrada de Stock</h2><br/>
     <form id="addRow" method="" action="" enctype="multipart/form-data">
         @csrf
         <div class="row">
             <div class="form-group col-md-3">
                 <label for="EntradaSaida">Entrada/Saída:</label>
-                <select class="form-control " id="inout" name="inout">
+                <select class="form-control" id="inout" name="inout">
                     <option value="IN">Entrada</option>
                     <option value="OUT">Saída</option>
                 </select>
             </div>
-
+            <div class="form-group col-md-6"></div>
             <div class="form-group col-md-3">
                 <button type="button" id="newMaterial" class="btn btn-default" style="margin-top: 31px; float:right;">Criar nova Matéria-Prima</button>
             </div>
@@ -53,8 +53,16 @@
         <div class="row">
             <div class="col-md-3"></div>
             <div class="form-group col-md-6">
-                <label for="weight">Peso (gramas):</label>
+                <label for="weight">Peso (Kg):</label>
                 <input type="text" class="form-control" id="qtd" required>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div class="form-group col-md-6">
+                <label for="cost">Custo por Kg:</label>
+                <input type="text" class="form-control" id="cost" required>
             </div>
         </div>
 

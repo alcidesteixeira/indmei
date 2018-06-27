@@ -11,11 +11,12 @@
             <tr role="row">
                 <th role="columnheader">Referência</th>
                 <th role="columnheader">Cor</th>
-                <th role="columnheader">Stock Bruto (g)</th>
-                <th role="columnheader">Stock Líquido (g)</th>
-                <th role="columnheader">Atualizado Por</th>
+                <th role="columnheader">Stock Bruto (Kg)</th>
+                <th role="columnheader">Stock Líquido (Kg)</th>
+                <th role="columnheader">Alerta mínimo (Kg)</th>
+                <th role="columnheader">Custo (€/Kg)</th>
                 <th role="columnheader">Descrição</th>
-                <th role="columnheader">Alerta mínimo (g)</th>
+                <th role="columnheader">Atualizado Por</th>
                 <th role="columnheader">Última Atualização</th>
                 <th role="columnheader"></th>
                 <th role="columnheader"></th>
@@ -28,9 +29,10 @@
                     <td role="columnheader">{{$product->color}}</td>
                     <td role="columnheader">{{$product->weight}}</td>
                     <td role="columnheader">{{$product->weight}}</td>
-                    <td role="columnheader">{{$product->product->user->name}}</td>
-                    <td role="columnheader">{{$product->description}}</td>
+                    <td role="columnheader">{{$product->cost}}</td>
                     <td role="columnheader">{{$product->threshold}}</td>
+                    <td role="columnheader">{{$product->description}}</td>
+                    <td role="columnheader">{{$product->product->user->name}}</td>
                     <td role="columnheader">{{$product->updated_at}}</td>
                     <td role="columnheader">
                         <form method="get" action="{{url('stock/edit/'.$product->id)}}" id="edit" enctype="multipart/form-data">
@@ -46,23 +48,44 @@
         </table>
     </div>
 
-    <div class="container stock-history" style="margin-top: 50px;margin-bottom: 50px">
-        <h4>Histórico de Matéria-Prima</h4>
-        <table class="table table-striped thead-dark" role="table">
-            <thead role="rowgroup">
-            <tr role="row">
-                <th role="columnheader">Entrada/Saída</th>
-                <th role="columnheader">Quantidade (g)</th>
-                <th role="columnheader">Descrição</th>
-                <th role="columnheader">Atualizado Por</th>
-                <th role="columnheader">Última Atualização</th>
-                <th role="columnheader">Fatura</th>
-            </tr>
-            </thead>
-            <tbody role="rowgroup">
-            </tbody>
-        </table>
+    <div id="history" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Histórico de Matéria-Prima</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="container stock-history" style="margin-top: 50px;margin-bottom: 50px">
+                            <table class="table table-striped thead-dark table-responsive" role="table">
+                                <thead role="rowgroup">
+                                <tr role="row">
+                                    <th role="columnheader">Entrada/Saída</th>
+                                    <th role="columnheader">Quantidade (g)</th>
+                                    <th role="columnheader">Descrição</th>
+                                    <th role="columnheader">Atualizado Por</th>
+                                    <th role="columnheader">Última Atualização</th>
+                                    <th role="columnheader">Fatura</th>
+                                </tr>
+                                </thead>
+                                <tbody role="rowgroup">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+
+        </div>
     </div>
+
+
     <div id="modalApagar" class="modal fade" role="dialog">
         <div class="modal-dialog">
 
@@ -79,7 +102,7 @@
                     <form method="get" id="apagar" action="" enctype="multipart/form-data">
                         <button type="submit" class="btn btn-info">Apagar</button>
                     </form>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
                 </div>
             </div>
 
@@ -92,11 +115,30 @@
             //Filter and order table
             $('#stock').DataTable({
                 columnDefs: [ { orderable: false, targets: [-1, -2] } ],
-                "pageLength": 25,
+                "pageLength": 10,
                 dom: 'lBfrtip',
                 buttons: [
-                    'copy', 'csv', 'excel', 'pdf', 'print'
-                ]
+                    { extend: 'csv', text: 'CSV' },
+                    { extend: 'excel', text: 'Excel' },
+                    { extend: 'pdf', text: 'PDF' },
+                    { extend: 'print', text: 'Imprimir' }
+                ],
+                "language": {
+                    "lengthMenu": "Apresentar _MENU_ resultados por página",
+                    "zeroRecords": "Nenhum resultado encontrado.",
+                    "info": "Página _PAGE_ de _PAGES_",
+                    "infoEmpty": "Sem resultados disponíveis",
+                    "infoFiltered": "(Filtrado de _MAX_ resultados totais)",
+                    "paginate": {
+                        "first":      "Primeira",
+                        "last":       "Última",
+                        "next":       "Seguinte",
+                        "previous":   "Anterior"
+                    },
+                    "loadingRecords": "A pesquisar...",
+                    "processing":     "A processar...",
+                    "search":         "Pesquisar:",
+                }
             });
 
 
@@ -111,7 +153,7 @@
         });
 
         //Select table row from stock to show details
-        $(".stock-history").css('display', 'none');
+        //$(".stock-history").css('display', 'none');
 
         $("#stock tr").click(function(){
             $(this).addClass('selected').siblings().removeClass('selected');
@@ -127,14 +169,15 @@
                         '<td role="columnheader">'+v["inout"]+'</td>' +
                         '<td role="columnheader">'+v["weight"]+'</td>' +
                         '<td role="columnheader">'+v["description"]+'</td>' +
-                        '<td role="columnheader">'+v["user_id"]+'</td>' +
+                        '<td role="columnheader">'+v["name"]+'</td>' +
                         '<td role="columnheader">'+v["updated_at"]+'</td>' +
                         '<td role="columnheader"><img style="width: 50px" src="../../storage/'+v["receipt"]+'"></td></tr>';
                 });
                 $(".stock-history tbody").empty();
                 $(".stock-history tbody").append(toAppend);
             });
-            $(".stock-history").css('display', 'inherit');
+            //$(".stock-history").css('display', 'inherit');
+            $("#history").modal('show');
         });
 
         $('#edit, #delete').click(function(event){

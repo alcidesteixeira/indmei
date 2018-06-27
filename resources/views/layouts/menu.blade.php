@@ -17,14 +17,27 @@
                 </div>
             </li>
         @endif
+        @if (Auth::user()->hasAnyRole(['1', '7']))
+            <li class="nav-item dropdown">
+                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                    Gestão de Orçamentação <span class="caret"></span>
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="{{ url('quotation/create') }}">Criar Orçamentação</a>
+                    <a class="dropdown-item" href="{{ url('quotation/list') }}">Listar Orçamentos Enviados</a>
+                </div>
+            </li>
+        @endif
         @if (Auth::user()->hasAnyRole(['1', '4']))
                 <li class="nav-item dropdown">
                     <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                        Gestão de Encomendas <span class="caret"></span>
+                        Gestão de Encomendas/Fornecedores <span class="caret"></span>
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="{{ url('roles/create') }}">Criar Encomenda</a>
                         <a class="dropdown-item" href="{{ url('roles/list') }}">Listar Encomendas</a>
+                        <a class="dropdown-item" href="{{ url('supplier/create') }}">Criar Fornecedor</a>
+                        <a class="dropdown-item" href="{{ url('supplier/list') }}">Listar Fornecedores</a>
                     </div>
                 </li>
         @endif
@@ -34,7 +47,7 @@
                     Gestão de Armazém <span class="caret"></span>
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="{{ url('stock/receipt') }}">Entrada de Encomenda</a>
+                    <a class="dropdown-item" href="{{ url('stock/receipt') }}">Dar Entrada de Stock</a>
                     <a class="dropdown-item" href="{{ url('stock/create') }}">Inserir Nova Matéria-Prima</a>
                     <a class="dropdown-item" href="{{ url('stock/list') }}">Listar Matérias-Primas</a>
                     <a class="dropdown-item" href="{{ url('stock/request') }}">Solicitar Matéria-Prima</a>

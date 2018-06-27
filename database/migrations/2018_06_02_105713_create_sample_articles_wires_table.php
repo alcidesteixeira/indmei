@@ -18,6 +18,7 @@ class CreateSampleArticlesWiresTable extends Migration
             $table->string('sample_article_id');
             $table->string('step_id');
             $table->string('warehouse_product_id');
+            $table->string('guiafios_id');
             $table->string('grams');
             $table->timestamps();
         });

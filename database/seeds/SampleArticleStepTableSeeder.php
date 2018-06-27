@@ -41,6 +41,10 @@ class SampleArticleStepTableSeeder extends Seeder
         $step->save();
 
         $step = new SampleArticleStep();
+        $step->step = 'G8';
+        $step->save();
+
+        $step = new SampleArticleStep();
         $step->step = 'PUNHO';
         $step->save();
 
@@ -58,6 +62,26 @@ class SampleArticleStepTableSeeder extends Seeder
 
         $step = new SampleArticleStep();
         $step->step = 'BR4';
+        $step->save();
+
+        $step = new SampleArticleStep();
+        $step->step = 'BR5';
+        $step->save();
+
+        $step = new SampleArticleStep();
+        $step->step = 'BR6';
+        $step->save();
+
+        $step = new SampleArticleStep();
+        $step->step = 'BR7';
+        $step->save();
+
+        $step = new SampleArticleStep();
+        $step->step = 'BR8';
+        $step->save();
+
+        $step = new SampleArticleStep();
+        $step->step = '';
         $step->save();
     }
 }

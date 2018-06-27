@@ -18,6 +18,7 @@ class WarehouseProductSpecsTableSeeder extends Seeder
         $warehouseProduct->description = 'description abc';
         $warehouseProduct->weight = '2000';
         $warehouseProduct->threshold = '500';
+        $warehouseProduct->cost = '100';
         $warehouseProduct->save();
 
         $warehouseProduct = new WarehouseProductSpec();
@@ -26,6 +27,7 @@ class WarehouseProductSpecsTableSeeder extends Seeder
         $warehouseProduct->description = 'description abc';
         $warehouseProduct->weight = '1000';
         $warehouseProduct->threshold = '500';
+        $warehouseProduct->cost = '100';
         $warehouseProduct->save();
 
         $warehouseProduct = new WarehouseProductSpec();
@@ -34,6 +36,7 @@ class WarehouseProductSpecsTableSeeder extends Seeder
         $warehouseProduct->description = 'description abc';
         $warehouseProduct->weight = '2500';
         $warehouseProduct->threshold = '500';
+        $warehouseProduct->cost = '100';
         $warehouseProduct->save();
 
         $warehouseProduct = new WarehouseProductSpec();
@@ -42,6 +45,7 @@ class WarehouseProductSpecsTableSeeder extends Seeder
         $warehouseProduct->description = 'description abc';
         $warehouseProduct->weight = '2000';
         $warehouseProduct->threshold = '500';
+        $warehouseProduct->cost = '100';
         $warehouseProduct->save();
 
         $warehouseProduct = new WarehouseProductSpec();
@@ -50,6 +54,7 @@ class WarehouseProductSpecsTableSeeder extends Seeder
         $warehouseProduct->description = 'description abc';
         $warehouseProduct->weight = '1000';
         $warehouseProduct->threshold = '500';
+        $warehouseProduct->cost = '100';
         $warehouseProduct->save();
 
         $warehouseProduct = new WarehouseProductSpec();
@@ -58,6 +63,7 @@ class WarehouseProductSpecsTableSeeder extends Seeder
         $warehouseProduct->description = 'description abc';
         $warehouseProduct->weight = '2500';
         $warehouseProduct->threshold = '500';
+        $warehouseProduct->cost = '100';
         $warehouseProduct->save();
 
         $warehouseProduct = new WarehouseProductSpec();
@@ -66,6 +72,7 @@ class WarehouseProductSpecsTableSeeder extends Seeder
         $warehouseProduct->description = 'description abc';
         $warehouseProduct->weight = '2000';
         $warehouseProduct->threshold = '500';
+        $warehouseProduct->cost = '100';
         $warehouseProduct->save();
 
         $warehouseProduct = new WarehouseProductSpec();
@@ -74,6 +81,7 @@ class WarehouseProductSpecsTableSeeder extends Seeder
         $warehouseProduct->description = 'description abc';
         $warehouseProduct->weight = '1000';
         $warehouseProduct->threshold = '500';
+        $warehouseProduct->cost = '100';
         $warehouseProduct->save();
 
         $warehouseProduct = new WarehouseProductSpec();
@@ -82,6 +90,7 @@ class WarehouseProductSpecsTableSeeder extends Seeder
         $warehouseProduct->description = 'description abc';
         $warehouseProduct->weight = '2500';
         $warehouseProduct->threshold = '500';
+        $warehouseProduct->cost = '100';
         $warehouseProduct->save();
     }
 }

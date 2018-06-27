@@ -67,7 +67,23 @@
             //Filter and order table
             $('table').DataTable({
                 columnDefs: [ { orderable: false, targets: [-1, -2] } ],
-                "pageLength": 25
+                "pageLength": 25,
+                "language": {
+                    "lengthMenu": "Apresentar _MENU_ resultados por página",
+                    "zeroRecords": "Nenhum resultado encontrado.",
+                    "info": "Página _PAGE_ de _PAGES_",
+                    "infoEmpty": "Sem resultados disponíveis",
+                    "infoFiltered": "(Filtrado de _MAX_ resultados totais)",
+                    "paginate": {
+                        "first":      "Primeira",
+                        "last":       "Última",
+                        "next":       "Seguinte",
+                        "previous":   "Anterior"
+                    },
+                    "loadingRecords": "A pesquisar...",
+                    "processing":     "A processar...",
+                    "search":         "Pesquisar:",
+                }
             });
 
 

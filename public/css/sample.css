@@ -1,0 +1,33 @@
+.nav-pills>li.active>a, .nav-pills>li.active>a:focus, .nav-pills>li.active>a:hover
+{
+    color: #fff;
+    background-color: #337ab7;
+}
+
+.nav-pills>li>a
+{
+    border-radius: 4px;
+}
+
+.nav>li>a {
+    position: relative;
+    display: block;
+    padding: 10px 35px;
+}
+
+.show {
+    display: block!important;
+}
+
+.tab-content>.active {
+    display: block;
+}
+
+.tab-content>.tab-pane {
+    display: none;
+}
+
+a {
+    color: #337ab7;
+    text-decoration: none;
+}

@@ -49,6 +49,15 @@
                 font-size: 84px;
             }
 
+            @media
+            only screen
+            and (max-width: 760px), (min-device-width: 768px)
+            and (max-device-width: 1024px) {
+                .title {
+                    font-size: 34px !important;
+                }
+            }
+
             .links > a {
                 color: #636b6f;
                 padding: 0 25px;

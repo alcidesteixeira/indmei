@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\SampleArticle;
 use App\SampleArticleColor;
+use App\SampleArticleGuiafio;
 use App\SampleArticleStatus;
 use App\SampleArticleStep;
 use App\SampleArticlesWire;
@@ -47,7 +48,9 @@ class SampleArticleController extends Controller
 
         $statuses = SampleArticleStatus::all();
 
-        return view('samples.create', compact('steps', 'warehouseProducts', 'warehouseFirstWireSpecs', 'statuses'));
+        $guiafios = SampleArticleGuiafio::all();
+
+        return view('samples.create', compact('steps', 'warehouseProducts', 'warehouseFirstWireSpecs', 'statuses', 'guiafios'));
     }
 
     /**
@@ -74,12 +77,34 @@ class SampleArticleController extends Controller
         }
         //End Store Image
         $sampleArticle->sample_article_status_id = $request->status_id;
-        $sampleArticle->pe = $request->pe;
-        $sampleArticle->perna = $request->perna;
-        $sampleArticle->punho = $request->punho;
-        $sampleArticle->malha = $request->malha;
-        $sampleArticle->maq = $request->maq;
-        $sampleArticle->forma = $request->forma;
+        $sampleArticle->tamanho1 = $request->tamanho1;
+        $sampleArticle->pe1 = $request->pe1;
+        $sampleArticle->perna1 = $request->perna1;
+        $sampleArticle->punho1 = $request->punho1;
+        $sampleArticle->malha1 = $request->malha1;
+        $sampleArticle->maq1 = $request->maq1;
+        $sampleArticle->forma1 = $request->forma1;
+        $sampleArticle->tamanho2 = $request->tamanho2;
+        $sampleArticle->pe2 = $request->pe2;
+        $sampleArticle->perna2 = $request->perna2;
+        $sampleArticle->punho2 = $request->punho2;
+        $sampleArticle->malha2 = $request->malha2;
+        $sampleArticle->maq2 = $request->maq2;
+        $sampleArticle->forma2 = $request->forma2;
+        $sampleArticle->tamanho3 = $request->tamanho3;
+        $sampleArticle->pe3 = $request->pe3;
+        $sampleArticle->perna3 = $request->perna3;
+        $sampleArticle->punho3 = $request->punho3;
+        $sampleArticle->malha3 = $request->malha3;
+        $sampleArticle->maq3 = $request->maq3;
+        $sampleArticle->forma3 = $request->forma3;
+        $sampleArticle->tamanho4 = $request->tamanho4;
+        $sampleArticle->pe4 = $request->pe4;
+        $sampleArticle->perna4 = $request->perna4;
+        $sampleArticle->punho4 = $request->punho4;
+        $sampleArticle->malha4 = $request->malha4;
+        $sampleArticle->maq4 = $request->maq4;
+        $sampleArticle->forma4 = $request->forma4;
         $sampleArticle->save();
 
         //Store on SampleArticleWire Class
@@ -88,11 +113,13 @@ class SampleArticleController extends Controller
             $step = 'row-'.$i.'-step';
             $grams = 'row-'.$i.'-grams';
             $reference = 'row-'.$i.'-reference';
+            $guiafios = 'row-'.$i.'-guiafios';
 
             $wire = new sampleArticlesWire();
             $wire->sample_article_id = $sampleArticle->id;
             $wire->step_id = $request->$step;
             $wire->warehouse_product_id = $request->$reference;
+            $wire->guiafios_id = $request->$guiafios;
             $wire->grams = $request->$grams;
             $wire->save();
 
@@ -174,12 +201,34 @@ class SampleArticleController extends Controller
         }
         //End Store Image Upload
         $sampleArticle->sample_article_status_id = $request->status_id;
-        $sampleArticle->pe = $request->pe;
-        $sampleArticle->perna = $request->perna;
-        $sampleArticle->punho = $request->punho;
-        $sampleArticle->malha = $request->malha;
-        $sampleArticle->maq = $request->maq;
-        $sampleArticle->forma = $request->forma;
+        $sampleArticle->tamanho1 = $request->tamanho1;
+        $sampleArticle->pe1 = $request->pe1;
+        $sampleArticle->perna1 = $request->perna1;
+        $sampleArticle->punho1 = $request->punho1;
+        $sampleArticle->malha1 = $request->malha1;
+        $sampleArticle->maq1 = $request->maq1;
+        $sampleArticle->forma1 = $request->forma1;
+        $sampleArticle->tamanho2 = $request->tamanho2;
+        $sampleArticle->pe2 = $request->pe2;
+        $sampleArticle->perna2 = $request->perna2;
+        $sampleArticle->punho2 = $request->punho2;
+        $sampleArticle->malha2 = $request->malha2;
+        $sampleArticle->maq2 = $request->maq2;
+        $sampleArticle->forma2 = $request->forma2;
+        $sampleArticle->tamanho3 = $request->tamanho3;
+        $sampleArticle->pe3 = $request->pe3;
+        $sampleArticle->perna3 = $request->perna3;
+        $sampleArticle->punho3 = $request->punho3;
+        $sampleArticle->malha3 = $request->malha3;
+        $sampleArticle->maq3 = $request->maq3;
+        $sampleArticle->forma3 = $request->forma3;
+        $sampleArticle->tamanho4 = $request->tamanho4;
+        $sampleArticle->pe4 = $request->pe4;
+        $sampleArticle->perna4 = $request->perna4;
+        $sampleArticle->punho4 = $request->punho4;
+        $sampleArticle->malha4 = $request->malha4;
+        $sampleArticle->maq4 = $request->maq4;
+        $sampleArticle->forma4 = $request->forma4;
         $sampleArticle->save();
 
         //dd($request->all());
@@ -191,10 +240,12 @@ class SampleArticleController extends Controller
             $step = 'row-'.$i.'-step';
             $grams = 'row-'.$i.'-grams';
             $reference = 'row-'.$i.'-reference';
+            $guiafios = 'row-'.$i.'-guiafios';
 
             $wire = $sampleArticle->sampleArticleWires()->get()->values()->get($i-1);
             $wire->step_id = $request->$step;
             $wire->warehouse_product_id = $request->$reference;
+            $wire->guiafios_id = $request->$guiafios;
             $wire->grams = $request->$grams;
             $wire->save();
 
