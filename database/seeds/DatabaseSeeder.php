@@ -31,5 +31,8 @@ class DatabaseSeeder extends Seeder
 
         //Seed Suppliers
         $this->call(SupplierTableSeeder::class);
+
+        //Seed Clients
+        $this->call(ClientTableSeeder::class);
     }
 }

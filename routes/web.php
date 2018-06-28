@@ -84,4 +84,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/suppliers/update/{id}', 'SupplierController@update');
     Route::get('/suppliers/delete/{id}', 'SupplierController@destroy');
 
+//Clients
+    Route::get('/clients/list', 'ClientController@index');
+    Route::get('/clients/create', 'ClientController@create');
+    Route::post('/clients/create', 'ClientController@store');
+    Route::get('/clients/edit/{id}', 'ClientController@edit');
+    Route::post('/clients/update/{id}', 'ClientController@update');
+    Route::get('/clients/delete/{id}', 'ClientController@destroy');
+
 });

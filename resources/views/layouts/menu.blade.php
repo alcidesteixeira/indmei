@@ -31,13 +31,29 @@
         @if (Auth::user()->hasAnyRole(['1', '4']))
                 <li class="nav-item dropdown">
                     <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                        Gestão de Encomendas/Fornecedores <span class="caret"></span>
+                        Gestão de Encomendas <span class="caret"></span>
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="{{ url('roles/create') }}">Criar Encomenda</a>
                         <a class="dropdown-item" href="{{ url('roles/list') }}">Listar Encomendas</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                        Gestão de Fornecedores <span class="caret"></span>
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="{{ url('suppliers/create') }}">Criar Fornecedor</a>
                         <a class="dropdown-item" href="{{ url('suppliers/list') }}">Listar Fornecedores</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                        Gestão de Clientes <span class="caret"></span>
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="{{ url('clients/create') }}">Criar Cliente</a>
+                        <a class="dropdown-item" href="{{ url('clients/list') }}">Listar Clientes</a>
                     </div>
                 </li>
         @endif

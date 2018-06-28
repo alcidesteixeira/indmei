@@ -6,8 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
-    public function suppliers()
+    public function supplier()
     {
-        return $this->hasMany('App\Supplier');
+        return $this->belongsTo('App\Supplier');
     }
+
+    public function client()
+    {
+        return $this->belongsTo('App\Client');
+    }
+
 }
