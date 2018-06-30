@@ -34,4 +34,9 @@ class SampleArticle extends Model
     {
         return $this->belongsTo('App\SampleArticleGuiafio');
     }
+
+    public function orders()
+    {
+        return $this->hasMany('App\Order');
+    }
 }

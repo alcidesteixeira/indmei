@@ -34,8 +34,8 @@
                         Gestão de Encomendas <span class="caret"></span>
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="{{ url('roles/create') }}">Criar Encomenda</a>
-                        <a class="dropdown-item" href="{{ url('roles/list') }}">Listar Encomendas</a>
+                        <a class="dropdown-item" href="{{ url('orders/create') }}">Criar Encomenda</a>
+                        <a class="dropdown-item" href="{{ url('orders/list') }}">Listar Encomendas</a>
                     </div>
                 </li>
                 <li class="nav-item dropdown">

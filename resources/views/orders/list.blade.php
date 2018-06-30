@@ -7,34 +7,34 @@
 
 
 
-        <h2>Lista de Fornecedores</h2>
+        <h2>Lista de Encomendas</h2>
         <table class="table table-striped thead-dark" role="table">
             <thead role="rowgroup">
             <tr role="row">
-                <th role="columnheader">Fornecedor</th>
-                <th role="columnheader">Email</th>
-                <th role="columnheader">NIF</th>
+                <th role="columnheader">Cliente</th>
+                <th role="columnheader">Id do Cliente</th>
+                <th role="columnheader">Id da Amostra</th>
                 <th role="columnheader">Descrição</th>
-                <th role="columnheader">Data de Alteração</th>
+                <th role="columnheader">Data de Entrega</th>
                 <th role="columnheader"></th>
                 <th role="columnheader"></th>
             </tr>
             </thead>
             <tbody role="rowgroup">
-            @foreach($suppliers as $supplier)
+            @foreach($orders as $order)
                 <tr role="row">
-                    <td role="columnheader" data-col1="Fornecedor">{{$supplier->supplier}}</td>
-                    <td role="columnheader" data-col2="Email">{{$supplier->email}}</td>
-                    <td role="columnheader" data-col2="NIF">{{$supplier->nif}}</td>
-                    <td role="columnheader" data-col3="Descrição">{{$supplier->description}}</td>
-                    <td role="columnheader" data-col4="Data de Alteração">{{$supplier->updated_at}}</td>
+                    <td role="columnheader" data-col1="Cliente">{{$order->client->client}}</td>
+                    <td role="columnheader" data-col2="Id do Cliente">{{$order->client_identifier}}</td>
+                    <td role="columnheader" data-col3="Id da Amostra">{{$order->sampleArticle->reference}}</td>
+                    <td role="columnheader" data-col4="Descrição">{{$order->description}}</td>
+                    <td role="columnheader" data-col4="Data de Entrega">{{$order->delivery_date}}</td>
                     <td role="columnheader" data-col5="">
-                        <form method="get" action="{{url('suppliers/edit/'.$supplier->id)}}" enctype="multipart/form-data">
+                        <form method="get" action="{{url('orders/edit/'.$order->id)}}" enctype="multipart/form-data">
                             <button type="submit" class="btn btn-warning">Editar</button>
                         </form>
                     </td>
                     <td role="columnheader" data-col6="">
-                        <button type="button" data-id="{{$supplier->id}}" data-role="{{$supplier->supplier}}"  class="apagarform btn btn-danger">Apagar</button>
+                        <button type="button" data-id="{{$order->id}}" data-role="{{$order->client_identifier}}"  class="apagarform btn btn-danger">Apagar</button>
                     </td>
                 </tr>
             @endforeach
@@ -95,7 +95,7 @@
                 let id = $( this ).data('id');
                 let name = $( this ).data('role');
                 $(".modal-body").append('');
-                $(".modal-body").append('<p>Fornecedor: ' + name + '</p>');
+                $(".modal-body").append('<p>Encomenda: ' + name + '</p>');
                 $('#apagar').attr('action', 'delete/'+id);
                 $("#modalApagar").modal('show');
             });

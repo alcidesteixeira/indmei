@@ -4,10 +4,10 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Quotation extends Model
+class OrderFile extends Model
 {
     public function order()
     {
-        return $this->hasOne('App\Order');
+        return $this->belongsTo('App\Order');
     }
 }

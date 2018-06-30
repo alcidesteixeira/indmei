@@ -15,6 +15,13 @@
             <div class="row">
                 <div class="col-md-3"></div>
                 <div class="form-group col-md-6">
+                    <label for="email">Email:</label>
+                    <input type="email" class="form-control" name="email" value="{{@$supplier->email}}" required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3"></div>
+                <div class="form-group col-md-6">
                     <label for="nif">NIF:</label>
                     <input type="text" class="form-control" name="nif" value="{{@$supplier->nif}}" required>
                 </div>

@@ -34,5 +34,10 @@ class DatabaseSeeder extends Seeder
 
         //Seed Clients
         $this->call(ClientTableSeeder::class);
+
+        //Seed Orders
+        $this->call(OrderTableSeeder::class);
+        $this->call(OrderFileTableSeeder::class);
+
     }
 }

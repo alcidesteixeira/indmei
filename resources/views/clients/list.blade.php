@@ -12,6 +12,7 @@
             <thead role="rowgroup">
             <tr role="row">
                 <th role="columnheader">Cliente</th>
+                <th role="columnheader">Email</th>
                 <th role="columnheader">NIF</th>
                 <th role="columnheader">Descrição</th>
                 <th role="columnheader">Data de Alteração</th>
@@ -23,6 +24,7 @@
             @foreach($clients as $client)
                 <tr role="row">
                     <td role="columnheader" data-col1="Fornecedor">{{$client->client}}</td>
+                    <td role="columnheader" data-col2="Email">{{$client->email}}</td>
                     <td role="columnheader" data-col2="NIF">{{$client->nif}}</td>
                     <td role="columnheader" data-col3="Descrição">{{$client->description}}</td>
                     <td role="columnheader" data-col4="Data de Alteração">{{$client->updated_at}}</td>

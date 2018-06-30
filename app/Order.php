@@ -16,4 +16,19 @@ class Order extends Model
         return $this->belongsTo('App\Client');
     }
 
+    public function sampleArticle()
+    {
+        return $this->belongsTo('App\SampleArticle');
+    }
+
+    public function quotation()
+    {
+        return $this->hasOne('App\Quotation');
+    }
+
+    public function orderFiles()
+    {
+        return $this->hasMany('App\OrderFile');
+    }
+
 }
