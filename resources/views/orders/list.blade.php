@@ -27,13 +27,13 @@
                     <td role="columnheader" data-col2="Id do Cliente">{{$order->client_identifier}}</td>
                     <td role="columnheader" data-col3="Id da Amostra">{{$order->sampleArticle->reference}}</td>
                     <td role="columnheader" data-col4="Descrição">{{$order->description}}</td>
-                    <td role="columnheader" data-col4="Data de Entrega">{{$order->delivery_date}}</td>
-                    <td role="columnheader" data-col5="">
+                    <td role="columnheader" data-col5="Data de Entrega">{{$order->delivery_date}}</td>
+                    <td role="columnheader" data-col6="">
                         <form method="get" action="{{url('orders/edit/'.$order->id)}}" enctype="multipart/form-data">
                             <button type="submit" class="btn btn-warning">Editar</button>
                         </form>
                     </td>
-                    <td role="columnheader" data-col6="">
+                    <td role="columnheader" data-col7="">
                         <button type="button" data-id="{{$order->id}}" data-role="{{$order->client_identifier}}"  class="apagarform btn btn-danger">Apagar</button>
                     </td>
                 </tr>
@@ -95,7 +95,7 @@
                 let id = $( this ).data('id');
                 let name = $( this ).data('role');
                 $(".modal-body").text('');
-                $(".modal-body").append('<p>Encomenda: ' + name + '</p>');
+                $(".modal-body").append('<p>Encomenda com Id do Cliente: ' + name + '</p>');
                 $('#apagar').attr('action', 'delete/'+id);
                 $("#modalApagar").modal('show');
             });

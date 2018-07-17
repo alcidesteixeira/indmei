@@ -203,6 +203,10 @@ class OrderController extends Controller
 
         $order = Order::find($id);
 
+        $order_files = OrderFile::where('order_id', $id);
+
+        $order_files->delete();
+
         $order->delete();
 
         flash('A encomenda com o id de cliente '. $order->client_identifier . ' e com a descrição '. $order->description . ' foi eliminada com sucesso!')->success();
