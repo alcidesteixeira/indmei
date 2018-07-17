@@ -94,7 +94,7 @@
             $('.apagarform').click(function() {
                 let id = $( this ).data('id');
                 let name = $( this ).data('role');
-                $(".modal-body").append('');
+                $(".modal-body").text('');
                 $(".modal-body").append('<p>Encomenda: ' + name + '</p>');
                 $('#apagar').attr('action', 'delete/'+id);
                 $("#modalApagar").modal('show');

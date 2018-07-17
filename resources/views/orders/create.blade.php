@@ -53,7 +53,7 @@
                     <select class="form-control" name="sample_article_id" id="sampleArticleChange">
                         <option value=""></option>
                         @foreach($sampleArticles as $sample)
-                        <option value="{{$sample->id}}">{{$sample->reference}}</option>
+                        <option value="{{$sample->id}}" {{$sample->id == @$order->sample_article_id ? 'selected' : ''}}>{{$sample->reference}}</option>
                         @endforeach
                     </select>
                     {{--<input type="text" class="form-control" name="sample_article_id" value="{{@$order->sample_article_id}}">--}}
@@ -136,8 +136,20 @@
     </div>
 
     <script>
-        $("#sampleArticleChange").change( function () {
-            let id = $(this).val();
+
+        $( document ).ready( function () {
+
+            updateSizes ();
+            updateAmounts ();
+
+        });
+
+        $("#sampleArticleChange").change( updateSizes );
+
+        $(".sizes").keyup( updateAmounts );
+
+        function updateSizes () {
+            let id = $("#sampleArticleChange").val();
             $.ajax({
                 url: "/orders/getSampleArticleId/"+id,
                 success: function(result){
@@ -147,13 +159,13 @@
                     $("#tamanho4").text(result['tamanho4']);
                 }
             });
-        });
+        }
 
-        $(".sizes").keyup( function () {
+        function updateAmounts () {
             $("#pedido1").text(parseInt($("#tamanho11").val())+parseInt($("#tamanho12").val())+parseInt($("#tamanho13").val())+parseInt($("#tamanho14").val()));
             $("#pedido2").text(parseInt($("#tamanho21").val())+parseInt($("#tamanho22").val())+parseInt($("#tamanho23").val())+parseInt($("#tamanho24").val()));
             $("#pedido3").text(parseInt($("#tamanho31").val())+parseInt($("#tamanho32").val())+parseInt($("#tamanho33").val())+parseInt($("#tamanho34").val()));
             $("#pedido4").text(parseInt($("#tamanho41").val())+parseInt($("#tamanho42").val())+parseInt($("#tamanho43").val())+parseInt($("#tamanho44").val()));
-        });
+        }
     </script>
 @endsection
