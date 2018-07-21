@@ -112,7 +112,7 @@
                 @for($i = 1; $i < sizeof($steps); $i++)
                     <tr>
                         <td data-col1="Guiafios">
-                            <select size="1" data-row="{{$i}}" id="row-{{$i}}-guiafios" name="row-{{$i}}-guiafios">
+                            <select size="1" data-row="{{$i}}" id="row-{{$i}}-guiafios" name="row-{{$i}}-guiafios" class="form-control">
                                 @foreach($guiafios as $guia)
                                     <option value="{{$guia->id}}" {{@$sampleArticle && $guia->id == $sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->guiafios_id ? 'selected' : ''}}>
                                         {{$guia->description}}
@@ -121,22 +121,25 @@
                             </select>
                         </td>
                         <td data-col2="Step">
-                            <select size="1" class="stepEmpty" data-row="{{$i}}" id="row-{{$i}}-step" name="row-{{$i}}-step">
+                            <select size="1" class="stepEmpty form-control" data-row="{{$i}}" id="row-{{$i}}-step" name="row-{{$i}}-step">
                                 @foreach($steps as $step)
-                                <option value="{{$step->id}}" {{@$sampleArticle && $step->id == $sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->step_id ?
-                                 'selected' : $step->id == $i ? 'selected' : ''}}>
+                                {{--Primeiro if acontece ao criar para listar todos os steps direitinhos--}}
+                                {{--Segundo if é para no edit aparecer tudo o que está na BD guardado--}}
+                                <option value="{{$step->id}}" {{$step->id == $i ? 'selected' : @$sampleArticle && $step->id == $sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->step_id ?
+                                 'selected' : ''}}>
                                     {{$step->step}}
                                 </option>
                                 @endforeach
                             </select>
                         </td>
                         <td data-col3="Gramas">
-                            <input type="text" id="row-{{$i}}-grams" name="row-{{$i}}-grams" value="{{@$sampleArticle && $sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->grams
+                            <input type="text" id="row-{{$i}}-grams"  class="form-control" name="row-{{$i}}-grams"
+                                   value="{{@$sampleArticle && $sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->grams
                             && $sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->step_id !== '18' ?
                             $sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->grams : '0'}}">
                         </td>
                         <td data-col4="Refrência do Fio">
-                            <select size="1" class="referenceChanged" data-row="{{$i}}" id="row-{{$i}}-reference" name="row-{{$i}}-reference">
+                            <select size="1" class="referenceChanged form-control" data-row="{{$i}}" id="row-{{$i}}-reference" name="row-{{$i}}-reference">
                                 @foreach($warehouseProducts as $product)
                                 <option value="{{@$product->id}}" {{@$sampleArticle && $product->id == $sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->warehouse_product_id ? 'selected' : ''}}>
                                     {{@$product->reference}}
@@ -147,11 +150,13 @@
                             </select>
                         </td>
                         <td data-col5="Cor #1">
-                            <select size="1" id="row-{{$i}}-color1" name="row-{{$i}}-color1">
+                            <select size="1" id="row-{{$i}}-color1" name="row-{{$i}}-color1" class="form-control">
+                                {{--Caso a cor esteja diferente de vazio--}}
                                 @if(@$sampleArticle && $sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->warehouse_product_id !== 'default')
+                                    {{--Fios da amostra, ou fios default--}}
                                     @if(@$sampleArticle)
                                         @foreach(@$sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->warehouseProduct->warehouseProductSpecs()->get() as $wireSpecs)
-                                        <option value="{{$wireSpecs->id}}"
+                                            <option value="{{$wireSpecs->id}}"
                                                 {{$wireSpecs->id == $sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->wireColors()->get()->values()->get(0)->warehouse_product_spec_id
                                                 ? 'selected' : ''}}>
                                             {{$wireSpecs->color}}
@@ -164,13 +169,13 @@
                                             </option>
                                         @endforeach
                                     @endif
-                                    @else
+                                @else
                                     <option value="default" {{@$sampleArticle && $step->id == $sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->step_id ? 'selected' : ''}}></option>
                                 @endif
                             </select>
                         </td>
                         <td data-col6="Cor #2">
-                            <select size="1" id="row-{{$i}}-color2" name="row-{{$i}}-color2">
+                            <select size="1" id="row-{{$i}}-color2" name="row-{{$i}}-color2" class="form-control">
                                 @if(@$sampleArticle && $sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->warehouse_product_id !== 'default')
                                     @if(@$sampleArticle)
                                         @foreach(@$sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->warehouseProduct->warehouseProductSpecs()->get() as $wireSpecs)
@@ -192,7 +197,7 @@
                                 @endif
                             </select></td>
                         <td data-col7="Cor #3">
-                            <select size="1" id="row-{{$i}}-color3" name="row-{{$i}}-color3">
+                            <select size="1" id="row-{{$i}}-color3" name="row-{{$i}}-color3" class="form-control">
                                 @if(@$sampleArticle && $sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->warehouse_product_id !== 'default')
                                     @if(@$sampleArticle)
                                         @foreach(@$sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->warehouseProduct->warehouseProductSpecs()->get() as $wireSpecs)
@@ -215,7 +220,7 @@
                             </select>
                         </td>
                         <td data-col8="Cor #4">
-                            <select size="1" id="row-{{$i}}-color4" name="row-{{$i}}-color4">
+                            <select size="1" id="row-{{$i}}-color4" name="row-{{$i}}-color4" class="form-control">
                                 @if(@$sampleArticle && $sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->warehouse_product_id !== 'default')
                                     @if(@$sampleArticle)
                                         @foreach(@$sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->warehouseProduct->warehouseProductSpecs()->get() as $wireSpecs)
@@ -254,6 +259,10 @@
     </div>
 
 
+    @if(!(@$sampleArticle->reference))
+
+    @endif
+
     <script>
         //Filter and order table
         // $('table').DataTable({
@@ -291,6 +300,7 @@
             $.ajax({
                 url: "/samples/updatewirespecs/"+wireSelectedId,
                 success: function(result){
+                    console.log(result);
                     $( "#row-"+rowSelected+"-color1, #row-"+rowSelected+"-color2, #row-"+rowSelected+"-color3, #row-"+rowSelected+"-color4").empty();
                     $.each(result, function (key, value) {
                         $( "#row-"+rowSelected+"-color1, #row-"+rowSelected+"-color2, #row-"+rowSelected+"-color3, #row-"+rowSelected+"-color4")
@@ -299,14 +309,6 @@
                 }
             });
         }
-
-        //Run function
-
-            for(let i = 1; i <= $('table tr').length - 1; i++) {
-                if($("#row-"+i+"-step").val() !== '18') {
-                    requestWiresToDB(1, i);
-                }
-            }
 
         //Whenever user changes wire, queries database to output correct wire colors
         $(" .referenceChanged ").change( function () {
@@ -351,5 +353,16 @@
             $("#blah").css('display', 'block');
         });
     </script>
+
+    @if(@$sampleArticle->reference == null)
+    <script>
+        //Run function
+        for(let i = 1; i <= $('table tr').length - 1; i++) {
+            if($("#row-"+i+"-step").val() !== '18') {
+                requestWiresToDB(1, i);
+            }
+        }
+    </script>
+    @endif
 
 @endsection

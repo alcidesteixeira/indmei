@@ -33,10 +33,21 @@
             </div>
             <div class="row">
                 <div class="col-md-3"></div>
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-3">
                     <label for="order_files_id">Upload Ficheiros:</label>
                     <input type="file" class="form-control-file" name="order_files_id[]" value="{{@$order->order_files_id}}" multiple >
                 </div>
+                @if(@$order->client_identifier)
+                <div class="form-group col-md-3">
+                    <label for="order_files_id">Ficheiros:</label>
+                    @foreach($orderFiles as $file)
+                    <p>
+                        <a target="_blank" href="../../storage/{{$file->url}}">{{substr($file->url, 7, strlen($file->url)-7)}}</a>
+                        <i data-remove="{{$file->id}}" class="far fa-window-close" style="cursor:pointer;"></i>
+                    </p>
+                    @endforeach
+                </div>
+                @endif
             </div>
             <div class="row">
                 <div class="col-md-3"></div>
@@ -124,7 +135,7 @@
                     </tr>
                 </tbody>
             </table>
-            
+            <input type="hidden" name="filesToDelete" id="filesToDelete">
             <div class="row">
                 <div class="col-md-3"></div>
                 <div class="form-group col-md-6" style="margin-top:60px;margin-bottom:40px;">
@@ -142,6 +153,12 @@
             updateSizes ();
             updateAmounts ();
 
+        });
+
+        //remove files attached
+        $(".fa-window-close").click ( function () {
+            $("#filesToDelete").val($("#filesToDelete").val()+$(this).data("remove")+',');
+            $( this ).parent().css('display', 'none');
         });
 
         $("#sampleArticleChange").change( updateSizes );

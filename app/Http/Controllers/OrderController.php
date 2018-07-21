@@ -9,6 +9,7 @@ use App\SampleArticle;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 
@@ -21,7 +22,7 @@ class OrderController extends Controller
      */
     public function index()
     {
-        Auth::user()->authorizeRoles(['1', '4']);
+        Auth::user()->authorizeRoles(['1', '4', '6']);
 
         $orders = Order::all();
 
@@ -127,7 +128,9 @@ class OrderController extends Controller
 
         $order = Order::find($id);
 
-        return view('orders.create', compact('sampleArticles', 'clients', 'order'));
+        $orderFiles = OrderFile::where('order_id', $id)->get();
+//dd($orderFiles);
+        return view('orders.create', compact('sampleArticles', 'clients', 'order', 'orderFiles'));
     }
 
     /**
@@ -185,6 +188,14 @@ class OrderController extends Controller
             }
         }
         //End Store Image
+        //Files to Delete
+        if(@$request->filesToDelete) {
+            $ids = substr($request->filesToDelete, 0, strlen($request->filesToDelete)-1);
+            $ids = explode(',', $ids);
+            $order_files = DB::table('order_files')
+                ->whereIn('id', $ids)->delete();
+        }
+        //End Files to Delete
 
         flash('Encomenda do Cliente '. $order->client_id . ' com o identificador '. $order->client_identifier . ' foi atualizada com sucesso!')->success();
 

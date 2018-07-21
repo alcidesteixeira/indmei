@@ -31,4 +31,14 @@ class Order extends Model
         return $this->hasMany('App\OrderFile');
     }
 
+    public function orderProductions()
+    {
+        return $this->hasMany('App\OrderProduction');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo('App\User');
+    }
+
 }

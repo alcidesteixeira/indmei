@@ -125,7 +125,7 @@ class SampleArticleController extends Controller
 
             //Store on SampleArticleColor Class
             //Run for the different number of colors
-            for($j = 1; $j <= $request->colorsCount; $j++) {
+            for($j = 1; $j < $request->colorsCount; $j++) {
                 $colorFromWarehouse = 'row-'.$i.'-color'.$j;
                 $wireColor = new sampleArticleColor();
                 $wireColor->sample_articles_wire_id = $wire->id;
@@ -160,9 +160,9 @@ class SampleArticleController extends Controller
 
         $guiafios = SampleArticleGuiafio::all();
 
-//        dd($sampleArticle->sampleArticleWires()->get()->values()->get(1)->guiafios_id);
-//        dd($sampleArticle->sampleArticleWires()->get()->values()->get(2)->wireColors()->get()->values()->get(2)->warehouse_product_spec_id);
-        //dd($sampleArticle->sampleArticleWires()->get()->values()->get(2)->warehouseProduct->warehouseProductSpecs()->get());
+//        dd($sampleArticle->sampleArticleWires()->get()->values()->get(16)->guiafios_id);
+//        dd($sampleArticle->sampleArticleWires()->get()->values()->get(16)->wireColors()->get());
+//        dd($sampleArticle->sampleArticleWires()->get()->values()->get(16)->warehouseProduct->warehouseProductSpecs()->get());
 
         return view('samples.create', compact('sampleArticle', 'steps', 'warehouseProducts', 'statuses', 'guiafios', 'id'));
     }
@@ -188,6 +188,8 @@ class SampleArticleController extends Controller
      */
     public function update(Request $request, $id)
     {
+
+        //dd($request->all());
 
         Auth::user()->authorizeRoles(['1', '3']);
 
@@ -254,7 +256,7 @@ class SampleArticleController extends Controller
 
             //Store on SampleArticleColor Class
             //Run for the different number of colors
-            for($j = 1; $j <= $request->colorsCount; $j++) {
+            for($j = 1; $j < $request->colorsCount; $j++) {
                 $colorFromWarehouse = 'row-'.$i.'-color'.$j;
                 $wireColor = $wire->wireColors()->get()->values()->get($j-1);
                 $wireColor->warehouse_product_spec_id = $request->$colorFromWarehouse ? $request->$colorFromWarehouse : '0';

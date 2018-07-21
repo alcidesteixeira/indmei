@@ -1,0 +1,247 @@
+@extends('layouts.app')
+
+@section('content')
+
+    <div class="container">
+        <h2>Atualizar Quantidade Produzida</h2><br/>
+
+            <div class="row">
+                <div class="col-md-3"></div>
+                <div class="form-group col-md-6">
+                    <label for="Description">Identificador INDMEI:</label>
+                    <span style="font-weight: bold;">{{$order->sampleArticle->reference}}</span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3">
+                    <label for="Description">Imagem Amostra:</label>
+                    <img src="../../../storage/{{$order->sampleArticle->image_url}}" style="max-width: 200px;">
+                </div>
+                <div class="form-group col-md-9">
+                    <table class="table table-striped thead-dark">
+                        <thead>
+                        <tr>
+                            <th></th>
+                            <th><input type="text" class="form-control" value="{{$order->cor1}}" readonly></th>
+                            <th><input type="text" class="form-control" value="{{$order->cor2}}" readonly></th>
+                            <th><input type="text" class="form-control" value="{{$order->cor3}}" readonly></th>
+                            <th><input type="text" class="form-control" value="{{$order->cor4}}" readonly></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        @for($i = 1; $i < 5; $i++)
+                            @php $tamanho1 = "tamanho1".$i; $tamanho2 = "tamanho2".$i; $tamanho3 = "tamanho3".$i; $tamanho4 = "tamanho4".$i; @endphp
+                            @php $tamanho = "tamanho".$i; @endphp
+                            <tr>
+                                <td data-col1="Tamanho">
+                                    <span type="text">{{$order->sampleArticle->$tamanho}}</span>
+                                </td>
+                                <td data-col2="Cor1">
+
+                                    <input type="text" id="tamanho1{{$i}}" class="sizes form-control" value="{{$order->$tamanho1}}" readonly>
+                                </td>
+                                <td data-col3="Cor2">
+                                    <input type="text" id="tamanho2{{$i}}" class="sizes form-control" value="{{$order->$tamanho2}}" readonly>
+                                </td>
+                                <td data-col4="Cor3">
+                                    <input type="text" id="tamanho3{{$i}}" class="sizes form-control" value="{{$order->$tamanho3}}" readonly>
+                                </td>
+                                <td data-col5="Cor4">
+                                    <input type="text" id="tamanho4{{$i}}" class="sizes form-control" value="{{$order->$tamanho4}}" readonly>
+                                </td>
+                            </tr>
+                        @endfor
+                        <tr>
+                            <td data-col1="">
+                                Pedido
+                            </td>
+                            <td data-col2="Pedido da Cor1" id="pedido1">
+                                {{$order->tamanho11 + $order->tamanho12 +$order->tamanho13 +$order->tamanho14}}
+                            </td>
+                            <td data-col3="Pedido da Cor2" id="pedido2">
+                                {{$order->tamanho21 + $order->tamanho22 +$order->tamanho23 +$order->tamanho24}}
+                            </td>
+                            <td data-col4="Pedido da Cor3" id="pedido3">
+                                {{$order->tamanho31 + $order->tamanho32 +$order->tamanho33 +$order->tamanho34}}
+                            </td>
+                            <td data-col5="Pedido da Cor4" id="pedido4">
+                                {{$order->tamanho41 + $order->tamanho42 +$order->tamanho43 +$order->tamanho44}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td data-col1="">
+                                Em Falta
+                            </td>
+                            <td data-col2="Em Falta da Cor1" id="falta1">
+                            </td>
+                            <td data-col3="Em Falta da Cor2" id="falta2">
+                            </td>
+                            <td data-col4="Em Falta da Cor3" id="falta3">
+                            </td>
+                            <td data-col5="Em Falta da Cor4" id="falta4">
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+            <table class="table table-striped thead-dark">
+                <thead>
+                <tr>
+                    <th>Guiafios</th>
+                    <th>Step</th>
+                    <th>Gramas</th>
+                    <th>Referência do Fio</th>
+                    <th>Cor #1</th>
+                    <th>Cor #2</th>
+                    <th>Cor #3</th>
+                    <th>Cor #4</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                @for($i = 1; $i < sizeof($steps); $i++)
+                    <tr>
+                        <td data-col1="Guiafios">
+                                @foreach($guiafios as $guia)
+                                    @if($guia->id == $order->sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->guiafios_id)
+                                        <span>{{$guia->description}}</span>
+                                    @endif
+                                @endforeach
+                        </td>
+                        <td data-col2="Step">
+                            @foreach($steps as $step)
+                                @if($step->id == $order->sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->step_id)
+                                    <span>{{$step->step}}</span>
+                                @endif
+                            @endforeach
+                        </td>
+                        <td data-col3="Gramas">
+                            <span>{{$order->sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->grams}}</span>
+                        </td>
+                        <td data-col4="Refrência do Fio">
+                            @foreach($warehouseProducts as $product)
+                                @if($product->id == $order->sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->warehouse_product_id)
+                                    <span>{{$product->reference}}</span>
+                                @endif
+                            @endforeach
+                        </td>
+                        <td data-col5="Cor #1">
+                            @if(@$order->sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->warehouseProduct)
+                                @foreach($order->sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->warehouseProduct->warehouseProductSpecs()->get() as $wireSpecs)
+                                    @if($wireSpecs->id == $order->sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->wireColors()->get()->values()->get(0)->warehouse_product_spec_id)
+                                        <span>{{$wireSpecs->color}}</span>
+                                    @endif
+                                @endforeach
+                            @else
+                                <span></span>
+                            @endif
+                        </td>
+                        <td data-col6="Cor #2">
+                            @if(@$order->sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->warehouseProduct)
+                                @foreach($order->sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->warehouseProduct->warehouseProductSpecs()->get() as $wireSpecs)
+                                    @if($wireSpecs->id == $order->sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->wireColors()->get()->values()->get(1)->warehouse_product_spec_id)
+                                        <span>{{$wireSpecs->color}}</span>
+                                    @endif
+                                @endforeach
+                            @else
+                                <span></span>
+                            @endif
+                        </td>
+                        <td data-col7="Cor #3">
+                            @if(@$order->sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->warehouseProduct)
+                                @foreach($order->sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->warehouseProduct->warehouseProductSpecs()->get() as $wireSpecs)
+                                    @if($wireSpecs->id == $order->sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->wireColors()->get()->values()->get(2)->warehouse_product_spec_id)
+                                        <span>{{$wireSpecs->color}}</span>
+                                    @endif
+                                @endforeach
+                            @else
+                                <span></span>
+                            @endif
+                        </td>
+                        <td data-col8="Cor #4">
+                            @if(@$order->sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->warehouseProduct)
+                                @foreach($order->sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->warehouseProduct->warehouseProductSpecs()->get() as $wireSpecs)
+                                    @if($wireSpecs->id == $order->sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->wireColors()->get()->values()->get(3)->warehouse_product_spec_id)
+                                        <span>{{$wireSpecs->color}}</span>
+                                    @endif
+                                @endforeach
+                            @else
+                                <span></span>
+                            @endif
+                        </td>
+                    </tr>
+                @endfor
+            </tbody>
+        </table>
+
+        <div class="row">
+            <table>
+                <tr>
+                    @for($i = 1; $i<=4; $i++)
+                        @php($tamanho = 'tamanho'.$i) @php($pe = 'pe'.$i) @php($perna = 'perna'.$i)
+                        @php($punho = 'punho'.$i) @php($malha = 'malha'.$i)@php($maq = 'maq'.$i)
+                        @php($forma = 'forma'.$i)
+                        <td style="border: 2px solid darkgray; text-align: center;">
+                            <div class="form-group" style="margin: auto;">
+                                <label>T{{$i}}: {{$order->sampleArticle->$tamanho}}</label>
+                                <div class="row">
+                                    <div class="col-md-1"></div>
+                                    <div class="form-group col-md-5">
+                                        <label for="pe">Pé:</label>
+                                        <input type="text" class="form-control" value="{{$order->sampleArticle->$pe}}" required readonly >
+                                    </div>
+                                    <div class="form-group col-md-5">
+                                        <label for="Perna">Perna:</label>
+                                        <input type="text" class="form-control" value="{{$order->sampleArticle->$perna}}" required readonly>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-1"></div>
+                                    <div class="form-group col-md-5">
+                                        <label for="Punho">Punho:</label>
+                                        <input type="text" class="form-control" value="{{$order->sampleArticle->$punho}}" required readonly>
+                                    </div>
+                                    <div class="form-group col-md-5">
+                                        <label for="Malha">Malha:</label>
+                                        <input type="text" class="form-control" value="{{$order->sampleArticle->$malha}}" required readonly>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-1"></div>
+                                    <div class="form-group col-md-5">
+                                        <label for="Maq">Maq:</label>
+                                        <input type="text" class="form-control" value="{{$order->sampleArticle->$maq}}" required readonly>
+                                    </div>
+                                    <div class="form-group col-md-5">
+                                        <label for="Forma">Forma:</label>
+                                        <input type="text" class="form-control" value="{{$order->sampleArticle->$forma}}" required readonly>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    @endfor
+                </tr>
+            </table>
+        </div>
+
+
+        <form method="post" action="{{url('orders/update/'.$order->id)}}" enctype="multipart/form-data">
+            @csrf
+
+            <div class="row">
+                <div class="col-md-3"></div>
+                <div class="form-group col-md-6" style="margin-top:60px;margin-bottom:40px;">
+                    <button type="submit" class="btn btn-success">Atualizar</button>
+                    <button type="button" onclick="window.history.back();" class="btn btn-info">Voltar</button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+@endsection

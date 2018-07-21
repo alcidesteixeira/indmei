@@ -14,6 +14,7 @@ class OrderTableSeeder extends Seeder
     public function run()
     {
         $order = new Order();
+        $order->user_id = '1';
         $order->sample_article_id = '1';
         $order->client_id = '1';
         $order->client_identifier = '1';

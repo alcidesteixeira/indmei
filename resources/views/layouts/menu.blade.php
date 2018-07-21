@@ -84,9 +84,12 @@
         @endif
         @if (Auth::user()->hasAnyRole(['1', '6']))
             <li class="nav-item dropdown">
-                <a id="navbarDropdown" class="nav-link" href="{{ url('roles/create') }}" role="button" aria-haspopup="true" aria-expanded="false" v-pre>
-                    Encomendas em Produção </span>
+                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                    Encomendas em Produção <span class="caret"></span>
                 </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="{{ url('orders/list') }}">Listar Encomendas para Produção</a>
+                </div>
             </li>
         @endif
 
