@@ -2,6 +2,19 @@
 
 @section('content')
 
+    <style>
+        .table td, .table th {
+            padding: 0;
+        }
+        .form-group {
+            margin-bottom: 5px;
+        }
+        .form-control {
+            padding: 1px .75rem;
+            line-height: 1;
+        }
+    </style>
+
     <div class="container">
         <h2>Atualizar Quantidade Produzida</h2><br/>
 
@@ -234,6 +247,47 @@
             @csrf
 
             <div class="row">
+                @for($i = 1; $i <=4; $i++)
+                @php($tamanho1 = 'tamanho1'.$i) @php($tamanho2 = 'tamanho2'.$i) @php($tamanho3 = 'tamanho3'.$i) @php($tamanho4 = 'tamanho4'.$i)
+                <table class="table table-striped thead-dark table-bordered col-sm-3" style="border:2px solid #dee2e6; text-align:center">
+                    <thead>
+                        <tr>
+                            <th id="tam1{{$i}}">{{round($order->$tamanho1 * 2 + ($order->$tamanho1 * 2 * 0.03))}}</th>
+                            <th id="tam2{{$i}}">{{round($order->$tamanho2 * 2 + ($order->$tamanho2 * 2 * 0.03))}}</th>
+                            <th id="tam3{{$i}}">{{round($order->$tamanho3 * 2 + ($order->$tamanho3 * 2 * 0.03))}}</th>
+                            <th id="tam4{{$i}}">{{round($order->$tamanho4 * 2 + ($order->$tamanho4 * 2 * 0.03))}}</th>
+                        </tr>
+                        <tr>
+                            <th>{{$order->cor1}}</th>
+                            <th>{{$order->cor2}}</th>
+                            <th>{{$order->cor3}}</th>
+                            <th>{{$order->cor4}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="toSubtract">
+                            <td class=""><input type="number" data-table="{{$i}}" value="0" name="cor{{$i}}1" class="value-added tabela{{$i}} cor{{$i}}1" style="width:100%"></td>
+                            <td class=""><input type="number" data-table="{{$i}}" value="0" name="cor{{$i}}2" class="value-added tabela{{$i}} cor{{$i}}2" style="width:100%"></td>
+                            <td class=""><input type="number" data-table="{{$i}}" value="0" name="cor{{$i}}3" class="value-added tabela{{$i}} cor{{$i}}3" style="width:100%"></td>
+                            <td class=""><input type="number" data-table="{{$i}}" value="0" name="cor{{$i}}4" class="value-added tabela{{$i}} cor{{$i}}4" style="width:100%"></td>
+                        </tr>
+                        {{--<tr class="toSubtract">--}}
+                            {{--<td class=""><input type="number" data-table="{{$i}}" value="0" name="cor{{$i}}1" class="value-added tabela{{$i}} cor{{$i}}1" style="width:100%"></td>--}}
+                            {{--<td class=""><input type="number" data-table="{{$i}}" value="0" name="cor{{$i}}2" class="value-added tabela{{$i}} cor{{$i}}2" style="width:100%"></td>--}}
+                            {{--<td class=""><input type="number" data-table="{{$i}}" value="0" name="cor{{$i}}3" class="value-added tabela{{$i}} cor{{$i}}3" style="width:100%"></td>--}}
+                            {{--<td class=""><input type="number" data-table="{{$i}}" value="0" name="cor{{$i}}4" class="value-added tabela{{$i}} cor{{$i}}4" style="width:100%"></td>--}}
+                        {{--</tr>--}}
+                        <tr class="missing">
+                            <td id="missing1{{$i}}">{{round($order->$tamanho1 * 2 + ($order->$tamanho1 * 2 * 0.03))}}</td>
+                            <td id="missing2{{$i}}">{{round($order->$tamanho2 * 2 + ($order->$tamanho2 * 2 * 0.03))}}</td>
+                            <td id="missing3{{$i}}">{{round($order->$tamanho3 * 2 + ($order->$tamanho3 * 2 * 0.03))}}</td>
+                            <td id="missing4{{$i}}">{{round($order->$tamanho4 * 2 + ($order->$tamanho4 * 2 * 0.03))}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                @endfor
+            </div>
+            <div class="row">
                 <div class="col-md-3"></div>
                 <div class="form-group col-md-6" style="margin-top:60px;margin-bottom:40px;">
                     <button type="submit" class="btn btn-success">Atualizar</button>
@@ -243,5 +297,52 @@
 
         </form>
     </div>
+
+    <script>
+
+        updateValues ();
+
+        $(".value-added").keyup( updateValues );
+
+        function updateValues () {
+            {{--$( this ).parent().parent().parent().append("<tr class='toSubtract'>" +--}}
+                {{--"<td class=''><input type='number' data-table='{{$i}}' name='cor{{$i}}1' class='value-added tabela{{$i}} cor{{$i}}1' style='width:100%'></td>" +--}}
+                {{--"<td class=''><input type='number' data-table='{{$i}}' name='cor{{$i}}2' class='value-added tabela{{$i}} cor{{$i}}2' style='width:100%'></td>" +--}}
+                {{--"<td class=''><input type='number' data-table='{{$i}}' name='cor{{$i}}3' class='value-added tabela{{$i}} cor{{$i}}3' style='width:100%'></td>" +--}}
+                {{--"<td class=''><input type='number' data-table='{{$i}}' name='cor{{$i}}4' class='value-added tabela{{$i}} cor{{$i}}4' style='width:100%'></td>" +--}}
+                {{--"</tr>");--}}
+            //Count Values to Subtract to Totals for each table T1 T2 T3 T4
+            //Retorna um array com todos os valores somados que se terão de subtrair ao total
+            let arrayToSubtract = [];
+            for(let i = 1; i <= 4; i++) {
+                for(let j = 1; j <= 4; j++) {
+                    let length = $('.cor'+i+j).length;
+                    let increment = 0;
+                    arrayToSubtract['cor'+i+j] = '';
+                    $('.cor'+i+j).each(function () {
+                        increment ++;
+                        arrayToSubtract['cor'+i+j] += $(this).val();
+                        if(increment !== length) {arrayToSubtract['cor'+i+j] += ',';}
+                    });
+                    //Com os valores a subtrair numa só variável, subtrair neste momento:
+                    let subtracts = JSON.parse("[" + arrayToSubtract['cor'+i+j] + "]");
+                    arrayToSubtract['cor'+i+j] = subtracts.reduce((a, b) => a + b, 0);
+                    $("#missing"+j+i).text($("#tam"+j+i).text() - arrayToSubtract['cor'+i+j]);
+                }
+            }
+            //END - Retorna um array com todos os valores somados que se terão de subtrair ao total - END
+            console.log(arrayToSubtract);
+
+            // for(let i = 1; i <= 4; i++) {
+            //     for(let j = 1; j <= 4; j++) {
+            //         $("#missing1" + i).text($("#tam1" + i).text() - arrayToSubtract['cor'+j+i]);
+            //         $("#missing2" + i).text($("#tam2" + i).text() - arrayToSubtract['cor'+j+i]);
+            //         $("#missing3" + i).text($("#tam3" + i).text() - arrayToSubtract['cor'+j+i]);
+            //         $("#missing4" + i).text($("#tam4" + i).text() - arrayToSubtract['cor'+j+i]);
+            //     }
+            // }
+        }
+
+    </script>
 
 @endsection
