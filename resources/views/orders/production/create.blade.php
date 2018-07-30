@@ -16,6 +16,9 @@
         .value-added {
             text-align: right;
         }
+        input:read-only {
+            background-color: #e9ecef;
+        }
     </style>
 
     <div class="container">
@@ -270,22 +273,29 @@
                     </thead>
                     <tbody>
                         @foreach($prod_days as $key=>$day)
-
                         <tr class="toSubtract">
                             <td class=""><span style="position:absolute;left:4px; font-size:8px;">{{$key}}</span>
-                                         <input type="number" data-table="{{$i}}" value="@php($valor = 'val'.$i.'1'){{array_key_exists('val'.$i.'1', $day) ? $day[$valor]: '0'}}" class="value-added tabela{{$i}} cor{{$i}}1" style="width:100%;background-color: #e9ecef" readonly></td>
-                            <td class=""><input type="number" data-table="{{$i}}" value="@php($valor = 'val'.$i.'2'){{array_key_exists('val'.$i.'2', $day) ? $day[$valor]: '0'}}" class="value-added tabela{{$i}} cor{{$i}}2" style="width:100%;background-color: #e9ecef" readonly></td>
-                            <td class=""><input type="number" data-table="{{$i}}" value="@php($valor = 'val'.$i.'3'){{array_key_exists('val'.$i.'3', $day) ? $day[$valor]: '0'}}" class="value-added tabela{{$i}} cor{{$i}}3" style="width:100%;background-color: #e9ecef" readonly></td>
-                            <td class=""><input type="number" data-table="{{$i}}" value="@php($valor = 'val'.$i.'4'){{array_key_exists('val'.$i.'4', $day) ? $day[$valor]: '0'}}" class="value-added tabela{{$i}} cor{{$i}}4" style="width:100%;background-color: #e9ecef" readonly></td>
+                                         <input type="number" data-table="{{$i}}" value="@php($valor = 'val'.$i.'1'){{array_key_exists('val'.$i.'1', $day) ? $day[$valor]: '0'}}"
+                                                class="value-added tabela{{$i}} cor{{$i}}1" style="width:100%;" {{strtotime($key) == strtotime(date("Y-m-d")) ? 'name=cor'.$i.'1' : 'readonly'}}>
+                            </td>
+                            <td class=""><input type="number" data-table="{{$i}}" value="@php($valor = 'val'.$i.'2'){{array_key_exists('val'.$i.'2', $day) ? $day[$valor]: '0'}}"
+                                                class="value-added tabela{{$i}} cor{{$i}}2" style="width:100%;" {{strtotime($key) == strtotime(date("Y-m-d")) ? 'name=cor'.$i.'2' : 'readonly'}}>
+                            </td>
+                            <td class=""><input type="number" data-table="{{$i}}" value="@php($valor = 'val'.$i.'3'){{array_key_exists('val'.$i.'3', $day) ? $day[$valor]: '0'}}"
+                                                class="value-added tabela{{$i}} cor{{$i}}3" style="width:100%;" {{strtotime($key) == strtotime(date("Y-m-d")) ? 'name=cor'.$i.'3' : 'readonly'}}>
+                            </td>
+                            <td class=""><input type="number" data-table="{{$i}}" value="@php($valor = 'val'.$i.'4'){{array_key_exists('val'.$i.'4', $day) ? $day[$valor]: '0'}}"
+                                                class="value-added tabela{{$i}} cor{{$i}}4" style="width:100%;" {{strtotime($key) == strtotime(date("Y-m-d")) ? 'name=cor'.$i.'4' : 'readonly'}}>
+                            </td>
                         </tr>
                         @endforeach
-                        <tr class="toSubtract">
+                       <!-- <tr class="toSubtract">
                             <td class=""><span style="position:absolute;left:4px; font-size:8px;">{{date("Y-m-d")}}</span>
                                          <input type="number" data-table="{{$i}}" value="0" name="cor{{$i}}1" class="value-added tabela{{$i}} cor{{$i}}1" style="width:100%"></td>
                             <td class=""><input type="number" data-table="{{$i}}" value="0" name="cor{{$i}}2" class="value-added tabela{{$i}} cor{{$i}}2" style="width:100%"></td>
                             <td class=""><input type="number" data-table="{{$i}}" value="0" name="cor{{$i}}3" class="value-added tabela{{$i}} cor{{$i}}3" style="width:100%"></td>
                             <td class=""><input type="number" data-table="{{$i}}" value="0" name="cor{{$i}}4" class="value-added tabela{{$i}} cor{{$i}}4" style="width:100%"></td>
-                        </tr>
+                        </tr>-->
                         <tr class="missing">
                             <td class="missing1{{$i}}">
                                                     {{round($order->$tamanho1 * 2 + ($order->$tamanho1 * 2 * 0.03))}}</td>
@@ -313,6 +323,7 @@
         updateValues ();
         updateEmFalta ();
         $(".value-added").keyup( updateValues );
+        $(".value-added").keyup( updateEmFalta );
 
         function updateValues () {
             {{--$( this ).parent().parent().parent().append("<tr class='toSubtract'>" +--}}

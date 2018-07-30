@@ -19,7 +19,8 @@
                 <th role="columnheader"></th>
                 <th role="columnheader"></th>
                 <th role="columnheader"></th>
-                @elseif (Auth::user()->hasAnyRole(['1', '6']))
+                @endif
+                @if (Auth::user()->hasAnyRole(['1', '6']))
                 <th role="columnheader"></th>
                 @endif
             </tr>
@@ -43,11 +44,12 @@
                         <button type="button" data-id="{{$order->id}}" data-role="{{$order->client_identifier}}"  class="apagarform btn btn-danger">Apagar</button>
                     </td>
                     <td role="columnheader" data-col9="">
-                        <form method="get" action="{{url('orders/edit/'.$order->id)}}" enctype="multipart/form-data">
+                        <form method="get" action="{{url('/order/production/'.$order->id)}}" enctype="multipart/form-data">
                             <button type="submit" class="btn btn-info">Produção Atual</button>
                         </form>
                     </td>
-                    @elseif (Auth::user()->hasAnyRole(['1', '6']))
+                    @endif
+                    @if (Auth::user()->hasAnyRole(['1', '6']))
                     <td role="columnheader" data-col8="">
                         <form method="get" action="{{url('/order/production/insert/'.$order->id)}}" enctype="multipart/form-data">
                             <button type="submit" class="btn btn-info">A minha produção</button>

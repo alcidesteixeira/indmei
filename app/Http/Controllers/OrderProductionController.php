@@ -19,9 +19,13 @@ class OrderProductionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function list()
     {
-        //
+        Auth::user()->authorizeRoles(['1', '4']);
+
+        $orders = OrderProduction::groupBy('user_id')->get();
+
+        return view('orders.production.list', compact('orders'));
     }
 
     /**
@@ -41,7 +45,7 @@ class OrderProductionController extends Controller
         $warehouseProductSpecs = WarehouseProductSpec::all();
         $production = OrderProduction::where('order_id', $id)->where('user_id', Auth::id())->get();
         //create array of values to subtract stored
-        $start = $order->updated_at;
+        $start = $order->created_at;
         $start=substr($start, 0, 10);
         //dd($start);
         $end = $order->delivery_date;
@@ -51,7 +55,7 @@ class OrderProductionController extends Controller
         $today = strtotime(date("Y-m-d"));
         $last = strtotime($end);
         $i = $j = 0;
-        if ($today > $last) {
+        if ($today >= $last) {
             while ($current <= $last) {
                 $i++;
                 $period[] = date('Y-m-d', $current);
@@ -59,7 +63,7 @@ class OrderProductionController extends Controller
             }
         }
         else {
-            while ($current < $today) {
+            while ($current <= $today) {
                 $j++;
                 $period[] = date('Y-m-d', $current);
                 $current = strtotime('+1 day', $current);
@@ -79,6 +83,8 @@ class OrderProductionController extends Controller
             $prod_days[$date] = $prod_array;
         }
 
+        $todayProduction = OrderProduction::where('order_id', $id)->where('user_id', Auth::id())->where('created_at', '>', Carbon::today())->get();
+
         //dd($prod_days);
         //dd(@$order->sampleArticle->sampleArticleWires()->get()->values()->get(13)->warehouseProduct);
 
@@ -96,6 +102,11 @@ class OrderProductionController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $orderProd = OrderProduction::where('created_at', '>', Carbon::today())
+            ->where('created_at', '<', Carbon::tomorrow())
+            ->where('user_id', Auth::id())
+            ->delete();
+
         //dd($request->all());
         for($i = 1; $i <= 4; $i++) {
             for($j = 1; $j <= 4; $j++) {

@@ -94,6 +94,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/clients/delete/{id}', 'ClientController@destroy');
 
 //Orders
+    Route::get('/order/production/{id}', 'OrderProductionController@list');
     Route::get('/order/production/insert/{id}', 'OrderProductionController@create');
     Route::post('/order/production/update/{id}', 'OrderProductionController@update');
 
