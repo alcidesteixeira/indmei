@@ -95,7 +95,8 @@ Route::group(['middleware' => 'auth'], function () {
 
 //Orders
     Route::get('/order/production/{id}', 'OrderProductionController@list');
-    Route::get('/order/production/insert/{id}', 'OrderProductionController@create');
+    Route::get('/order/production/insert/{id}/{id_user?}', 'OrderProductionController@create');
     Route::post('/order/production/update/{id}', 'OrderProductionController@update');
+    Route::get('/to/subtract/{id}', 'OrderProductionController@toSubtract');
 
 });

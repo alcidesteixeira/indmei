@@ -51,7 +51,7 @@
                     @endif
                     @if (Auth::user()->hasAnyRole(['1', '6']))
                     <td role="columnheader" data-col8="">
-                        <form method="get" action="{{url('/order/production/insert/'.$order->id)}}" enctype="multipart/form-data">
+                        <form method="get" action="{{url('/order/production/insert/'.$order->id.'/')}}" enctype="multipart/form-data">
                             <button type="submit" class="btn btn-info">A minha produção</button>
                         </form>
                     </td>

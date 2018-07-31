@@ -35,7 +35,7 @@
             <div class="row">
                 <div class="col-md-3">
                     <label for="Description">Imagem Amostra:</label>
-                    <img src="../../../storage/{{$order->sampleArticle->image_url}}" style="max-width: 200px;">
+                    <img src="{{asset('storage/'.$order->sampleArticle->image_url)}}" style="max-width: 200px;">
                 </div>
                 <div class="form-group col-md-9">
                     <table class="table table-striped thead-dark">
@@ -276,26 +276,23 @@
                         <tr class="toSubtract">
                             <td class=""><span style="position:absolute;left:4px; font-size:8px;">{{$key}}</span>
                                          <input type="number" data-table="{{$i}}" value="@php($valor = 'val'.$i.'1'){{array_key_exists('val'.$i.'1', $day) ? $day[$valor]: '0'}}"
-                                                class="value-added tabela{{$i}} cor{{$i}}1" style="width:100%;" {{strtotime($key) == strtotime(date("Y-m-d")) ? 'name=cor'.$i.'1' : 'readonly'}}>
+                                                class="value-added tabela{{$i}} {{strtotime($key) == strtotime(date("Y-m-d")) ? 'cor'.$i.'1' : ''}}"
+                                                style="width:100%;" {{strtotime($key) == strtotime(date("Y-m-d")) ? 'name=cor'.$i.'1' : 'readonly'}}>
                             </td>
                             <td class=""><input type="number" data-table="{{$i}}" value="@php($valor = 'val'.$i.'2'){{array_key_exists('val'.$i.'2', $day) ? $day[$valor]: '0'}}"
-                                                class="value-added tabela{{$i}} cor{{$i}}2" style="width:100%;" {{strtotime($key) == strtotime(date("Y-m-d")) ? 'name=cor'.$i.'2' : 'readonly'}}>
+                                                class="value-added tabela{{$i}} {{strtotime($key) == strtotime(date("Y-m-d")) ? 'cor'.$i.'2' : ''}}"
+                                                style="width:100%;" {{strtotime($key) == strtotime(date("Y-m-d")) ? 'name=cor'.$i.'2' : 'readonly'}}>
                             </td>
                             <td class=""><input type="number" data-table="{{$i}}" value="@php($valor = 'val'.$i.'3'){{array_key_exists('val'.$i.'3', $day) ? $day[$valor]: '0'}}"
-                                                class="value-added tabela{{$i}} cor{{$i}}3" style="width:100%;" {{strtotime($key) == strtotime(date("Y-m-d")) ? 'name=cor'.$i.'3' : 'readonly'}}>
+                                                class="value-added tabela{{$i}} {{strtotime($key) == strtotime(date("Y-m-d")) ? 'cor'.$i.'3' : ''}}"
+                                                style="width:100%;" {{strtotime($key) == strtotime(date("Y-m-d")) ? 'name=cor'.$i.'3' : 'readonly'}}>
                             </td>
                             <td class=""><input type="number" data-table="{{$i}}" value="@php($valor = 'val'.$i.'4'){{array_key_exists('val'.$i.'4', $day) ? $day[$valor]: '0'}}"
-                                                class="value-added tabela{{$i}} cor{{$i}}4" style="width:100%;" {{strtotime($key) == strtotime(date("Y-m-d")) ? 'name=cor'.$i.'4' : 'readonly'}}>
+                                                class="value-added tabela{{$i}} {{strtotime($key) == strtotime(date("Y-m-d")) ? 'cor'.$i.'4' : ''}}"
+                                                style="width:100%;" {{strtotime($key) == strtotime(date("Y-m-d")) ? 'name=cor'.$i.'4' : 'readonly'}}>
                             </td>
                         </tr>
                         @endforeach
-                       <!-- <tr class="toSubtract">
-                            <td class=""><span style="position:absolute;left:4px; font-size:8px;">{{date("Y-m-d")}}</span>
-                                         <input type="number" data-table="{{$i}}" value="0" name="cor{{$i}}1" class="value-added tabela{{$i}} cor{{$i}}1" style="width:100%"></td>
-                            <td class=""><input type="number" data-table="{{$i}}" value="0" name="cor{{$i}}2" class="value-added tabela{{$i}} cor{{$i}}2" style="width:100%"></td>
-                            <td class=""><input type="number" data-table="{{$i}}" value="0" name="cor{{$i}}3" class="value-added tabela{{$i}} cor{{$i}}3" style="width:100%"></td>
-                            <td class=""><input type="number" data-table="{{$i}}" value="0" name="cor{{$i}}4" class="value-added tabela{{$i}} cor{{$i}}4" style="width:100%"></td>
-                        </tr>-->
                         <tr class="missing">
                             <td class="missing1{{$i}}">
                                                     {{round($order->$tamanho1 * 2 + ($order->$tamanho1 * 2 * 0.03))}}</td>
@@ -320,20 +317,32 @@
 
     <script>
 
-        updateValues ();
-        updateEmFalta ();
-        $(".value-added").keyup( updateValues );
-        $(".value-added").keyup( updateEmFalta );
+        let arraySub = [];
+        $( document ).ready( function () {
+
+            //Arranjar array com key,val que traga a soma de cores desde cor11 a cor44
+            //Parametro é o order_id, retorna o arrayToSubtract [cor11 => 10, cor12 => 30]
+            $.ajax({
+                url: "/to/subtract/"+{!! $order->id !!},
+                success: function(result){
+                    arraySub = result;
+
+                    //Depois de ter os valores antigos da BD, atualiza
+                    updateValues ();
+                    updateEmFalta ();
+                    $(".value-added").keyup( updateValues );
+                    $(".value-added").keyup( updateEmFalta );
+                }
+            });
+            //End array
+
+        });
+
 
         function updateValues () {
-            {{--$( this ).parent().parent().parent().append("<tr class='toSubtract'>" +--}}
-                {{--"<td class=''><input type='number' data-table='{{$i}}' name='cor{{$i}}1' class='value-added tabela{{$i}} cor{{$i}}1' style='width:100%'></td>" +--}}
-                {{--"<td class=''><input type='number' data-table='{{$i}}' name='cor{{$i}}2' class='value-added tabela{{$i}} cor{{$i}}2' style='width:100%'></td>" +--}}
-                {{--"<td class=''><input type='number' data-table='{{$i}}' name='cor{{$i}}3' class='value-added tabela{{$i}} cor{{$i}}3' style='width:100%'></td>" +--}}
-                {{--"<td class=''><input type='number' data-table='{{$i}}' name='cor{{$i}}4' class='value-added tabela{{$i}} cor{{$i}}4' style='width:100%'></td>" +--}}
-                {{--"</tr>");--}}
+
             //Count Values to Subtract to Totals for each table T1 T2 T3 T4
-            //Retorna um array com todos os valores somados que se terão de subtrair ao total
+            //Retorna um array com todos os valores somados DO DIA ATUAL (EDITÁVEL) que se terão de subtrair ao total
             let arrayToSubtract = [];
             for(let i = 1; i <= 4; i++) {
                 let totalCor = 0;
@@ -349,41 +358,53 @@
                     //Com os valores a subtrair numa só variável, subtrair neste momento:
                     let subtracts = JSON.parse("[" + arrayToSubtract['cor'+i+j] + "]");
                     arrayToSubtract['cor'+i+j] = subtracts.reduce((a, b) => a + b, 0);
-                    $(".missing"+j+i).text($("#tam"+j+i).text() - arrayToSubtract['cor'+i+j]);
+                    //Pega no valor total, e depois subtrai do array da BD (arraySub) - que corresponde a todos os dias
+                    //exceto o de hoje (o único editável); e depois subtrai em tempo real o dia de hoje
+                    let valFromDB = 0;
+                    if(arraySub['cor'+i+j]) {
+                        valFromDB = arraySub['cor'+i+j];
+                    }
+                    $(".missing"+j+i).text($("#tam"+j+i).text() - valFromDB - arrayToSubtract['cor'+i+j]);
                 }
             }
             //END - Retorna um array com todos os valores somados que se terão de subtrair ao total - END
-            //console.log(arrayToSubtract);
-
-            // for(let i = 1; i <= 4; i++) {
-            //     for(let j = 1; j <= 4; j++) {
-            //         $("#missing1" + i).text($("#tam1" + i).text() - arrayToSubtract['cor'+j+i]);
-            //         $("#missing2" + i).text($("#tam2" + i).text() - arrayToSubtract['cor'+j+i]);
-            //         $("#missing3" + i).text($("#tam3" + i).text() - arrayToSubtract['cor'+j+i]);
-            //         $("#missing4" + i).text($("#tam4" + i).text() - arrayToSubtract['cor'+j+i]);
-            //     }
-            // }
         }
 
         function updateEmFalta () {
+            //Valores diários totais a subtrair, por cor
             let arrayToSubtract = [];
             for(let i = 1; i <= 4; i++) {
                 let ar = 0;
-                for(let j = 1; j <= 4; j++) {
+                for (let j = 1; j <= 4; j++) {
                     $('.cor' + j + i).each(function () {
-                        //console.log(parseInt($(this).val()));
                         ar += parseInt($(this).val());
                     });
-                    arrayToSubtract['a'+i] = ar;
-                    //em falta 1ª tabela
-                    //console.log($("#pedido" + i).text());
-                    //console.log(arrayToSubtract);
-                    //$("#falta" + i).text($("#pedido" + i).text() - (arrayToSubtract / 2).toFixed(0));
+                    arrayToSubtract['a' + i] = ar;
                 }
-                //console.log(arrayToSubtract);
-                $("#falta" + i).text($("#pedido" + i).text() - (arrayToSubtract['a'+i] / 2).toFixed(0));
             }
-            //console.log(arrayToSubtract);
+            //Valores da BD totais a subtrair, por cor
+            let ar2 = [];
+            let intAr2;
+            for (i = 1; i <= 4; i ++) {
+                let valFromDB = 0;
+                for(let j = 1; j <= 4; j++) {
+                    if(arraySub['cor'+j+i]) {
+                        valFromDB += parseInt(arraySub['cor'+j+i]);
+                    }
+                    // console.log(j);
+                    // console.log(i);
+                    // console.log(valFromDB);
+                }
+                ar2['x' + i] = valFromDB;
+            }
+                // console.log(ar2);
+
+            for (let i = 1; i <= 4; i ++) {
+                console.log($("#pedido" + i).text());
+                console.log((ar2['x'+i] / 2).toFixed(0));
+                console.log((arrayToSubtract['a'+i] / 2).toFixed(0));
+                $("#falta" + i).text($("#pedido" + i).text() - (ar2['x'+i] / 2).toFixed(0) - (arrayToSubtract['a'+i] / 2).toFixed(0));
+            }
         }
 
     </script>

@@ -20,16 +20,17 @@
             </thead>
             <tbody role="rowgroup">
             @foreach($orders as $order)
+
                 <tr role="row">
-                    <td role="columnheader" data-col1="Cliente">{{$order->reference}}</td>
-                    <td role="columnheader" data-col2="Id do Cliente">{{$order->description}}</td>
-                    <td role="columnheader" data-col3="Id da Amostra"></td>
-                    <td role="columnheader" data-col4="Descrição">{{$order->user->name}}</td>
-                    <td role="columnheader" data-col5="Data de Entrega">{{$order->updated_at}}</td>
-                    <td role="columnheader" data-col6="Produzido Por">{{$order->sampleArticleStatus->status}}</td>
+                    <td role="columnheader" data-col1="Cliente">{{$order->order()->first()->client->client}}</td>
+                    <td role="columnheader" data-col2="Id do Cliente">{{$order->order()->first()->client_id}}</td>
+                    <td role="columnheader" data-col3="Id da Amostra">{{$order->order()->first()->sample_article_id}}</td>
+                    <td role="columnheader" data-col4="Descrição">{{$order->order()->first()->description}}</td>
+                    <td role="columnheader" data-col5="Data de Entrega">{{$order->order()->first()->delivery_date}}</td>
+                    <td role="columnheader" data-col6="Produzido Por">{{$order->user()->first()->name}}</td>
                     <td role="columnheader" data-col7="">
-                        <form method="get" action="{{url('samples/edit/'.$sample->id)}}" enctype="multipart/form-data">
-                            <button type="submit" class="btn btn-warning">Editar</button>
+                        <form method="get" action="{{url('/order/production/insert/'.$order->order()->first()->id.'/'.$order->user()->first()->id)}}" enctype="multipart/form-data">
+                            <button type="submit" class="btn btn-info">Ver</button>
                         </form>
                     </td>
                 </tr>

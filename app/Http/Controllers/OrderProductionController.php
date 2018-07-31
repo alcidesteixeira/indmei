@@ -11,6 +11,7 @@ use App\WarehouseProductSpec;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class OrderProductionController extends Controller
 {
@@ -19,11 +20,11 @@ class OrderProductionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function list()
+    public function list($id)
     {
         Auth::user()->authorizeRoles(['1', '4']);
 
-        $orders = OrderProduction::groupBy('user_id')->get();
+        $orders = OrderProduction::where('order_id', $id)->groupBy('user_id')->get();
 
         return view('orders.production.list', compact('orders'));
     }
@@ -33,7 +34,7 @@ class OrderProductionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create($id)
+    public function create($id, $id_user = null)
     {
         Auth::user()->authorizeRoles(['1', '4', '6']);
 
@@ -43,13 +44,11 @@ class OrderProductionController extends Controller
         $steps = SampleArticleStep::all();
         $warehouseProducts = WarehouseProduct::all();
         $warehouseProductSpecs = WarehouseProductSpec::all();
-        $production = OrderProduction::where('order_id', $id)->where('user_id', Auth::id())->get();
+        $production = OrderProduction::where('order_id', $id)->where('user_id', $id_user ? $id_user : Auth::id())->get();
         //create array of values to subtract stored
         $start = $order->created_at;
         $start=substr($start, 0, 10);
-        //dd($start);
         $end = $order->delivery_date;
-        //dd($end);
         $period = [];
         $current = strtotime($start);
         $today = strtotime(date("Y-m-d"));
@@ -131,4 +130,20 @@ class OrderProductionController extends Controller
         return redirect()->action('OrderController@index');
     }
 
+    public function toSubtract($id) {
+
+        //$totals = OrderProduction::where('order_id', $id)->get();
+
+        $totals = DB::table('order_productions')
+            ->select('tamanho', 'cor', 'value', DB::raw('sum(value) as total'))
+            ->where('created_at', '<', Carbon::today())
+            ->groupBy('tamanho', 'cor' )
+            ->get();
+
+        $arrayTotals = [];
+        foreach($totals as $total) {
+            $arrayTotals['cor'.$total->tamanho.$total->cor] = abs($total->total);
+        }
+        return($arrayTotals);
+    }
 }
