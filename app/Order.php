@@ -56,17 +56,31 @@ class Order extends Model
             ->select('sample_articles_wires.id', 'sample_article_id', 'warehouse_product_id', 'grams', 'a.sample_articles_wire_id', 'a.warehouse_product_spec_id')
             ->selectRaw('COUNT(sample_articles_wire_id) AS total_samples')
             ->selectRaw('MIN(a.id) AS minColorID')
+            ->selectRaw(
+                'CASE
+                                WHEN MOD(a.id, 4) = 0 THEN 4
+                                ELSE MOD(a.id, 4)
+                            END as cor')
             ->leftJoin('sample_article_colors AS a', 'sample_articles_wires.id', '=', 'a.sample_articles_wire_id')
             ->where('sample_article_id', $sampleArticleId)
             ->groupBy('sample_articles_wires.id', 'a.id')
+            ->orderBy('cor')
+            ->orderBy('minColorID')
             ->get()
             ->toArray();
         //FIM SELECIONAR o total GASTO numa amostra, por COR de UM PAR DE MEIAS:
-        dd($wires);
+        //dd($wires);
         $clientName = Client::where('id', $request->client_id)->first()->client;
 
         //Selecionar as quantidades de pares de meias, POR COR
-
+//        dd($request->all());
+        $paresPorCor = [
+            'cor1' => $request->tamanho11+$request->tamanho12+$request->tamanho13+$request->tamanho14,
+            'cor2' => $request->tamanho21+$request->tamanho22+$request->tamanho23+$request->tamanho24,
+            'cor3' => $request->tamanho31+$request->tamanho32+$request->tamanho33+$request->tamanho34,
+            'cor4' => $request->tamanho41+$request->tamanho42+$request->tamanho43+$request->tamanho44
+            ];
+        //dd($paresPorCor);
         //FIM Selecionar as quantidades de pares de meias, POR COR
 
         //Delete das entradas antes de atualizar.
@@ -74,19 +88,24 @@ class Order extends Model
             ->where('description',  'Encomenda para o cliente: ' . $clientName . ', com o identificador: ' . $request->client_identifier)
             ->delete();
 
+        //Editar para conter historico de liquid weight e gross weight!!!!
         //Adicionar as quantidades de fio, dependendo das meias selecionadas: stock
-
-        foreach($wires as $wire) {
-            DB::table('warehouse_products_history')->insert([
-                'warehouse_product_spec_id' => $wire->warehouse_product_spec_id,
-                'user_id' => Auth::id(),
-                'inout' => 'OUT',
-                'weight' => $wire->grams,
-                'cost' => 0,
-                'description' => 'Encomenda para o cliente: ' . $clientName . ', com o identificador: ' . $request->client_identifier,
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
-            ]);
+        for($i = 1; $i <= 4; $i++) {
+            $cor = 'cor'.$i;
+            foreach ($wires as $wire) {
+                if($wire->cor == $i) {
+                    DB::table('warehouse_products_history')->insert([
+                        'warehouse_product_spec_id' => $wire->warehouse_product_spec_id,
+                        'user_id' => Auth::id(),
+                        'inout' => 'OUT',
+                        'weight' => $wire->grams * $paresPorCor[$cor],
+                        'cost' => 0,
+                        'description' => 'Encomenda para o cliente: ' . $clientName . ', com o identificador: ' . $request->client_identifier,
+                        'created_at' => Carbon::now(),
+                        'updated_at' => Carbon::now(),
+                    ]);
+                }
+            }
         }
         //END - Add Row to Stock History with the order to subtract
         return $clientName;

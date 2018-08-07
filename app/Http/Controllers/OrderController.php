@@ -202,7 +202,6 @@ class OrderController extends Controller
         }
         //End Files to Delete
 
-
         $addRow = new Order();
         $addRow = $addRow->addRowToStockHistoty($request);
         //dd($addRow);
