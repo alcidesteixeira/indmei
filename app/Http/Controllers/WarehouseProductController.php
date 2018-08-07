@@ -23,6 +23,12 @@ class WarehouseProductController extends Controller
 
         Auth::user()->authorizeRoles(['1', '5']);
 
+        $update = new WarehouseProduct();
+
+        $update = $update->updateStocks();
+
+        //dd($update);
+
         $stock = WarehouseProductSpec::all();
 
         return view('warehouse.list', compact('stock'));
@@ -73,7 +79,8 @@ class WarehouseProductController extends Controller
         $spec->warehouse_product_id = $warehouseProduct->id;
         $spec->description = $request->description;
         $spec->color = $request->color;
-        $spec->weight = $request->weight;
+        $spec->liquid_weight = $request->liquid_weight;
+        $spec->gross_weight = $request->gross_weight;
         $spec->cost = $request->cost;
         $spec->threshold = $request->threshold;
         $spec->save();
@@ -114,7 +121,8 @@ class WarehouseProductController extends Controller
         $spec->warehouse_product_id = $spec->product->id;
         $spec->description = $request->description;
         $spec->color = $request->color;
-        $spec->weight = $request->weight;
+        $spec->liquid_weight = $request->liquid_weight;
+        $spec->gross_weight = $request->gross_weight;
         $spec->cost = $request->cost;
         $spec->threshold = $request->threshold;
         $spec->save();
@@ -202,7 +210,8 @@ class WarehouseProductController extends Controller
                 $warehouseProductSpec->warehouse_product_id = $warehouseProduct->id;
                 $warehouseProductSpec->description = $request->$description;
                 $warehouseProductSpec->color = $request->$color;
-                $warehouseProductSpec->weight = $request->$qtd;
+                $warehouseProductSpec->liquid_weight = $request->$qtd;
+                $warehouseProductSpec->gross_weight = $request->$qtd;
                 $warehouseProductSpec->cost = $request->$cost;
                 $warehouseProductSpec->threshold = $request->$threshold ? $request->$threshold : 1000;
                 $warehouseProductSpec->save();

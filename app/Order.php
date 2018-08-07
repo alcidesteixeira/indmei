@@ -2,7 +2,10 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class Order extends Model
 {
@@ -39,6 +42,54 @@ class Order extends Model
     public function user()
     {
         return $this->belongsTo('App\User');
+    }
+
+    public function addRowToStockHistoty ($request) {
+        //Add Row to Stock History with the order to subtract:
+        $sampleArticleId = $request->sample_article_id;
+        //SELECIONAR o total GASTO, POR FIO, numa amostra, por COR de UM PAR DE MEIAS:
+        // multiplos de 4 -> somando 0 são cor 1;
+        // multiplos de 4 -> somando 1 sao cor 2;
+        // multiplos de 4 -> somando 2 sao cor 3;
+        // multiplos de 4 -> somando 3 sao cor 4;
+        $wires = DB::table('sample_articles_wires')
+            ->select('sample_articles_wires.id', 'sample_article_id', 'warehouse_product_id', 'grams', 'a.sample_articles_wire_id', 'a.warehouse_product_spec_id')
+            ->selectRaw('COUNT(sample_articles_wire_id) AS total_samples')
+            ->selectRaw('MIN(a.id) AS minColorID')
+            ->leftJoin('sample_article_colors AS a', 'sample_articles_wires.id', '=', 'a.sample_articles_wire_id')
+            ->where('sample_article_id', $sampleArticleId)
+            ->groupBy('sample_articles_wires.id', 'a.id')
+            ->get()
+            ->toArray();
+        //FIM SELECIONAR o total GASTO numa amostra, por COR de UM PAR DE MEIAS:
+        dd($wires);
+        $clientName = Client::where('id', $request->client_id)->first()->client;
+
+        //Selecionar as quantidades de pares de meias, POR COR
+
+        //FIM Selecionar as quantidades de pares de meias, POR COR
+
+        //Delete das entradas antes de atualizar.
+        DB::table('warehouse_products_history')
+            ->where('description',  'Encomenda para o cliente: ' . $clientName . ', com o identificador: ' . $request->client_identifier)
+            ->delete();
+
+        //Adicionar as quantidades de fio, dependendo das meias selecionadas: stock
+
+        foreach($wires as $wire) {
+            DB::table('warehouse_products_history')->insert([
+                'warehouse_product_spec_id' => $wire->warehouse_product_spec_id,
+                'user_id' => Auth::id(),
+                'inout' => 'OUT',
+                'weight' => $wire->grams,
+                'cost' => 0,
+                'description' => 'Encomenda para o cliente: ' . $clientName . ', com o identificador: ' . $request->client_identifier,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ]);
+        }
+        //END - Add Row to Stock History with the order to subtract
+        return $clientName;
     }
 
 }

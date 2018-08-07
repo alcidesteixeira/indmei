@@ -30,8 +30,19 @@
             <div class="row">
                 <div class="col-md-3"></div>
                 <div class="form-group col-md-6">
-                    <label for="weight">Peso (gramas):</label>
-                    <input type="text" class="form-control" name="weight" value="{{@$stock->weight}}" required>
+                    <label for="weight">Peso Bruto (gramas):</label>
+                    <input type="text" class="form-control" name="gross_weight" value="{{@$stock->gross_weight}}" required {{@$stock->product->reference ? 'readonly' : ''}}>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3"></div>
+                <div class="form-group col-md-5">
+                    <label for="weight">Peso Líquido (gramas):</label>
+                    <input type="text" class="form-control" name="liquid_weight" value="{{@$stock->liquid_weight}}" required {{@$stock->product->reference ? 'readonly' : ''}}>
+                </div>
+                <div class="form-group col-md-1">
+                    <button style="margin-top:31px;" type="button" onclick="window.location = '/stock/receipt';" class="btn btn-warning">Ajustar</button>
                 </div>
             </div>
 

@@ -19,7 +19,7 @@
         @endif
         @if (Auth::user()->hasAnyRole(['1', '7']))
             <li class="nav-item dropdown">
-                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre style="pointer-events: none; background-color: #cccccc">
                     Gestão de Orçamentação <span class="caret"></span>
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -64,10 +64,10 @@
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item" href="{{ url('stock/receipt') }}">Dar Entrada de Stock</a>
-                    <a class="dropdown-item" href="{{ url('stock/create') }}">Inserir Nova Matéria-Prima</a>
-                    <a class="dropdown-item" href="{{ url('stock/list') }}">Listar Matérias-Primas</a>
-                    <a class="dropdown-item" href="{{ url('stock/request') }}">Solicitar Matéria-Prima</a>
-                    <a class="dropdown-item" href="{{ url('stock/request/history') }}">Histórico de Pedidos de Matérias-Primas</a>
+                    <a class="dropdown-item" href="{{ url('stock/create') }}">Criar Nova Matéria-Prima</a>
+                    <a class="dropdown-item" href="{{ url('stock/list') }}">Listar Stock</a>
+                    <a class="dropdown-item" href="{{ url('stock/request') }}" style="pointer-events: none; background-color: #cccccc">Solicitar Matéria-Prima</a>
+                    <a class="dropdown-item" href="{{ url('stock/request/history') }}" style="pointer-events: none; background-color: #cccccc">Histórico de Pedidos de Matérias-Primas</a>
                 </div>
             </li>
         @endif

@@ -120,19 +120,19 @@
                             {{@$order->$tamanho41 + @$order->$tamanho42 +@$order->$tamanho43 +@$order->$tamanho44}}
                         </td>
                     </tr>
-                    <tr>
-                        <td data-col1="">
-                            Em Falta
-                        </td>
-                        <td data-col2="Em Falta da Cor1" id="falta1">
-                        </td>
-                        <td data-col3="Em Falta da Cor2" id="falta2">
-                        </td>
-                        <td data-col4="Em Falta da Cor3" id="falta3">
-                        </td>
-                        <td data-col5="Em Falta da Cor4" id="falta4">
-                        </td>
-                    </tr>
+                    {{--<tr>--}}
+                        {{--<td data-col1="">--}}
+                            {{--Em Falta--}}
+                        {{--</td>--}}
+                        {{--<td data-col2="Em Falta da Cor1" id="falta1">--}}
+                        {{--</td>--}}
+                        {{--<td data-col3="Em Falta da Cor2" id="falta2">--}}
+                        {{--</td>--}}
+                        {{--<td data-col4="Em Falta da Cor3" id="falta3">--}}
+                        {{--</td>--}}
+                        {{--<td data-col5="Em Falta da Cor4" id="falta4">--}}
+                        {{--</td>--}}
+                    {{--</tr>--}}
                 </tbody>
             </table>
             <input type="hidden" name="filesToDelete" id="filesToDelete">

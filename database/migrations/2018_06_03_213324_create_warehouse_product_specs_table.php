@@ -18,7 +18,8 @@ class CreateWarehouseProductSpecsTable extends Migration
             $table->string('warehouse_product_id');
             $table->string('description');
             $table->string('color');
-            $table->string('weight');
+            $table->string('liquid_weight');
+            $table->string('gross_weight');
             $table->string('cost');
             $table->string('threshold');
             $table->timestamps();

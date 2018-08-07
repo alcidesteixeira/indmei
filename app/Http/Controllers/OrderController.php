@@ -6,6 +6,7 @@ use App\Client;
 use App\Order;
 use App\OrderFile;
 use App\SampleArticle;
+use App\SampleArticlesWire;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -66,6 +67,7 @@ class OrderController extends Controller
         Auth::user()->authorizeRoles(['1', '4']);
 
         $order= new Order();
+        $order->user_id =  Auth::id();
         $order->sample_article_id =  $request->sample_article_id;
         $order->client_id =  $request->client_id;
         $order->client_identifier = $request->client_identifier;
@@ -107,7 +109,10 @@ class OrderController extends Controller
         }
         //End Store Image
 
-        flash('Encomenda do Cliente '. $order->client_id . ' com o identificador '. $order->client_identifier . ' foi criado com sucesso!')->success();
+        $addRow = new Order();
+        $addRow = $addRow->addRowToStockHistoty($request);
+
+        flash('Encomenda do Cliente: '. $addRow . ', com o identificador: '. $order->client_identifier . ' foi criado com sucesso!')->success();
 
         return redirect()->action('OrderController@index');
     }
@@ -197,7 +202,12 @@ class OrderController extends Controller
         }
         //End Files to Delete
 
-        flash('Encomenda do Cliente '. $order->client_id . ' com o identificador '. $order->client_identifier . ' foi atualizada com sucesso!')->success();
+
+        $addRow = new Order();
+        $addRow = $addRow->addRowToStockHistoty($request);
+        //dd($addRow);
+
+        flash('Encomenda do Cliente '. $addRow . ' com o identificador '. $order->client_identifier . ' foi atualizada com sucesso!')->success();
 
         return redirect()->action('OrderController@index');
     }

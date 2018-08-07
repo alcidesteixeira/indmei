@@ -24,13 +24,13 @@
             </thead>
             <tbody role="rowgroup">
             @foreach($stock as $product)
-                <tr style="background-color: {{$product->threshold >= $product->weight ? '#f9a9a9' : ''}}" data-specid="{{$product->id}}" role="row">
+                <tr style="background-color: {{$product->threshold >= $product->gross_weight ? '#f9a9a9' : ''}}" data-specid="{{$product->id}}" role="row">
                     <td role="columnheader" data-col1="Referência">{{$product->product->reference}}</td>
                     <td role="columnheader" data-col2="Cor">{{$product->color}}</td>
-                    <td role="columnheader" data-col3="Stock Bruto (Kg)">{{$product->weight}}</td>
-                    <td role="columnheader" data-col4="Stock Líquido (Kg)">{{$product->weight}}</td>
-                    <td role="columnheader" data-col5="Alerta mínimo (Kg)">{{$product->cost}}</td>
-                    <td role="columnheader" data-col6="Custo (€/Kg)">{{$product->threshold}}</td>
+                    <td role="columnheader" data-col3="Stock Bruto (Kg)">{{$product->gross_weight}}</td>
+                    <td role="columnheader" data-col4="Stock Líquido (Kg)">{{$product->liquid_weight}}</td>
+                    <td role="columnheader" data-col5="Alerta mínimo (Kg)">{{$product->threshold}}</td>
+                    <td role="columnheader" data-col6="Custo (€/Kg)">{{$product->cost}}</td>
                     <td role="columnheader" data-col7="Descrição">{{$product->description}}</td>
                     <td role="columnheader" data-col8="Atualizado Por">{{$product->product->user->name}}</td>
                     <td role="columnheader" data-col9="Última Atualização">{{$product->updated_at}}</td>

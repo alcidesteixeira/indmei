@@ -16,7 +16,8 @@ class WarehouseProductSpecsTableSeeder extends Seeder
         $warehouseProduct->warehouse_product_id = '1';
         $warehouseProduct->color = 'pt101e1';
         $warehouseProduct->description = 'description abc';
-        $warehouseProduct->weight = '2000';
+        $warehouseProduct->liquid_weight = '2000';
+        $warehouseProduct->gross_weight = '2000';
         $warehouseProduct->threshold = '500';
         $warehouseProduct->cost = '100';
         $warehouseProduct->save();
@@ -25,7 +26,8 @@ class WarehouseProductSpecsTableSeeder extends Seeder
         $warehouseProduct->warehouse_product_id = '1';
         $warehouseProduct->color = 'az3505f1';
         $warehouseProduct->description = 'description abc';
-        $warehouseProduct->weight = '1000';
+        $warehouseProduct->liquid_weight = '1000';
+        $warehouseProduct->gross_weight = '2000';
         $warehouseProduct->threshold = '500';
         $warehouseProduct->cost = '100';
         $warehouseProduct->save();
@@ -34,7 +36,8 @@ class WarehouseProductSpecsTableSeeder extends Seeder
         $warehouseProduct->warehouse_product_id = '1';
         $warehouseProduct->color = 'pt101f1';
         $warehouseProduct->description = 'description abc';
-        $warehouseProduct->weight = '2500';
+        $warehouseProduct->liquid_weight = '2500';
+        $warehouseProduct->gross_weight = '2000';
         $warehouseProduct->threshold = '500';
         $warehouseProduct->cost = '100';
         $warehouseProduct->save();
@@ -43,7 +46,8 @@ class WarehouseProductSpecsTableSeeder extends Seeder
         $warehouseProduct->warehouse_product_id = '2';
         $warehouseProduct->color = 'pt101e2';
         $warehouseProduct->description = 'description abc';
-        $warehouseProduct->weight = '2000';
+        $warehouseProduct->liquid_weight = '2000';
+        $warehouseProduct->gross_weight = '2000';
         $warehouseProduct->threshold = '500';
         $warehouseProduct->cost = '100';
         $warehouseProduct->save();
@@ -52,7 +56,8 @@ class WarehouseProductSpecsTableSeeder extends Seeder
         $warehouseProduct->warehouse_product_id = '2';
         $warehouseProduct->color = 'az3505f2';
         $warehouseProduct->description = 'description abc';
-        $warehouseProduct->weight = '1000';
+        $warehouseProduct->liquid_weight = '1000';
+        $warehouseProduct->gross_weight = '2000';
         $warehouseProduct->threshold = '500';
         $warehouseProduct->cost = '100';
         $warehouseProduct->save();
@@ -61,7 +66,8 @@ class WarehouseProductSpecsTableSeeder extends Seeder
         $warehouseProduct->warehouse_product_id = '2';
         $warehouseProduct->color = 'pt101f2';
         $warehouseProduct->description = 'description abc';
-        $warehouseProduct->weight = '2500';
+        $warehouseProduct->liquid_weight = '2500';
+        $warehouseProduct->gross_weight = '2000';
         $warehouseProduct->threshold = '500';
         $warehouseProduct->cost = '100';
         $warehouseProduct->save();
@@ -70,7 +76,8 @@ class WarehouseProductSpecsTableSeeder extends Seeder
         $warehouseProduct->warehouse_product_id = '3';
         $warehouseProduct->color = 'pt101e3';
         $warehouseProduct->description = 'description abc';
-        $warehouseProduct->weight = '2000';
+        $warehouseProduct->liquid_weight = '2000';
+        $warehouseProduct->gross_weight = '2000';
         $warehouseProduct->threshold = '500';
         $warehouseProduct->cost = '100';
         $warehouseProduct->save();
@@ -79,7 +86,8 @@ class WarehouseProductSpecsTableSeeder extends Seeder
         $warehouseProduct->warehouse_product_id = '3';
         $warehouseProduct->color = 'az3505f3';
         $warehouseProduct->description = 'description abc';
-        $warehouseProduct->weight = '1000';
+        $warehouseProduct->liquid_weight = '1000';
+        $warehouseProduct->gross_weight = '2000';
         $warehouseProduct->threshold = '500';
         $warehouseProduct->cost = '100';
         $warehouseProduct->save();
@@ -88,7 +96,8 @@ class WarehouseProductSpecsTableSeeder extends Seeder
         $warehouseProduct->warehouse_product_id = '3';
         $warehouseProduct->color = 'pt101f3';
         $warehouseProduct->description = 'description abc';
-        $warehouseProduct->weight = '2500';
+        $warehouseProduct->liquid_weight = '2500';
+        $warehouseProduct->gross_weight = '2000';
         $warehouseProduct->threshold = '500';
         $warehouseProduct->cost = '100';
         $warehouseProduct->save();

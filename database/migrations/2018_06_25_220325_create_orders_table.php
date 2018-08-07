@@ -18,7 +18,7 @@ class CreateOrdersTable extends Migration
             $table->string('user_id');
             $table->string('sample_article_id')->nullable();
             $table->string('client_id');
-            $table->string('client_identifier');
+            $table->string('client_identifier')->unique();
             $table->string('delivery_date');
             $table->string('description');
             $table->string('cor1')->nullable();

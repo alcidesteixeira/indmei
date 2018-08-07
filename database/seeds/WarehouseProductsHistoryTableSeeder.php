@@ -16,7 +16,7 @@ class WarehouseProductsHistoryTableSeeder extends Seeder
             [
                 'warehouse_product_spec_id' => '9',
                 'user_id' => 1,
-                'inout' => 'in',
+                'inout' => 'IN',
                 'cost' => '100',
                 'weight' => '300',
                 'description' => 'fornecedor x',
