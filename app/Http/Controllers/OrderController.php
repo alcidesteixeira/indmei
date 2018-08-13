@@ -110,7 +110,7 @@ class OrderController extends Controller
         //End Store Image
 
         $addRow = new Order();
-        $addRow = $addRow->addRowToStockHistoty($request);
+        $addRow = $addRow->addRowToStockHistory($request, $order->id);
 
         flash('Encomenda do Cliente: '. $addRow . ', com o identificador: '. $order->client_identifier . ' foi criado com sucesso!')->success();
 
@@ -203,7 +203,7 @@ class OrderController extends Controller
         //End Files to Delete
 
         $addRow = new Order();
-        $addRow = $addRow->addRowToStockHistoty($request);
+        $addRow = $addRow->addRowToStockHistory($request, $id);
         //dd($addRow);
 
         flash('Encomenda do Cliente '. $addRow . ' com o identificador '. $order->client_identifier . ' foi atualizada com sucesso!')->success();

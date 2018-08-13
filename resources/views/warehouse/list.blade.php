@@ -11,8 +11,8 @@
             <tr role="row">
                 <th role="columnheader">Referência</th>
                 <th role="columnheader">Cor</th>
-                <th role="columnheader">Stock Bruto (Kg)</th>
-                <th role="columnheader">Stock Líquido (Kg)</th>
+                <th role="columnheader" title="Stock em armazém subtraíndo o valor produzido diariamente pelos operadores">Stock Bruto (Kg)</th>
+                <th role="columnheader" title="Stock em armazém subtraíndo o valor necessário para as encomendas criadas">Stock Líquido (Kg)</th>
                 <th role="columnheader">Alerta mínimo (Kg)</th>
                 <th role="columnheader">Custo (€/Kg)</th>
                 <th role="columnheader">Descrição</th>
@@ -27,8 +27,8 @@
                 <tr style="background-color: {{$product->threshold >= $product->gross_weight ? '#f9a9a9' : ''}}" data-specid="{{$product->id}}" role="row">
                     <td role="columnheader" data-col1="Referência">{{$product->product->reference}}</td>
                     <td role="columnheader" data-col2="Cor">{{$product->color}}</td>
-                    <td role="columnheader" data-col3="Stock Bruto (Kg)">{{$product->gross_weight}}</td>
-                    <td role="columnheader" data-col4="Stock Líquido (Kg)">{{$product->liquid_weight}}</td>
+                    <td role="columnheader" data-col3="Stock Bruto (Kg)">{{$product->gross_weight / 100}}</td>
+                    <td role="columnheader" data-col4="Stock Líquido (Kg)">{{$product->liquid_weight / 100}}</td>
                     <td role="columnheader" data-col5="Alerta mínimo (Kg)">{{$product->threshold}}</td>
                     <td role="columnheader" data-col6="Custo (€/Kg)">{{$product->cost}}</td>
                     <td role="columnheader" data-col7="Descrição">{{$product->description}}</td>

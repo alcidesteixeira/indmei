@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Order;
 use App\WarehouseProduct;
 use App\WarehouseProductSpec;
 use Carbon\Carbon;
@@ -23,9 +24,19 @@ class WarehouseProductController extends Controller
 
         Auth::user()->authorizeRoles(['1', '5']);
 
-        $update = new WarehouseProduct();
+        //Update all OUT for gross calculations
+        $orders = Order::all();
+        foreach($orders as $order) {
+//            dump($order);
+            $grossCalcsResults = new Order();
+            $grossCalcsResults = $grossCalcsResults->addRowToStockHistory ($order, $order->id);
+        }
 
+        //Calculate using historic;
+        $update = new WarehouseProduct();
         $update = $update->updateStocks();
+
+
 
         //dd($update);
 
@@ -210,8 +221,8 @@ class WarehouseProductController extends Controller
                 $warehouseProductSpec->warehouse_product_id = $warehouseProduct->id;
                 $warehouseProductSpec->description = $request->$description;
                 $warehouseProductSpec->color = $request->$color;
-                $warehouseProductSpec->liquid_weight = $request->$qtd;
-                $warehouseProductSpec->gross_weight = $request->$qtd;
+                $warehouseProductSpec->liquid_weight = intval($request->$qtd) * 100;
+                $warehouseProductSpec->gross_weight = intval($request->$qtd) * 100;
                 $warehouseProductSpec->cost = $request->$cost;
                 $warehouseProductSpec->threshold = $request->$threshold ? $request->$threshold : 1000;
                 $warehouseProductSpec->save();
@@ -228,7 +239,7 @@ class WarehouseProductController extends Controller
                     'warehouse_product_spec_id' => $warehouseProductSpec->id,
                     'user_id' => Auth::id(),
                     'inout' => $request->$inout,
-                    'weight' => $request->$qtd,
+                    'weight' => intval($request->$qtd) * 100,
                     'cost' => $request->$cost,
                     'description' => $request->$description,
                     'receipt' => $filename,

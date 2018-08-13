@@ -44,7 +44,10 @@ class Order extends Model
         return $this->belongsTo('App\User');
     }
 
-    public function addRowToStockHistoty ($request) {
+    /**
+     * Função que irá obter os gastos de cada fio para cada um dos pares
+     */
+    public function checkWireSpentInOnePair ($request) {
         //Add Row to Stock History with the order to subtract:
         $sampleArticleId = $request->sample_article_id;
         //SELECIONAR o total GASTO, POR FIO, numa amostra, por COR de UM PAR DE MEIAS:
@@ -69,9 +72,14 @@ class Order extends Model
             ->get()
             ->toArray();
         //FIM SELECIONAR o total GASTO numa amostra, por COR de UM PAR DE MEIAS:
-        //dd($wires);
-        $clientName = Client::where('id', $request->client_id)->first()->client;
+        return $wires;
+    }
 
+    /**
+     * Função que retorna o total de pares para cada cor
+     * Usada para o cálculo do STOCK LÍQUIDO: TOTAL MENOS AS ENCOMENDAS CRIADAS
+     */
+    public function pairsPerColorLiquid ($request) {
         //Selecionar as quantidades de pares de meias, POR COR
 //        dd($request->all());
         $paresPorCor = [
@@ -79,9 +87,55 @@ class Order extends Model
             'cor2' => $request->tamanho21+$request->tamanho22+$request->tamanho23+$request->tamanho24,
             'cor3' => $request->tamanho31+$request->tamanho32+$request->tamanho33+$request->tamanho34,
             'cor4' => $request->tamanho41+$request->tamanho42+$request->tamanho43+$request->tamanho44
-            ];
+        ];
         //dd($paresPorCor);
+        return $paresPorCor;
         //FIM Selecionar as quantidades de pares de meias, POR COR
+    }
+
+    /**
+     * Função que retorna o total de pares para cada cor
+     * Usada para o cálculo do STOCK BRUTO: TOTAL MENOS OS TOTAIS DE ENCOMENDAS JÁ EXECUTADOS PELOS OPERADORES
+     */
+    public function pairsPerColorGross ($order_id) {
+        //Selecionar as quantidades de pares de meias, POR COR, já executados
+
+        $currentProduction = OrderProduction::where('order_id', $order_id)->get();
+        $paresPorCor = [];
+
+        foreach ($currentProduction as $newInsertion) {
+            if(array_key_exists('cor'.$newInsertion->cor, $paresPorCor)) {
+                $paresPorCor['cor' . $newInsertion->cor] = intval($paresPorCor['cor' . $newInsertion->cor]) + intval($newInsertion->value);
+            } else {
+                $paresPorCor['cor' . $newInsertion->cor] = intval($newInsertion->value);
+            }
+        }
+        if(empty($currentProduction->first())) {
+            $paresPorCor = ["cor1" => '0', "cor2" => '0', "cor3" => '0', "cor4" => '0'];
+        }
+        // * 0.97 / 2 uma vez que nos referimos a meias e não a pares
+        foreach ($paresPorCor as $key => $par) {
+            $paresPorCor[$key] = round($par * 0.97 / 2);
+        }
+        return ($paresPorCor);
+        //FIM Selecionar as quantidades de pares de meias, POR COR, já executados
+    }
+
+    /**
+     * Função que obtém as saídas totais de stock para o cálculo de stock LÍQUIDO e BRUTO
+     */
+    public function addRowToStockHistory ($request, $id) {
+
+        //dd($request->all());
+
+        $wires = $this->checkWireSpentInOnePair($request);
+//        dd($wires);
+        $clientName = Client::where('id', $request->client_id)->first()->client;
+//        dd($clientName);
+        $paresPorCorLiquido = $this->pairsPerColorLiquid($request);
+//        dd($paresPorCorLiquido);
+        $paresPorCorBruto = $this->pairsPerColorGross($id);
+//        dd($paresPorCorBruto);
 
         //Delete das entradas antes de atualizar.
         DB::table('warehouse_products_history')
@@ -93,12 +147,24 @@ class Order extends Model
         for($i = 1; $i <= 4; $i++) {
             $cor = 'cor'.$i;
             foreach ($wires as $wire) {
-                if($wire->cor == $i) {
+                if($wire->cor == $i && $wire->grams !== '0') {
+                    //Inserir valor liquido multiplicado pelos pares
                     DB::table('warehouse_products_history')->insert([
                         'warehouse_product_spec_id' => $wire->warehouse_product_spec_id,
                         'user_id' => Auth::id(),
-                        'inout' => 'OUT',
-                        'weight' => $wire->grams * $paresPorCor[$cor],
+                        'inout' => 'OUT_LIQUID',
+                        'weight' => $wire->grams * $paresPorCorLiquido[$cor],
+                        'cost' => 0,
+                        'description' => 'Encomenda para o cliente: ' . $clientName . ', com o identificador: ' . $request->client_identifier,
+                        'created_at' => Carbon::now(),
+                        'updated_at' => Carbon::now(),
+                    ]);
+                    //Inserir valor bruto multiplicado pelos pares
+                    DB::table('warehouse_products_history')->insert([
+                        'warehouse_product_spec_id' => $wire->warehouse_product_spec_id,
+                        'user_id' => Auth::id(),
+                        'inout' => 'OUT_GROSS',
+                        'weight' => $wire->grams * $paresPorCorBruto[$cor],
                         'cost' => 0,
                         'description' => 'Encomenda para o cliente: ' . $clientName . ', com o identificador: ' . $request->client_identifier,
                         'created_at' => Carbon::now(),
