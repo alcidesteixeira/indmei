@@ -46,6 +46,10 @@ class SampleArticleTableSeeder extends Seeder
         $sampleArticle->malha4 = '23';
         $sampleArticle->maq4 = '156';
         $sampleArticle->forma4 = '10,5';
+        $sampleArticle->cost1 = '9,5';
+        $sampleArticle->cost2 = '23';
+        $sampleArticle->cost3 = '156';
+        $sampleArticle->cost4 = '10,5';
         $sampleArticle->save();
     }
 }

@@ -19,12 +19,12 @@
         @endif
         @if (Auth::user()->hasAnyRole(['1', '7']))
             <li class="nav-item dropdown">
-                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre style="pointer-events: none; background-color: #cccccc">
+                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                     Gestão de Orçamentação <span class="caret"></span>
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item" href="{{ url('quotation/create') }}">Criar Orçamentação</a>
-                    <a class="dropdown-item" href="{{ url('quotation/list') }}">Listar Orçamentos Enviados</a>
+                    <a class="dropdown-item" href="{{ url('orders/list') }}">Listar Orçamentos Enviados</a>
                 </div>
             </li>
         @endif

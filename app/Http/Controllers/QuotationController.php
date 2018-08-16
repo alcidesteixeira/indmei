@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Order;
+use App\Quotation;
 use Illuminate\Http\Request;
 
 class QuotationController extends Controller
@@ -23,7 +25,7 @@ class QuotationController extends Controller
      */
     public function create()
     {
-        //
+        return view('quotations.create');
     }
 
     /**
@@ -56,7 +58,13 @@ class QuotationController extends Controller
      */
     public function edit($id)
     {
-        //
+        $order = Order::find($id);
+
+        $quotation = Quotation::where('order_id', $order->id)->first();
+
+//        dd($quotation);
+
+        return view('quotations.create', compact('order', 'quotation'));
     }
 
     /**

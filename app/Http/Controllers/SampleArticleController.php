@@ -63,6 +63,9 @@ class SampleArticleController extends Controller
     {
         Auth::user()->authorizeRoles(['1', '3']);
 
+        $sampleCost = new SampleArticle();
+        $sampleCost = $sampleCost->getValuePerSample($request->all());
+
         //Store on SampleArticle Class
         $sampleArticle= new SampleArticle();
         $sampleArticle->user_id = Auth::id();
@@ -105,6 +108,10 @@ class SampleArticleController extends Controller
         $sampleArticle->malha4 = $request->malha4;
         $sampleArticle->maq4 = $request->maq4;
         $sampleArticle->forma4 = $request->forma4;
+        $sampleArticle->cost1 = $sampleCost['cor1'];
+        $sampleArticle->cost2 = $sampleCost['cor2'];
+        $sampleArticle->cost3 = $sampleCost['cor3'];
+        $sampleArticle->cost4 = $sampleCost['cor4'];
         $sampleArticle->save();
 
         //Store on SampleArticleWire Class
@@ -189,9 +196,10 @@ class SampleArticleController extends Controller
     public function update(Request $request, $id)
     {
 
-        //dd($request->all());
-
         Auth::user()->authorizeRoles(['1', '3']);
+
+        $sampleCost = new SampleArticle();
+        $sampleCost = $sampleCost->getValuePerSample($request->all());
 
         //Update SampleArticle Class
         $sampleArticle= SampleArticle::find($id);
@@ -234,6 +242,10 @@ class SampleArticleController extends Controller
         $sampleArticle->malha4 = $request->malha4;
         $sampleArticle->maq4 = $request->maq4;
         $sampleArticle->forma4 = $request->forma4;
+        $sampleArticle->cost1 = $sampleCost['cor1'];
+        $sampleArticle->cost2 = $sampleCost['cor2'];
+        $sampleArticle->cost3 = $sampleCost['cor3'];
+        $sampleArticle->cost4 = $sampleCost['cor4'];
         $sampleArticle->save();
 
         //dd($request->all());

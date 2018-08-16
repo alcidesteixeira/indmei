@@ -15,6 +15,14 @@ class CreateQuotationsTable extends Migration
     {
         Schema::create('quotations', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('order_id');
+            $table->string('order_sample_cost');
+            $table->string('tags');
+            $table->string('boxes');
+            $table->string('defect');
+            $table->string('manpower');
+            $table->string('other_costs');
+            $table->string('value_sent');
             $table->timestamps();
         });
     }

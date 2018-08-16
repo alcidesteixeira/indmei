@@ -23,7 +23,7 @@ class OrderController extends Controller
      */
     public function index()
     {
-        Auth::user()->authorizeRoles(['1', '4', '6']);
+        Auth::user()->authorizeRoles(['1', '4', '6', '7']);
 
         $orders = Order::all();
 

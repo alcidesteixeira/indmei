@@ -48,6 +48,10 @@ class CreateSampleArticlesTable extends Migration
             $table->string('malha4');
             $table->string('maq4');
             $table->string('forma4');
+            $table->string('cost1');
+            $table->string('cost2');
+            $table->string('cost3');
+            $table->string('cost4');
             $table->timestamps();
         });
     }

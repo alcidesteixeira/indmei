@@ -23,6 +23,9 @@
                 @if (Auth::user()->hasAnyRole(['1', '6']))
                 <th role="columnheader"></th>
                 @endif
+                @if (Auth::user()->hasAnyRole(['1', '7']))
+                    <th role="columnheader"></th>
+                @endif
             </tr>
             </thead>
             <tbody role="rowgroup">
@@ -55,6 +58,13 @@
                             <button type="submit" class="btn btn-info">A minha produção</button>
                         </form>
                     </td>
+                    @endif
+                    @if (Auth::user()->hasAnyRole(['1', '7']))
+                        <td role="columnheader" data-col8="">
+                            <form method="get" action="{{url('/quotation/edit/'.$order->id.'/')}}" enctype="multipart/form-data">
+                                <button type="submit" class="btn btn-primary">Ver Orçamentação</button>
+                            </form>
+                        </td>
                     @endif
                 </tr>
             @endforeach
