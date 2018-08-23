@@ -60,33 +60,33 @@
                             <div class="col-md-3"></div>
                             <div class="form-group col-md-3">
                                 <label for="pe">Pé:</label>
-                                <input type="text" class="form-control" name="pe{{$i}}" value="{{@$sampleArticle->$pe}}" required>
+                                <input type="number" step="0.01" class="form-control" name="pe{{$i}}" value="{{@$sampleArticle->$pe}}" required>
                             </div>
                             <div class="form-group col-md-3">
                                 <label for="Perna">Perna:</label>
-                                <input type="text" class="form-control" name="perna{{$i}}" value="{{@$sampleArticle->$perna}}" required>
+                                <input type="number" step="0.01" class="form-control" name="perna{{$i}}" value="{{@$sampleArticle->$perna}}" required>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-3"></div>
                             <div class="form-group col-md-3">
                                 <label for="Punho">Punho:</label>
-                                <input type="text" class="form-control" name="punho{{$i}}" value="{{@$sampleArticle->$punho}}" required>
+                                <input type="number" step="0.01" class="form-control" name="punho{{$i}}" value="{{@$sampleArticle->$punho}}" required>
                             </div>
                             <div class="form-group col-md-3">
                                 <label for="Malha">Malha:</label>
-                                <input type="text" class="form-control" name="malha{{$i}}" value="{{@$sampleArticle->$malha}}" required>
+                                <input type="number" step="0.01" class="form-control" name="malha{{$i}}" value="{{@$sampleArticle->$malha}}" required>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-3"></div>
                             <div class="form-group col-md-3">
                                 <label for="Maq">Maq:</label>
-                                <input type="text" class="form-control" name="maq{{$i}}" value="{{@$sampleArticle->$maq}}" required>
+                                <input type="number" step="0.01" class="form-control" name="maq{{$i}}" value="{{@$sampleArticle->$maq}}" required>
                             </div>
                             <div class="form-group col-md-3">
                                 <label for="Forma">Forma:</label>
-                                <input type="text" class="form-control" name="forma{{$i}}" value="{{@$sampleArticle->$forma}}" required>
+                                <input type="number" step="0.01" class="form-control" name="forma{{$i}}" value="{{@$sampleArticle->$forma}}" required>
                             </div>
                         </div>
                     </div>
@@ -133,7 +133,7 @@
                             </select>
                         </td>
                         <td data-col3="Gramas">
-                            <input type="text" id="row-{{$i}}-grams"  class="form-control" name="row-{{$i}}-grams"
+                            <input type="number" id="row-{{$i}}-grams"  class="form-control" name="row-{{$i}}-grams"
                                    value="{{@$sampleArticle && $sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->grams
                             && $sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->step_id !== '18' ?
                             $sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->grams : '0'}}">

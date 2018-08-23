@@ -33,7 +33,7 @@
                 <tr role="row">
                     <td role="columnheader" data-col1="Cliente">{{$order->client->client}}</td>
                     <td role="columnheader" data-col2="Id do Cliente">{{$order->client_identifier}}</td>
-                    <td role="columnheader" data-col3="Id da Amostra">{{$order->sampleArticle->reference}}</td>
+                    <td role="columnheader" data-col3="Id da Amostra">{{@$order->sampleArticle->reference}}</td>
                     <td role="columnheader" data-col4="Descrição">{{$order->description}}</td>
                     <td role="columnheader" data-col5="Data de Entrega">{{$order->delivery_date}}</td>
                     <td role="columnheader" data-col6="Criado Por">{{$order->user->name}}</td>

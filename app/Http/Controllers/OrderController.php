@@ -202,9 +202,10 @@ class OrderController extends Controller
         }
         //End Files to Delete
 
+//        dd($request->all());
         $addRow = new Order();
         $addRow = $addRow->addRowToStockHistory($request, $id);
-        //dd($addRow);
+        return($addRow);
 
         flash('Encomenda do Cliente '. $addRow . ' com o identificador '. $order->client_identifier . ' foi atualizada com sucesso!')->success();
 

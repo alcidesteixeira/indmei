@@ -142,6 +142,11 @@ class Order extends Model
             ->where('description',  'Encomenda para o cliente: ' . $clientName . ', com o identificador: ' . $request->client_identifier)
             ->delete();
 
+        //Obter imagem do produto
+//        dd($request->sample_article_id);
+        $orderImage = SampleArticle::where('id', $request->sample_article_id)->first()->image_url;
+        //dd($orderImage);
+
         //Editar para conter historico de liquid weight e gross weight!!!!
         //Adicionar as quantidades de fio, dependendo das meias selecionadas: stock
         for($i = 1; $i <= 4; $i++) {
@@ -155,6 +160,7 @@ class Order extends Model
                         'inout' => 'OUT_LIQUID',
                         'weight' => $wire->grams * $paresPorCorLiquido[$cor],
                         'cost' => 0,
+                        'receipt' => $orderImage,
                         'description' => 'Encomenda para o cliente: ' . $clientName . ', com o identificador: ' . $request->client_identifier,
                         'created_at' => Carbon::now(),
                         'updated_at' => Carbon::now(),
@@ -166,6 +172,7 @@ class Order extends Model
                         'inout' => 'OUT_GROSS',
                         'weight' => $wire->grams * $paresPorCorBruto[$cor],
                         'cost' => 0,
+                        'receipt' => $orderImage,
                         'description' => 'Encomenda para o cliente: ' . $clientName . ', com o identificador: ' . $request->client_identifier,
                         'created_at' => Carbon::now(),
                         'updated_at' => Carbon::now(),

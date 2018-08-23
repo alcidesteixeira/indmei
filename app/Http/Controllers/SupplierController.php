@@ -47,6 +47,7 @@ class SupplierController extends Controller
 
         $supplier= new Supplier();
         $supplier->supplier = $request->supplier;
+        $supplier->email = $request->email;
         $supplier->nif = $request->nif;
         $supplier->description = $request->description;
         $supplier->save();
@@ -83,6 +84,7 @@ class SupplierController extends Controller
 
         $supplier= Supplier::find($id);
         $supplier->supplier = $request->supplier;
+        $supplier->email = $request->email;
         $supplier->nif = $request->nif;
         $supplier->description = $request->description;
         $supplier->updated_at = Carbon::now('Europe/Lisbon');

@@ -137,6 +137,7 @@ class OrderProductionController extends Controller
         $totals = DB::table('order_productions')
             ->select('tamanho', 'cor', 'value', DB::raw('sum(value) as total'))
             ->where('created_at', '<', Carbon::today())
+            ->where('order_id', $id)
             ->groupBy('tamanho', 'cor' )
             ->get();
 

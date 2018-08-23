@@ -62,11 +62,14 @@ Route::group(['middleware' => 'auth'], function () {
 
 //Quotations
     Route::get('/quotation/list', 'QuotationController@index');
-    Route::get('/quotation/create', 'QuotationController@create');
-    Route::post('/quotation/create', 'QuotationController@store');
     Route::get('/quotation/edit/{id}', 'QuotationController@edit');
+    Route::post('/quotation/create', 'QuotationController@store');
     Route::post('/quotation/update/{id}', 'QuotationController@update');
-    Route::get('/quotation/delete/{id}', 'QuotationController@destroy');
+
+//Emails
+    Route::get('/email/list', 'EmailController@index');
+    Route::get('/email/create', 'EmailController@create');
+    Route::post('/email/send', 'EmailController@send');
 
 //Orders
     Route::get('/orders/list', 'OrderController@index');
@@ -98,5 +101,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/order/production/insert/{id}/{id_user?}', 'OrderProductionController@create');
     Route::post('/order/production/update/{id}', 'OrderProductionController@update');
     Route::get('/to/subtract/{id}', 'OrderProductionController@toSubtract');
+
+//Emails
+    Route::get('/email/manage', 'OrderProductionController@toSubtract');
 
 });

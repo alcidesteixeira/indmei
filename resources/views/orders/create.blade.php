@@ -74,10 +74,10 @@
                 <thead>
                 <tr>
                     <th></th>
-                    <th><input type="text" class="form-control" name="cor1" value="{{@$order->cor1}}"></th>
-                    <th><input type="text" class="form-control" name="cor2" value="{{@$order->cor2}}"></th>
-                    <th><input type="text" class="form-control" name="cor3" value="{{@$order->cor3}}"></th>
-                    <th><input type="text" class="form-control" name="cor4" value="{{@$order->cor4}}"></th>
+                    <th><input type="text" class="form-control" name="cor1" placeholder="Cor #1" value="{{@$order->cor1}}"></th>
+                    <th><input type="text" class="form-control" name="cor2" placeholder="Cor #2" value="{{@$order->cor2}}"></th>
+                    <th><input type="text" class="form-control" name="cor3" placeholder="Cor #3" value="{{@$order->cor3}}"></th>
+                    <th><input type="text" class="form-control" name="cor4" placeholder="Cor #4" value="{{@$order->cor4}}"></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -90,16 +90,16 @@
                         </td>
                         <td data-col2="Cor1">
 
-                            <input type="text" name="tamanho1{{$i}}" id="tamanho1{{$i}}" class="sizes form-control" value="{{@$order->$tamanho1 ? @$order->$tamanho1 : 0}}">
+                            <input type="number" name="tamanho1{{$i}}" id="tamanho1{{$i}}" class="sizes form-control" value="{{@$order->$tamanho1 ? @$order->$tamanho1 : 0}}">
                         </td>
                         <td data-col3="Cor2">
-                            <input type="text" name="tamanho2{{$i}}" id="tamanho2{{$i}}" class="sizes form-control" value="{{@$order->$tamanho2 ? @$order->$tamanho2 : 0}}">
+                            <input type="number" name="tamanho2{{$i}}" id="tamanho2{{$i}}" class="sizes form-control" value="{{@$order->$tamanho2 ? @$order->$tamanho2 : 0}}">
                         </td>
                         <td data-col4="Cor3">
-                            <input type="text" name="tamanho3{{$i}}" id="tamanho3{{$i}}" class="sizes form-control" value="{{@$order->$tamanho3 ? @$order->$tamanho3 : 0}}">
+                            <input type="number" name="tamanho3{{$i}}" id="tamanho3{{$i}}" class="sizes form-control" value="{{@$order->$tamanho3 ? @$order->$tamanho3 : 0}}">
                         </td>
                         <td data-col5="Cor4">
-                            <input type="text" name="tamanho4{{$i}}" id="tamanho4{{$i}}" class="sizes form-control" value="{{@$order->$tamanho4 ? @$order->$tamanho4 : 0}}">
+                            <input type="number" name="tamanho4{{$i}}" id="tamanho4{{$i}}" class="sizes form-control" value="{{@$order->$tamanho4 ? @$order->$tamanho4 : 0}}">
                         </td>
                     </tr>
                 @endfor

@@ -47,6 +47,7 @@ class ClientController extends Controller
 
         $client= new Client();
         $client->client = $request->client;
+        $client->email = $request->email;
         $client->nif = $request->nif;
         $client->description = $request->description;
         $client->save();
@@ -83,6 +84,7 @@ class ClientController extends Controller
 
         $client= Client::find($id);
         $client->client = $request->client;
+        $client->email = $request->email;
         $client->nif = $request->nif;
         $client->description = $request->description;
         $client->updated_at = Carbon::now('Europe/Lisbon');

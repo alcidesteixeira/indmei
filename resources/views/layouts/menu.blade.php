@@ -23,8 +23,10 @@
                     Gestão de Orçamentação <span class="caret"></span>
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="{{ url('quotation/create') }}">Criar Orçamentação</a>
-                    <a class="dropdown-item" href="{{ url('orders/list') }}">Listar Orçamentos Enviados</a>
+                    {{--<a class="dropdown-item" href="{{ url('quotation/create') }}">Criar Orçamentação</a>--}}
+                    <a class="dropdown-item" href="{{ url('orders/list') }}">Listar Orçamentos</a>
+                    <a class="dropdown-item" href="{{ url('email/create') }}">Enviar Email a Clientes</a>
+                    <a class="dropdown-item" href="{{ url('email/list') }}">Gerir Emails</a>
                 </div>
             </li>
         @endif
@@ -92,7 +94,13 @@
                 </div>
             </li>
         @endif
-
+        {{--@if (Auth::user()->hasAnyRole(['1', '3', '4', '5', '7']))--}}
+        {{--<li class="nav-item dropdown">--}}
+            {{--<a href="{{ url('email/manage') }}" id="navbarDropdown" class="nav-link" role="button" v-pre>--}}
+                {{--Gerir Emails--}}
+            {{--</a>--}}
+        {{--</li>--}}
+        {{--@endif--}}
         <li class="nav-item dropdown">
             <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                 {{ Auth::user()->name }} <span class="caret"></span>

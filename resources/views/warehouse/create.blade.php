@@ -50,7 +50,7 @@
                 <div class="col-md-3"></div>
                 <div class="form-group col-md-6">
                     <label for="threshold">Valor de aviso mínimo:</label>
-                    <input type="text" class="form-control" name="threshold" value="{{@$stock->threshold}}" required>
+                    <input type="number" step="0.01" class="form-control" name="threshold" value="{{@$stock->threshold}}" required>
                 </div>
             </div>
 

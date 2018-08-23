@@ -401,9 +401,9 @@
 
             for (let i = 1; i <= 4; i ++) {
                 console.log($("#pedido" + i).text());
-                console.log((ar2['x'+i] / 2).toFixed(0));
+                console.log((ar2['x'+i] / 1.03 / 2).toFixed(0));
                 console.log((arrayToSubtract['a'+i] / 2).toFixed(0));
-                $("#falta" + i).text($("#pedido" + i).text() - (ar2['x'+i] / 2).toFixed(0) - (arrayToSubtract['a'+i] / 2).toFixed(0));
+                $("#falta" + i).text($("#pedido" + i).text() - (ar2['x'+i] / 1.03 / 2).toFixed(0) - (arrayToSubtract['a'+i] / 1.03 / 2).toFixed(0));
             }
         }
 

@@ -14,7 +14,10 @@ class QuotationsTableSeeder extends Seeder
     {
         $quotation = new Quotation();
         $quotation->order_id = '2';
-        $quotation->order_sample_cost = '5.66';
+        $quotation->order_sample_cost_1 = '5.66';
+        $quotation->order_sample_cost_2 = '1';
+        $quotation->order_sample_cost_3 = '2';
+        $quotation->order_sample_cost_4 = '5.66';
         $quotation->tags = '1.6';
         $quotation->boxes = '15';
         $quotation->defect = '8';

@@ -54,7 +54,7 @@
             <div class="col-md-3"></div>
             <div class="form-group col-md-6">
                 <label for="weight">Peso (Kg):</label>
-                <input type="text" class="form-control" id="qtd" required>
+                <input type="number" step="0.01"  class="form-control" id="qtd" required>
             </div>
         </div>
 
@@ -62,7 +62,7 @@
             <div class="col-md-3"></div>
             <div class="form-group col-md-6">
                 <label for="cost">Custo por Kg:</label>
-                <input type="text" class="form-control" id="cost" required>
+                <input type="number" step="0.01" class="form-control" id="cost" required>
             </div>
         </div>
 
@@ -70,7 +70,7 @@
             <div class="col-md-3"></div>
             <div class="form-group col-md-6">
                 <label for="threshold">Valor de aviso mínimo:</label>
-                <input type="text" class="form-control" id="threshold">
+                <input type="number" step="0.01" class="form-control" id="threshold">
             </div>
         </div>
 
