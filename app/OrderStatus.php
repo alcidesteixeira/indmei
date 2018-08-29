@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class SampleArticleStatus extends Model
+class OrderStatus extends Model
 {
     /**
      * The attributes that are mass assignable.
@@ -18,8 +18,8 @@ class SampleArticleStatus extends Model
     /**
      * Get the comments for the blog post.
      */
-    public function sampleArticles()
+    public function order()
     {
-        return $this->hasMany('App\SampleArticle');
+        return $this->hasMany('App\Order');
     }
 }

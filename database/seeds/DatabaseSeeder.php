@@ -17,12 +17,12 @@ class DatabaseSeeder extends Seeder
         $this->call(UserTableSeeder::class);
 
         //Seed Sample Articles
-        $this->call(SampleArticleColorTableSeeder::class);
-        $this->call(SampleArticleStatusTableSeeder::class);
+        $this->call(OrderStatusTableSeeder::class);
         $this->call(SampleArticleStepTableSeeder::class);
-        $this->call(SampleArticleTableSeeder::class);
-        $this->call(SampleArticleWireTableSeeder::class);
         $this->call(SampleArticleGuiafioTableSeeder::class);
+        //$this->call(SampleArticleColorTableSeeder::class);
+        //$this->call(SampleArticleTableSeeder::class);
+        //$this->call(SampleArticleWireTableSeeder::class);
 
         //Seed Warehouse
         $this->call(WarehouseProductsTableSeeder::class);
@@ -36,9 +36,9 @@ class DatabaseSeeder extends Seeder
         $this->call(ClientTableSeeder::class);
 
         //Seed Orders
-        $this->call(OrderTableSeeder::class);
-        $this->call(OrderFileTableSeeder::class);
-        $this->call(OrderProductionTableSeeder::class);
+        //$this->call(OrderTableSeeder::class);
+        //$this->call(OrderFileTableSeeder::class);
+        //$this->call(OrderProductionTableSeeder::class);
 
     }
 }

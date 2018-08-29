@@ -6,6 +6,16 @@
         <form method="post" action="{{@$order->client_identifier ? url('orders/update/'.$order->id) : url('orders/create')}}" enctype="multipart/form-data">
             @csrf
             <div class="row">
+                <div class="form-group col-md-3">
+                    <label for="Status">Status:</label>
+                    <select class="form-control" name="status_id">
+                        @foreach($statuses as $status)
+                            <option value="{{$status->id}}" {{$status->id == @$order->status_id ? 'selected' : ''}}>{{$status->status}}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="row">
                 <div class="col-md-3"></div>
                 <div class="form-group col-md-6">
                     <label for="client_id">Nome do Cliente:</label>

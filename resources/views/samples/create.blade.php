@@ -8,17 +8,6 @@
         <form method="post" action="{{@$sampleArticle->reference ? url('samples/update/'.$sampleArticle->id) : url('samples/create')}}" enctype="multipart/form-data">
             @csrf
             <div class="row">
-                <div class="form-group col-md-3">
-                    <label for="Status">Status:</label>
-                    {{--<input type="text" class="form-control" name="status_id" value="{{@$sampleArticle->sample_article_status_id}}" required>--}}
-                    <select class="form-control" name="status_id">
-                        @foreach($statuses as $status)
-                        <option value="{{$status->id}}" {{$status->id == @$sampleArticle->sample_article_status_id ? 'selected' : ''}}>{{$status->status}}</option>
-                        @endforeach
-                    </select>
-                </div>
-            </div>
-            <div class="row">
                 <div class="col-md-3"></div>
                 <div class="form-group col-md-3">
                     <label for="Reference">Referência:</label>

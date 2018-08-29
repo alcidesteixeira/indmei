@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Order;
+use App\OrderStatus;
 use App\Quotation;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -51,9 +52,11 @@ class QuotationController extends Controller
 
         $quotation = Quotation::where('order_id', $order->id)->first();
 
+        $statuses = OrderStatus::all();
+
 //        dd($quotation);
 
-        return view('quotations.create', compact('order', 'quotation'));
+        return view('quotations.create', compact('order', 'statuses', 'quotation'));
     }
 
     /**

@@ -19,7 +19,6 @@ class CreateSampleArticlesTable extends Migration
             $table->string('reference');
             $table->string('description');
             $table->string('image_url');
-            $table->string('sample_article_status_id');
             $table->string('tamanho1');
             $table->string('pe1');
             $table->string('perna1');

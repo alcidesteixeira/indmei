@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\SampleArticle;
 use App\SampleArticleColor;
 use App\SampleArticleGuiafio;
-use App\SampleArticleStatus;
+use App\OrderStatus;
 use App\SampleArticleStep;
 use App\SampleArticlesWire;
 use App\WarehouseProduct;
@@ -46,11 +46,9 @@ class SampleArticleController extends Controller
 
         $warehouseFirstWireSpecs = WarehouseProduct::find(1)->warehouseProductSpecs()->get();
 
-        $statuses = SampleArticleStatus::all();
-
         $guiafios = SampleArticleGuiafio::all();
 
-        return view('samples.create', compact('steps', 'warehouseProducts', 'warehouseFirstWireSpecs', 'statuses', 'guiafios'));
+        return view('samples.create', compact('steps', 'warehouseProducts', 'warehouseFirstWireSpecs', 'guiafios'));
     }
 
     /**
@@ -79,7 +77,6 @@ class SampleArticleController extends Controller
             $sampleArticle->image_url = $filename;
         }
         //End Store Image
-        $sampleArticle->sample_article_status_id = $request->status_id;
         $sampleArticle->tamanho1 = $request->tamanho1;
         $sampleArticle->pe1 = $request->pe1;
         $sampleArticle->perna1 = $request->perna1;
@@ -163,15 +160,13 @@ class SampleArticleController extends Controller
 
         $warehouseProducts = WarehouseProduct::all();
 
-        $statuses = SampleArticleStatus::all();
-
         $guiafios = SampleArticleGuiafio::all();
 
 //        dd($sampleArticle->sampleArticleWires()->get()->values()->get(16)->guiafios_id);
 //        dd($sampleArticle->sampleArticleWires()->get()->values()->get(16)->wireColors()->get());
 //        dd($sampleArticle->sampleArticleWires()->get()->values()->get(16)->warehouseProduct->warehouseProductSpecs()->get());
 
-        return view('samples.create', compact('sampleArticle', 'steps', 'warehouseProducts', 'statuses', 'guiafios', 'id'));
+        return view('samples.create', compact('sampleArticle', 'steps', 'warehouseProducts', 'guiafios', 'id'));
     }
 
     public function updateWireSpecs($id)
@@ -213,7 +208,6 @@ class SampleArticleController extends Controller
             $sampleArticle->image_url = $filename;
         }
         //End Store Image Upload
-        $sampleArticle->sample_article_status_id = $request->status_id;
         $sampleArticle->tamanho1 = $request->tamanho1;
         $sampleArticle->pe1 = $request->pe1;
         $sampleArticle->perna1 = $request->perna1;

@@ -6,6 +6,7 @@ use App\Client;
 use App\Order;
 use App\OrderFile;
 use App\SampleArticle;
+use App\OrderStatus;
 use App\SampleArticlesWire;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -43,7 +44,9 @@ class OrderController extends Controller
 
         $clients = Client::all();
 
-        return view('orders.create', compact('sampleArticles', 'clients'));
+        $statuses = OrderStatus::all();
+
+        return view('orders.create', compact('sampleArticles', 'clients', 'statuses'));
     }
 
     public function getSampleArticleId ($id) {
@@ -133,9 +136,11 @@ class OrderController extends Controller
 
         $order = Order::find($id);
 
+        $statuses = OrderStatus::all();
+
         $orderFiles = OrderFile::where('order_id', $id)->get();
 //dd($orderFiles);
-        return view('orders.create', compact('sampleArticles', 'clients', 'order', 'orderFiles'));
+        return view('orders.create', compact('sampleArticles', 'clients', 'order', 'orderFiles', 'statuses'));
     }
 
     /**

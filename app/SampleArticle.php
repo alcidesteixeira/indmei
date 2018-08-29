@@ -22,7 +22,7 @@ class SampleArticle extends Model
 
     public function sampleArticleStatus()
     {
-        return $this->belongsTo('App\SampleArticleStatus');
+        return $this->belongsTo('App\OrderStatus');
     }
 
     public function sampleArticleWires()

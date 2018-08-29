@@ -14,6 +14,16 @@
         <form method="post" action="{{@$quotation->id ? url('quotation/update/'.$quotation->id) : url('quotation/create')}}" enctype="multipart/form-data">
             @csrf
             <div class="row">
+                <div class="form-group col-md-3">
+                    <label for="Status">Status:</label>
+                    <select class="form-control" name="status_id">
+                        @foreach($statuses as $status)
+                            <option value="{{$status->id}}" {{$status->id == @$quotation->$order->status_id ? 'selected' : ''}}>{{$status->status}}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="row">
                 <div class="form-group col-md-6">
                     <label for="client_id">Nome do Cliente:</label>
                     <input type="text" class="form-control" value="{{@$order->client->client}}" required readonly>

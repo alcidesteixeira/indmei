@@ -122,7 +122,7 @@ class Order extends Model
 
         // * 0.97 / 2 uma vez que nos referimos a meias e não a pares
         foreach ($paresPorCor as $key => $par) {
-            dump($key);
+            //dump($key);
             $paresPorCor[$key] = round($par * 0.97 / 2);
         }
 
