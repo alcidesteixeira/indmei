@@ -110,13 +110,24 @@ class Order extends Model
                 $paresPorCor['cor' . $newInsertion->cor] = intval($newInsertion->value);
             }
         }
-        if(empty($currentProduction->first())) {
-            $paresPorCor = ["cor1" => '0', "cor2" => '0', "cor3" => '0', "cor4" => '0'];
+
+        //fazer verificação para as 4 cores: caso não tenha, coloca valor a zero
+        if(count($paresPorCor) !== 4) {
+            for($i = 1; $i <=4; $i ++) {
+                if (!array_key_exists('cor'.$i, $paresPorCor)) {
+                    $paresPorCor['cor'.$i] = '0';
+                }
+            }
         }
+
         // * 0.97 / 2 uma vez que nos referimos a meias e não a pares
         foreach ($paresPorCor as $key => $par) {
+            dump($key);
             $paresPorCor[$key] = round($par * 0.97 / 2);
         }
+
+        //dd($paresPorCor);
+
         return ($paresPorCor);
         //FIM Selecionar as quantidades de pares de meias, POR COR, já executados
     }
@@ -165,6 +176,7 @@ class Order extends Model
                         'created_at' => Carbon::now(),
                         'updated_at' => Carbon::now(),
                     ]);
+
                     //Inserir valor bruto multiplicado pelos pares
                     DB::table('warehouse_products_history')->insert([
                         'warehouse_product_spec_id' => $wire->warehouse_product_spec_id,
