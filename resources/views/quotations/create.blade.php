@@ -16,9 +16,9 @@
             <div class="row">
                 <div class="form-group col-md-3">
                     <label for="Status">Status:</label>
-                    <select class="form-control" name="status_id">
+                    <select class="form-control" name="status_id" readonly disabled>
                         @foreach($statuses as $status)
-                            <option value="{{$status->id}}" {{$status->id == @$quotation->$order->status_id ? 'selected' : ''}}>{{$status->status}}</option>
+                            <option value="{{$status->id}}" {{$status->id == @$order->status_id ? 'selected' : ''}}>{{$status->status}}</option>
                         @endforeach
                     </select>
                 </div>

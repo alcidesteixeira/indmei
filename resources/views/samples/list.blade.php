@@ -14,7 +14,6 @@
                 <th role="columnheader">Imagem</th>
                 <th role="columnheader">Executante</th>
                 <th role="columnheader">Última Atualização</th>
-                <th role="columnheader">Status</th>
                 <th role="columnheader"></th>
                 <th role="columnheader"></th>
             </tr>
@@ -27,7 +26,6 @@
                     <td role="columnheader" data-col3="Imagem"><img src="../../storage/{{$sample->image_url}}" width="50"></td>
                     <td role="columnheader" data-col4="Executante">{{$sample->user->name}}</td>
                     <td role="columnheader" data-col5="Última Atualização">{{$sample->updated_at}}</td>
-                    <td role="columnheader" data-col6="Status">{{$sample->sampleArticleStatus->status}}</td>
                     <td role="columnheader" data-col7="">
                         <form method="get" action="{{url('samples/edit/'.$sample->id)}}" enctype="multipart/form-data">
                             <button type="submit" class="btn btn-warning">Editar</button>

@@ -12,10 +12,7 @@ class QuotationController extends Controller
 {
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * Criar novo orçamento pela primeira vez
      */
     public function store(Request $request)
     {
@@ -54,20 +51,22 @@ class QuotationController extends Controller
 
         $statuses = OrderStatus::all();
 
-//        dd($quotation);
+
+        $updateValueOfSamples = new Quotation();
+        $updateValueOfSamples = $updateValueOfSamples->updateValueOfSamples();
+//        return $updateValueOfSamples;
+
+//        dd($updateValueOfSamples);
 
         return view('quotations.create', compact('order', 'statuses', 'quotation'));
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * Atualizar orçamento já criado anteriormente
      */
     public function update(Request $request, $id)
     {
+
         //dd($request->all());
         $quotation = Quotation::where('id', $id)
             ->update([
@@ -93,14 +92,4 @@ class QuotationController extends Controller
 
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
 }

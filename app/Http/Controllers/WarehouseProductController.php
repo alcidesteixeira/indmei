@@ -175,12 +175,25 @@ class WarehouseProductController extends Controller
         Auth::user()->authorizeRoles(['1', '5']);
 
         $products = new WarehouseProduct();
-        $allProducts = $products->getProducts()->pluck('reference')->toArray();
+        $allProducts = $products->getProducts()->pluck('reference', 'id')->toArray();
 
         $colors = new WarehouseProductSpec();
-        $allColors = $colors->getColors()->pluck('color')->toArray();
+        $allColors = $colors->getColors()->where('warehouse_product_id', 1)->pluck('color', 'id')->toArray();
 
         return view('warehouse.receipt', compact('allProducts', 'allColors'));
+    }
+
+    /**
+     * Returns all colors based on the selected product
+     */
+    public function allColors ($id)
+    {
+
+        $colors = new WarehouseProductSpec();
+        $allColors = $colors->getColors()->where('warehouse_product_id', $id)->pluck('color', 'id')->toArray();
+
+
+        return ($allColors);
     }
 
     public function enterReceipt(Request $request)

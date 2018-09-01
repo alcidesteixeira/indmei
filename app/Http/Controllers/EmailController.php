@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Client;
 use App\Mail\sendSimpleEmail;
+use App\Supplier;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 
 class EmailController extends Controller
@@ -16,6 +18,9 @@ class EmailController extends Controller
      */
     public function index()
     {
+
+        Auth::user()->authorizeRoles(['1', '3', '5', '7']);
+
         return view('emails.list');
     }
 
@@ -26,9 +31,13 @@ class EmailController extends Controller
      */
     public function create()
     {
-        $clients = Client::all();
 
-        return view('emails.create', compact('clients'));
+        Auth::user()->authorizeRoles(['1', '3', '5', '7']);
+
+        $clients = Client::all();
+        $suppliers = Supplier::all();
+
+        return view('emails.create', compact('clients', 'suppliers'));
     }
 
     /**
@@ -39,6 +48,8 @@ class EmailController extends Controller
     public function send(Request $request)
     {
         //dd($request->all());
+
+        Auth::user()->authorizeRoles(['1', '3', '5', '7']);
 
         $res = Mail::to($request->client)->send(new sendSimpleEmail($request->subject, $request->body2));
 

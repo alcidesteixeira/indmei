@@ -24,7 +24,7 @@
             </thead>
             <tbody role="rowgroup">
             @foreach($stock as $product)
-                <tr style="background-color: {{$product->threshold >= $product->gross_weight ? '#f9a9a9' : ''}}" data-specid="{{$product->id}}" role="row">
+                <tr style="background-color: {{$product->threshold*100 >= $product->gross_weight ? '#f9a9a9' : ''}}" data-specid="{{$product->id}}" role="row">
                     <td role="columnheader" data-col1="Referência">{{$product->product->reference}}</td>
                     <td role="columnheader" data-col2="Cor">{{$product->color}}</td>
                     <td role="columnheader" data-col3="Stock Bruto (Kg)">{{$product->gross_weight / 100}}</td>

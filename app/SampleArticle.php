@@ -62,8 +62,8 @@ class SampleArticle extends Model
         for ($j = 1; $j <= 4; $j++) {
             for ($i = 1; $i <= $sample['rowCount']; $i++) {
                 //Para o caso dos valores vazios, colocar aqui condição
-                $keyForWireCost = intval($sample['row-'.$i.'-color'.$j])-1 == -1 ? 0 : intval($sample['row-'.$i.'-color'.$j])-1;
-                $valueCor['cor'.$j] += intval($sample['row-'.$i.'-grams']) * $wireCost[$keyForWireCost] / 100;
+                $keyForWireCost = intval(@$sample['row-'.$i.'-color'.$j])-1 == -1 ? 0 : intval(@$sample['row-'.$i.'-color'.$j])-1;
+                $valueCor['cor'.$j] += intval(@$sample['row-'.$i.'-grams']) * $wireCost[$keyForWireCost] / 100;
             }
         }
 

@@ -17,47 +17,61 @@
                 </div>
             </li>
         @endif
+        @if (Auth::user()->hasAnyRole(['1', '4']))
+            <li class="nav-item dropdown">
+                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                    Gestão de Encomendas <span class="caret"></span>
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="{{ url('orders/create') }}">Criar Encomenda</a>
+                    <a class="dropdown-item" href="{{ url('orders/list') }}">Listar Encomendas</a>
+                    <a class="dropdown-item" href="{{ url('email/create') }}">Enviar Email</a>
+                    <a class="dropdown-item" href="{{ url('email/list') }}">Gerir Emails</a>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                    Gestão de Fornecedores <span class="caret"></span>
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="{{ url('suppliers/create') }}">Criar Fornecedor</a>
+                    <a class="dropdown-item" href="{{ url('suppliers/list') }}">Listar Fornecedores</a>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                    Gestão de Clientes <span class="caret"></span>
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="{{ url('clients/create') }}">Criar Cliente</a>
+                    <a class="dropdown-item" href="{{ url('clients/list') }}">Listar Clientes</a>
+                </div>
+            </li>
+        @endif
+        @if (Auth::user()->hasAnyRole(['1', '3']))
+            <li class="nav-item dropdown">
+                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                    Gestão de Amostras <span class="caret"></span>
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="{{ url('samples/create') }}">Criar Nova Amostra de Artigo</a>
+                    <a class="dropdown-item" href="{{ url('samples/list') }}">Listar Amostras de Artigos</a>
+                    <a class="dropdown-item" href="{{ url('email/create') }}">Enviar Email</a>
+                    <a class="dropdown-item" href="{{ url('email/list') }}">Gerir Emails</a>
+                </div>
+            </li>
+        @endif
         @if (Auth::user()->hasAnyRole(['1', '7']))
             <li class="nav-item dropdown">
                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                     Gestão de Orçamentação <span class="caret"></span>
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    {{--<a class="dropdown-item" href="{{ url('quotation/create') }}">Criar Orçamentação</a>--}}
                     <a class="dropdown-item" href="{{ url('orders/list') }}">Listar Orçamentos</a>
-                    <a class="dropdown-item" href="{{ url('email/create') }}">Enviar Email a Clientes</a>
+                    <a class="dropdown-item" href="{{ url('email/create') }}">Enviar Email</a>
                     <a class="dropdown-item" href="{{ url('email/list') }}">Gerir Emails</a>
                 </div>
             </li>
-        @endif
-        @if (Auth::user()->hasAnyRole(['1', '4']))
-                <li class="nav-item dropdown">
-                    <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                        Gestão de Encomendas <span class="caret"></span>
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="{{ url('orders/create') }}">Criar Encomenda</a>
-                        <a class="dropdown-item" href="{{ url('orders/list') }}">Listar Encomendas</a>
-                    </div>
-                </li>
-                <li class="nav-item dropdown">
-                    <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                        Gestão de Fornecedores <span class="caret"></span>
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="{{ url('suppliers/create') }}">Criar Fornecedor</a>
-                        <a class="dropdown-item" href="{{ url('suppliers/list') }}">Listar Fornecedores</a>
-                    </div>
-                </li>
-                <li class="nav-item dropdown">
-                    <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                        Gestão de Clientes <span class="caret"></span>
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="{{ url('clients/create') }}">Criar Cliente</a>
-                        <a class="dropdown-item" href="{{ url('clients/list') }}">Listar Clientes</a>
-                    </div>
-                </li>
         @endif
         @if (Auth::user()->hasAnyRole(['1', '5']))
             <li class="nav-item dropdown">
@@ -70,17 +84,6 @@
                     <a class="dropdown-item" href="{{ url('stock/list') }}">Listar Stock</a>
                     <a class="dropdown-item" href="{{ url('stock/request') }}" style="pointer-events: none; background-color: #cccccc">Solicitar Matéria-Prima</a>
                     <a class="dropdown-item" href="{{ url('stock/request/history') }}" style="pointer-events: none; background-color: #cccccc">Histórico de Pedidos de Matérias-Primas</a>
-                </div>
-            </li>
-        @endif
-        @if (Auth::user()->hasAnyRole(['1', '3']))
-            <li class="nav-item dropdown">
-                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                    Gestão de Amostras <span class="caret"></span>
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="{{ url('samples/create') }}">Criar Nova Amostra de Artigo</a>
-                    <a class="dropdown-item" href="{{ url('samples/list') }}">Listar Amostras de Artigos</a>
                 </div>
             </li>
         @endif

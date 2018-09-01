@@ -28,6 +28,8 @@
             </div>
         </div>
     </div>
+    <!-- ISPs não permitem apresentar o conteúdo do site deles noutras plataformas, portanto fica a ideia em stand by-->
+    <!--
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-10">
@@ -42,6 +44,7 @@
             </div>
         </div>
     </div>
+    -->
 
     <script>
         $( document ).ready ( function () {

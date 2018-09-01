@@ -44,6 +44,11 @@ class Order extends Model
         return $this->belongsTo('App\User');
     }
 
+    public function status()
+    {
+        return $this->belongsTo('App\OrderStatus');
+    }
+
     /**
      * Função que irá obter os gastos de cada fio para cada um dos pares
      */
@@ -195,5 +200,6 @@ class Order extends Model
         //END - Add Row to Stock History with the order to subtract
         return $clientName;
     }
+
 
 }

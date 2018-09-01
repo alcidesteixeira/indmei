@@ -78,7 +78,7 @@
             @if (Route::has('login'))
                 <div class="top-right links">
                     @auth
-                        <a href="{{ url('/home') }}">Home</a>
+                        {{--<a href="{{ url('/home') }}">Home</a>--}}
                     @else
                         <a href="{{ route('login') }}">Login</a>
                         <a href="{{ route('register') }}">Registar</a>
@@ -91,7 +91,10 @@
                     INDMEI - Fabrico de Meias, Lda
                 </div>
 
-                <img src="{{asset('images/empresa.png')}}" style="max-width: 100%">
+                <a href="{{ url('/home') }}">
+                    <img src="{{asset('images/empresa.png')}}" style="max-width: 100%">
+                </a>
+                <h3><a href="{{ url('/home') }}">Clique para entrar</a></h3>
                 {{--<div class="links">--}}
                     {{--<a href="https://laravel.com/docs">Documentation</a>--}}
                     {{--<a href="https://laracasts.com">Laracasts</a>--}}

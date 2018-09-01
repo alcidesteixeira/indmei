@@ -38,7 +38,12 @@
             <div class="col-md-3"></div>
             <div class="form-group col-md-6">
                 <label for="Reference">Referência:</label>
-                <input type="text" class="form-control" id="reference" required>
+                <input style="display:none;" type="text" class="form-control typeOfRef" id="reference">
+                <select type="text" class="form-control typeOfRef" id="reference2" required>
+                    @foreach($allProducts as $key => $prod)
+                        <option value="{{$key}}">{{$prod}}</option>
+                    @endforeach
+                </select>
             </div>
         </div>
 
@@ -46,7 +51,12 @@
             <div class="col-md-3"></div>
             <div class="form-group col-md-6">
                 <label for="color">Cor:</label>
-                <input type="text" class="form-control" id="color" required>
+                <input style="display:none;" type="text" class="form-control typeOfCol" id="color">
+                <select type="text" class="form-control typeOfCol" id="color2" required>
+                    @foreach($allColors as $key => $color)
+                        <option value="{{$key}}">{{$color}}</option>
+                    @endforeach
+                </select>
             </div>
         </div>
 
@@ -127,21 +137,25 @@
         $("#saveReceipt").append('<input type="hidden" name="rowCount" value="'+rowCount+'">');
     }
 
-    $( function() {
-        let availableProducts = {!! json_encode($allProducts) !!};
-        let availableColors = {!! json_encode($allColors) !!};
-
-        $( "#reference" ).autocomplete({
-            source: availableProducts
-        });
-        $( "#color" ).autocomplete({
-            source: availableColors
-        });
-    } );
-
     //Add new product opens new field
     $( "#newMaterial" ).click( function () {
         $(".new-material").toggleClass('hide');
+        $(".typeOfRef").toggle();
+        $(".typeOfCol").toggle();
+    });
+
+    //Change colors depending on reference
+    $( "#reference2" ).change( function () {
+        let key = $(this).val();
+        $.ajax({
+            url: "/stock/choosecolor/"+key,
+            success: function(result){
+                $( "#color2" ).html('');
+                $.each( result, function( key, value ) {
+                    $( "#color2" ).append ('<option value="'+key+'">'+value+'</option>');
+                });
+            }
+        });
     });
 
 
@@ -153,7 +167,10 @@
         e.preventDefault(e);
 
         let inout = $("#inout").val(); let description = $("#description").val();
-        let reference = $("#reference").val(); let color = $("#color").val();
+        let reference = '';
+        if($("#reference").val() !== '') {reference = $("#reference").val();} else {reference = $( "#reference2 option:selected" ).text();}
+        let color = '';
+        if($("#color").val() !== '') {color = $("#color").val();} else {color = $( "#color2 option:selected" ).text();}
         let qtd = $("#qtd").val(); let cost = $("#cost").val();
         let threshold = $("#threshold").val(); let receipt = $("#receipt").val();
 

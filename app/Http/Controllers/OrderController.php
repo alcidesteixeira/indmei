@@ -71,6 +71,7 @@ class OrderController extends Controller
 
         $order= new Order();
         $order->user_id =  Auth::id();
+        $order->status_id = $request->status_id;
         $order->sample_article_id =  $request->sample_article_id;
         $order->client_id =  $request->client_id;
         $order->client_identifier = $request->client_identifier;
@@ -112,8 +113,15 @@ class OrderController extends Controller
         }
         //End Store Image
 
-        $addRow = new Order();
-        $addRow = $addRow->addRowToStockHistory($request, $order->id);
+        if($request->sample_article_id) {
+            $addRow = new Order();
+            $addRow = $addRow->addRowToStockHistory($request, $order->id);
+        }
+        else {
+            $addRow = Client::where('id', $request->client_id)->first()->client;
+        }
+
+        //dd($addRow);
 
         flash('Encomenda do Cliente: '. $addRow . ', com o identificador: '. $order->client_identifier . ' foi criado com sucesso!')->success();
 
@@ -156,6 +164,7 @@ class OrderController extends Controller
         Auth::user()->authorizeRoles(['1', '4']);
 
         $order= Order::find($id);
+        $order->status_id = $request->status_id;
         $order->sample_article_id =  $request->sample_article_id;
         $order->client_id =  $request->client_id;
         $order->client_identifier = $request->client_identifier;
@@ -208,9 +217,14 @@ class OrderController extends Controller
         //End Files to Delete
 
 //        dd($request->all());
+        if($request->sample_article_id) {
         $addRow = new Order();
         $addRow = $addRow->addRowToStockHistory($request, $id);
-        return($addRow);
+        }
+        else {
+            $addRow = Client::where('id', $request->client_id)->first()->client;
+        }
+        //return($addRow);
 
         flash('Encomenda do Cliente '. $addRow . ' com o identificador '. $order->client_identifier . ' foi atualizada com sucesso!')->success();
 

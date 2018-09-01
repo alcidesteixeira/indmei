@@ -14,9 +14,16 @@
                                 <label for="sel1">Enviar para</label>
                                 <select class="form-control" id="client" name="client">
                                     <option value="0">Novo</option>
-                                    @foreach($clients as $client)
-                                    <option value="{{$client->email}}">{{$client->client}} ({{$client->email}})</option>
-                                    @endforeach
+                                    <optgroup label="Clientes">
+                                        @foreach($clients as $client)
+                                        <option value="{{$client->email}}">{{$client->client}} ({{$client->email}})</option>
+                                        @endforeach
+                                    </optgroup>
+                                    <optgroup label="Fornecedores">
+                                        @foreach($suppliers as $supplier)
+                                        <option value="{{$supplier->email}}">{{$supplier->client}} ({{$supplier->email}})</option>
+                                        @endforeach
+                                    </optgroup>
                                 </select>
                             </div>
                             <div class="form-group">

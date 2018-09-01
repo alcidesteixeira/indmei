@@ -36,6 +36,7 @@ Route::group(['middleware' => 'auth'], function () {
 //WarehouseProducts
     //Entrada de stock em armazém através de uma fatura
     Route::get('/stock/receipt', 'WarehouseProductController@receipt');
+    Route::get('/stock/choosecolor/{id}', 'WarehouseProductController@allColors');
     Route::post('/stock/receipt', 'WarehouseProductController@enterReceipt');
     //CRUD de gestão do Stock
     Route::get('/stock/list', 'WarehouseProductController@index');

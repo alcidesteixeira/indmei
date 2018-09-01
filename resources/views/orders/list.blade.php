@@ -15,6 +15,7 @@
                 <th role="columnheader">Descrição</th>
                 <th role="columnheader">Data de Entrega</th>
                 <th role="columnheader">Criado Por</th>
+                <th role="columnheader">Status</th>
                 @if (Auth::user()->hasAnyRole(['1', '4']))
                 <th role="columnheader"></th>
                 <th role="columnheader"></th>
@@ -37,30 +38,31 @@
                     <td role="columnheader" data-col4="Descrição">{{$order->description}}</td>
                     <td role="columnheader" data-col5="Data de Entrega">{{$order->delivery_date}}</td>
                     <td role="columnheader" data-col6="Criado Por">{{$order->user->name}}</td>
+                    <td role="columnheader" data-col7="Status">{{$order->status->status}}</td>
                     @if (Auth::user()->hasAnyRole(['1', '4']))
-                    <td role="columnheader" data-col7="">
+                    <td role="columnheader" data-col8="">
                         <form method="get" action="{{url('orders/edit/'.$order->id)}}" enctype="multipart/form-data">
                             <button type="submit" class="btn btn-warning">Editar</button>
                         </form>
                     </td>
-                    <td role="columnheader" data-col8="">
+                    <td role="columnheader" data-col9="">
                         <button type="button" data-id="{{$order->id}}" data-role="{{$order->client_identifier}}"  class="apagarform btn btn-danger">Apagar</button>
                     </td>
-                    <td role="columnheader" data-col9="">
+                    <td role="columnheader" data-col10="">
                         <form method="get" action="{{url('/order/production/'.$order->id)}}" enctype="multipart/form-data">
                             <button type="submit" class="btn btn-info">Produção Atual</button>
                         </form>
                     </td>
                     @endif
                     @if (Auth::user()->hasAnyRole(['1', '6']))
-                    <td role="columnheader" data-col8="">
+                    <td role="columnheader" data-col9="">
                         <form method="get" action="{{url('/order/production/insert/'.$order->id.'/')}}" enctype="multipart/form-data">
                             <button type="submit" class="btn btn-info">A minha produção</button>
                         </form>
                     </td>
                     @endif
                     @if (Auth::user()->hasAnyRole(['1', '7']))
-                        <td role="columnheader" data-col8="">
+                        <td role="columnheader" data-col10="">
                             <form method="get" action="{{url('/quotation/edit/'.$order->id.'/')}}" enctype="multipart/form-data">
                                 <button type="submit" class="btn btn-primary">Ver Orçamentação</button>
                             </form>

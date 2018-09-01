@@ -236,10 +236,10 @@ class SampleArticleController extends Controller
         $sampleArticle->malha4 = $request->malha4;
         $sampleArticle->maq4 = $request->maq4;
         $sampleArticle->forma4 = $request->forma4;
-        $sampleArticle->cost1 = $sampleCost['cor1'];
-        $sampleArticle->cost2 = $sampleCost['cor2'];
-        $sampleArticle->cost3 = $sampleCost['cor3'];
-        $sampleArticle->cost4 = $sampleCost['cor4'];
+        $sampleArticle->cost1 = round($sampleCost['cor1'], 2);
+        $sampleArticle->cost2 = round($sampleCost['cor2'], 2);
+        $sampleArticle->cost3 = round($sampleCost['cor3'], 2);
+        $sampleArticle->cost4 = round($sampleCost['cor4'], 2);
         $sampleArticle->save();
 
         //dd($request->all());
