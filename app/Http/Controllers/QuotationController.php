@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Client;
 use App\Order;
 use App\OrderStatus;
 use App\Quotation;
+use App\Supplier;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -32,9 +34,23 @@ class QuotationController extends Controller
 
         $order = Order::where('id', $request->order_id)->first();
 
-        flash('Orçamento para a encomenda com Identificador: '. $order->client_identifier. ' do Cliente: ' . $order->client->client . ' foi criado com sucesso!')->success();
+        $content =
+            'Custo total: ' . intval($request->order_cost1 + $request->order_cost2 + $request->order_cost3 + $request->order_cost4) .
+            ',<br> Etiquetas: ' . $request->tag .
+            ',<br>Caixas: ' . $request->boxes .
+            ',<br>Defeito: ' . $request->defect .
+            ',<br>Mão de obra: ' . $request->manpower .
+            ',<br>Outros Custos: ' . $request->other_costs .
+            ',<br>Total: ' . $request->total_sent;
 
-        return redirect()->action('EmailController@create');
+        //dd($content);
+            flash('Orçamento para a encomenda com Identificador: '. $order->client_identifier. ' do Cliente: ' . $order->client->client . ' foi criado com sucesso!<br>
+                            Edite o email para enviar ao cliente que pretende.')->success();
+
+        $clients = Client::all();
+        $suppliers = Supplier::all();
+
+        return view('emails.create', compact('clients', 'suppliers', 'content'));
     }
 
     /**
@@ -53,10 +69,8 @@ class QuotationController extends Controller
 
 
         $updateValueOfSamples = new Quotation();
-        $updateValueOfSamples = $updateValueOfSamples->updateValueOfSamples();
-//        return $updateValueOfSamples;
+        $updateValueOfSamples->updateValueOfSamples();
 
-//        dd($updateValueOfSamples);
 
         return view('quotations.create', compact('order', 'statuses', 'quotation'));
     }
@@ -86,9 +100,23 @@ class QuotationController extends Controller
 
         $order = Order::where('id', $request->order_id)->first();
 
-        flash('Orçamento para a encomenda com Identificador: '. $order->client_identifier. ' do Cliente: ' . $order->client->client . ' foi atualizado com sucesso!')->success();
+        $content =
+            'Custo total: ' . intval($request->order_cost1 + $request->order_cost2 + $request->order_cost3 + $request->order_cost4) .
+            ',<br> Etiquetas: ' . $request->tag .
+            ',<br>Caixas: ' . $request->boxes .
+            ',<br>Defeito: ' . $request->defect .
+            ',<br>Mão de obra: ' . $request->manpower .
+            ',<br>Outros Custos: ' . $request->other_costs .
+            ',<br>Total: ' . $request->total_sent;
 
-        return redirect()->action('EmailController@create');
+
+        flash('Orçamento para a encomenda com Identificador: '. $order->client_identifier. ' do Cliente: ' . $order->client->client . ' foi atualizado com sucesso!<br>
+                            Edite o email para enviar ao cliente que pretende.')->success();
+
+        $clients = Client::all();
+        $suppliers = Supplier::all();
+
+        return view('emails.create', compact('clients', 'suppliers', 'content'));
 
     }
 

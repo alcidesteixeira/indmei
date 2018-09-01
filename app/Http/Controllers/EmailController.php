@@ -47,13 +47,12 @@ class EmailController extends Controller
      */
     public function send(Request $request)
     {
-        //dd($request->all());
 
         Auth::user()->authorizeRoles(['1', '3', '5', '7']);
 
-        $res = Mail::to($request->client)->send(new sendSimpleEmail($request->subject, $request->body2));
+        $receiver = $request->client !== '0' ? $request->client : $request->new_address;
 
-        //dd($res);
+        Mail::to($receiver)->send(new sendSimpleEmail($request->subject, $request->body2));
 
         flash('Email enviado com sucesso!')->success();
 

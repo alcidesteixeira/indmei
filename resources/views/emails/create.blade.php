@@ -36,7 +36,11 @@
                             </div>
                             <div class="form-group">
                                 <label for="comment">Conteúdo:</label>
-                                <textarea class="form-control" rows="5" id="body" name="body" required></textarea>
+                                @if(@$content)
+                                    <div class="form-control" id="bodyQuotation" contenteditable="true">{!! @$content !!}</div>
+                                @else
+                                    <textarea class="form-control" rows="5" id="bodyEmail" required></textarea>
+                                @endif
                             </div>
                             <input type="hidden" name="body2" id="body2">
                             <div class="row">
@@ -59,14 +63,18 @@
                 let client = $("#client").val();
                 let newAddress = $("#new_address").val();
                 if(client == 0 && newAddress == '') {
-                    alert("Deve selecionar pelo menos um endereço de envio de email.")
+                    alert("Deve selecionar pelo menos um endereço de envio de email.");
                     e.preventDefault();
                 }
-            });
-
-            //Before submit get html code of textarea
-            $("form").submit( function () {
-                $("#body2").val($("#body").val().replace(/\n|\r/g,'<br />'));
+                //Before submit get html code of textarea
+                if("{!! @$content !!}" !== "") {
+                    let body = $("#bodyQuotation").html().replace(/\n|\r/g,'<br />');
+                    $("#body2").val(body);
+                }
+                else {
+                    let body = $("#bodyEmail").val().replace(/\n|\r/g,'<br />');
+                    $("#body2").val(body);
+                }
             });
         });
     </script>
