@@ -24,7 +24,7 @@ class OrderController extends Controller
      */
     public function index()
     {
-        Auth::user()->authorizeRoles(['1', '4', '6', '7']);
+        Auth::user()->authorizeRoles(['1', '3', '4', '6', '7']);
 
         $orders = Order::all();
 
@@ -136,7 +136,7 @@ class OrderController extends Controller
      */
     public function edit($id)
     {
-        Auth::user()->authorizeRoles(['1', '4']);
+        Auth::user()->authorizeRoles(['1', '3', '4', '7']);
 
         $sampleArticles = SampleArticle::all();
 

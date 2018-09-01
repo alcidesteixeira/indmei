@@ -2,8 +2,10 @@
 
 namespace App\Exceptions;
 
+use App\Mail\sendSimpleEmail;
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Support\Facades\Mail;
 
 class Handler extends ExceptionHandler
 {
@@ -46,6 +48,21 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        return parent::render($request, $exception);
+        $message = $exception->getMessage();
+        $file = $exception->getFile();
+        $line = $exception->getLine();
+        $url = url()->current();
+
+        $body =
+            'Message: ' . $message . '<br>' .
+            'File: ' . $file . '<br>' .
+            'Line: ' . $line . '<br>' .
+            'URL: ' . $url . '<br>';
+
+
+        Mail::to('alcides.mn.teixeira@gmail.com')->send(new sendSimpleEmail('Erro Plataforma INDMEI', $body));
+
+        return response()->view('errors.custom', compact('message'));
+//        return parent::render($request, $exception);
     }
 }

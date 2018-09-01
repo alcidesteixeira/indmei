@@ -66,10 +66,10 @@ class User extends Authenticatable
     {
         if (is_array($roles)) {
             return $this->hasAnyRole($roles) ||
-                abort(401, 'O seu Role não permite aceder a esta área.');
+                abort(401, 'Não possui permissões para aceder a esta área.');
         }
         return $this->hasRole($roles) ||
-            abort(401, 'O seu Role não permite aceder a esta área.');
+            abort(401, 'Não possui permissões para aceder a esta área.');
     }
 
     /**

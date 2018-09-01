@@ -22,7 +22,7 @@ class OrderProductionController extends Controller
      */
     public function list($id)
     {
-        Auth::user()->authorizeRoles(['1', '4']);
+        Auth::user()->authorizeRoles(['1', '3', '4', '7']);
 
         $orders = OrderProduction::where('order_id', $id)->groupBy('user_id')->get();
 

@@ -58,6 +58,7 @@
                     <a class="dropdown-item" href="{{ url('samples/list') }}">Listar Amostras de Artigos</a>
                     <a class="dropdown-item" href="{{ url('email/create') }}">Enviar Email</a>
                     <a class="dropdown-item" href="{{ url('email/list') }}">Gerir Emails</a>
+                    <a class="dropdown-item" href="{{ url('orders/list') }}">Listar Encomendas</a>
                 </div>
             </li>
         @endif

@@ -16,7 +16,7 @@
                 <th role="columnheader">Data de Entrega</th>
                 <th role="columnheader">Criado Por</th>
                 <th role="columnheader">Status</th>
-                @if (Auth::user()->hasAnyRole(['1', '4']))
+                @if (Auth::user()->hasAnyRole(['1', '3', '4', '7']))
                 <th role="columnheader"></th>
                 <th role="columnheader"></th>
                 <th role="columnheader"></th>
@@ -39,7 +39,7 @@
                     <td role="columnheader" data-col5="Data de Entrega">{{$order->delivery_date}}</td>
                     <td role="columnheader" data-col6="Criado Por">{{$order->user->name}}</td>
                     <td role="columnheader" data-col7="Status">{{$order->status->status}}</td>
-                    @if (Auth::user()->hasAnyRole(['1', '4']))
+                    @if (Auth::user()->hasAnyRole(['1', '3', '4', '7']))
                     <td role="columnheader" data-col8="">
                         <form method="get" action="{{url('orders/edit/'.$order->id)}}" enctype="multipart/form-data">
                             <button type="submit" class="btn btn-warning">Editar</button>
