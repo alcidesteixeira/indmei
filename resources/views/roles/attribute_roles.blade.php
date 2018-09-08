@@ -5,7 +5,7 @@
     <div class="container">
         @include('flash::message')
 
-        <h2>Lista de Utilizadores e os seus Roles</h2>
+        <h2>Lista de Utilizadores e das suas Permissões</h2>
         <table class="table table-striped thead-dark" role="table">
             <thead role="rowgroup">
             <tr role="row">

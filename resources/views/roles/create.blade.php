@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container">
-        <h2>{{@$role->name ? 'Atualizar Role' : 'Criar Novo Role'}}</h2><br/>
+        <h2>{{@$role->name ? 'Atualizar Permissão' : 'Criar Nova Permissão'}}</h2><br/>
         <form method="post" action="{{@$role->name ? url('roles/update/'.$role->id) : url('roles/create')}}" enctype="multipart/form-data">
             @csrf
             <div class="row">

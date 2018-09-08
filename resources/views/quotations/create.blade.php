@@ -3,6 +3,10 @@
 @section('content')
     <style>
         button a, a:hover {
+            color: #000;
+            text-decoration: none;
+        }
+        button a:hover {
             color: #fff;
             text-decoration: none;
         }
@@ -54,7 +58,7 @@
             <hr>
             <div class="form-group row">
                 <div class="col-md-2"></div>
-                <label class="col-md-2 col-form-label" for="orderCost">Amostra de Cor 1:</label>
+                <label class="col-md-3 col-form-label" for="orderCost">Amostra de Cor "{{@$order->cor1 ? @$order->cor1 : '1'}}":</label>
                 <div class="input-group col-md-2">
                 <input type="number" step="0.01" class="form-control" id="order_cost1" name="order_cost1" value="{{@$quotation->order_sample_cost_1 ? $quotation->order_sample_cost_1 : @$order->sampleArticle->cost1}}" required>
                     <div class="input-group-prepend">
@@ -62,16 +66,13 @@
                     </div>
                 </div>
                 <label class="col-md-2 col-form-label" for="orderCost">Total Pares:</label>
-                <div class="input-group col-md-2">
+                <div class="input-group col-md-1">
                     <input type="number" step="0.01" class="form-control" id="color1" name="color1" value="{{@$order->tamanho11 + @$order->tamanh12 + @$order->tamanho13 + @$order->tamanho14}}" required readonly>
-                    <div class="input-group-prepend">
-                        <div class="input-group-text">Total</div>
-                    </div>
                 </div>
             </div>
             <div class="form-group row">
                 <div class="col-md-2"></div>
-                <label class="col-md-2 col-form-label" for="orderCost">Amostra de Cor 2:</label>
+                <label class="col-md-3 col-form-label" for="orderCost">Amostra de Cor "{{@$order->cor2 ? @$order->cor2 : '2'}}":</label>
                 <div class="input-group col-md-2">
                     <input type="number" step="0.01" class="form-control" id="order_cost2" name="order_cost2" value="{{@$quotation->order_sample_cost_2 ? $quotation->order_sample_cost_2 : @$order->sampleArticle->cost2}}" required>
                     <div class="input-group-prepend">
@@ -79,16 +80,13 @@
                     </div>
                 </div>
                 <label class="col-md-2 col-form-label" for="orderCost">Total Pares:</label>
-                <div class="input-group col-md-2">
+                <div class="input-group col-md-1">
                     <input type="number" step="0.01" class="form-control" id="color2" name="color2" value="{{@$order->tamanho21 + @$order->tamanho22 + @$order->tamanho23 + @$order->tamanho24}}" required readonly>
-                    <div class="input-group-prepend">
-                        <div class="input-group-text">Total</div>
-                    </div>
                 </div>
             </div>
             <div class="form-group row">
                 <div class="col-md-2"></div>
-                <label class="col-md-2 col-form-label" for="orderCost">Amostra de Cor 3:</label>
+                <label class="col-md-3 col-form-label" for="orderCost">Amostra de Cor "{{@$order->cor3 ? @$order->cor3 : '3'}}":</label>
                 <div class="input-group col-md-2">
                     <input type="number" step="0.01" class="form-control" id="order_cost3" name="order_cost3" value="{{@$quotation->order_sample_cost_3 ? $quotation->order_sample_cost_3 : @$order->sampleArticle->cost3}}" required>
                     <div class="input-group-prepend">
@@ -96,16 +94,13 @@
                     </div>
                 </div>
                 <label class="col-md-2 col-form-label" for="orderCost">Total Pares:</label>
-                <div class="input-group col-md-2">
+                <div class="input-group col-md-1">
                     <input type="number" step="0.01" class="form-control" id="color3" name="color3" value="{{@$order->tamanho31 + @$order->tamanho32 + @$order->tamanho33 + @$order->tamanho34}}" required readonly>
-                    <div class="input-group-prepend">
-                        <div class="input-group-text">Total</div>
-                    </div>
                 </div>
             </div>
             <div class="form-group row">
                 <div class="col-md-2"></div>
-                <label class="col-md-2 col-form-label" for="orderCost">Amostra de Cor 4:</label>
+                <label class="col-md-3 col-form-label" for="orderCost">Amostra de Cor "{{@$order->cor4 ? @$order->cor4 : '4'}}":</label>
                 <div class="input-group col-md-2">
                     <input type="number" step="0.01" class="form-control" id="order_cost4" name="order_cost4" value="{{@$quotation->order_sample_cost_4 ? $quotation->order_sample_cost_4 : @$order->sampleArticle->cost4}}" required>
                     <div class="input-group-prepend">
@@ -113,11 +108,8 @@
                     </div>
                 </div>
                 <label class="col-md-2 col-form-label" for="orderCost">Total Pares:</label>
-                <div class="input-group col-md-2">
+                <div class="input-group col-md-1">
                     <input type="number" step="0.01" class="form-control" id="color4" name="color4" value="{{@$order->tamanho41 + @$order->tamanho42 + @$order->tamanho43 + @$order->tamanho44}}" required readonly>
-                    <div class="input-group-prepend">
-                        <div class="input-group-text">Total</div>
-                    </div>
                 </div>
             </div>
             <div class="form-group row">
@@ -213,12 +205,12 @@
         });
 
         function calcTotalVal () {
-            let totalSamples = parseFloat($("#color1").val()) + parseFloat($("#color2").val()) + parseFloat($("#color3").val()) + parseFloat($("#color4").val());
+            let totalSamples =  (parseFloat($("#order_cost1").val()) * parseFloat($("#color1").val())) +
+                                (parseFloat($("#order_cost2").val()) * parseFloat($("#color2").val())) +
+                                (parseFloat($("#order_cost3").val()) * parseFloat($("#color3").val())) +
+                                (parseFloat($("#order_cost4").val()) * parseFloat($("#color4").val()));
             let total = (
-                (parseFloat($("#order_cost1").val()) * parseFloat($("#color1").val())) +
-                (parseFloat($("#order_cost2").val()) * parseFloat($("#color2").val())) +
-                (parseFloat($("#order_cost3").val()) * parseFloat($("#color3").val())) +
-                (parseFloat($("#order_cost4").val()) * parseFloat($("#color4").val())) +
+                totalSamples +
                 parseFloat($("#tag").val()) +
                 parseFloat($("#boxes").val()) +
                 (totalSamples * parseFloat($("#defect").val()) / 100) +

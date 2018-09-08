@@ -2,6 +2,7 @@
 
 @section('content')
 <div class="container">
+    @include('flash::message')
     <h2>Dar Entrada de Stock</h2><br/>
     <form id="addRow" method="" action="" enctype="multipart/form-data">
         @csrf
@@ -15,14 +16,16 @@
             </div>
             <div class="form-group col-md-6"></div>
             <div class="form-group col-md-3">
-                <button type="button" id="newMaterial" class="btn btn-default" style="margin-top: 31px; float:right;">Criar nova Matéria-Prima</button>
+                <button type="button" class="btn btn-default newMaterial new" style="margin-top: 31px; float:right;">Criar nova Matéria-Prima</button>
+                <button type="button" class="btn btn-default newMaterial new" style="margin-top: 31px; float:right;display:none;">Atualizar Matéria-Prima</button>
             </div>
         </div>
 
         <div class="row new-material hide">
             <div class="col-md-3"></div>
             <div class="form-group col-md-6">
-                <h2>Nova entrada de matéria-prima:</h2>
+                <h2 class="new2">Nova entrada de matéria-prima:</h2>
+                <h2 style="display:none;" class="new2">Atualizar matéria-prima:</h2>
             </div>
         </div>
 
@@ -79,7 +82,7 @@
         <div class="row new-material hide">
             <div class="col-md-3"></div>
             <div class="form-group col-md-6">
-                <label for="threshold">Valor de aviso mínimo:</label>
+                <label for="threshold">Valor de aviso mínimo (Kg):</label>
                 <input type="number" step="0.01" class="form-control" id="threshold">
             </div>
         </div>
@@ -115,8 +118,8 @@
         <div class="row" style="margin-bottom: 30px;">
 
             <div class="form-group col-md-6">
-                <label for="receipt">Carregar Fatura:</label>
-                <input type="file" class="form-control-file" name="receipt" id="receipt" required>
+                <label for="receipt">Carregar Fatura (.pdf, .png, .jpeg, .gif):</label>
+                <input type="file" class="form-control-file" name="receipt" id="receipt" accept="image/x-png,image/gif,image/jpeg,application/pdf" required>
             </div>
 
             <div class="col-md-3"></div>
@@ -138,10 +141,12 @@
     }
 
     //Add new product opens new field
-    $( "#newMaterial" ).click( function () {
+    $( ".newMaterial" ).click( function () {
         $(".new-material").toggleClass('hide');
         $(".typeOfRef").toggle();
         $(".typeOfCol").toggle();
+        $(".new").toggle();
+        $(".new2").toggle();
     });
 
     //Change colors depending on reference

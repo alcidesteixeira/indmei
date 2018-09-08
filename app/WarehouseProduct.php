@@ -70,12 +70,20 @@ class WarehouseProduct extends Model
                 }
             }
 
-            WarehouseProductSpec::where('id', $product->id)
-                ->update([
-                    'liquid_weight' => $total_liquid,
-                    'gross_weight' => $total_bruto,
-                    'cost' => $cost
-                ]);
+            //Apenas atualiza os valores de stock que sofreram alterações
+            $currentValsStored = WarehouseProductSpec::where('id', $product->id)->first();
+
+            if(strcmp($currentValsStored->liquid_weight, $total_liquid) ||
+                strcmp($currentValsStored->gross_weight, $total_bruto) ||
+                strcmp($currentValsStored->cost, $cost)) {
+
+                WarehouseProductSpec::where('id', $product->id)
+                    ->update([
+                        'liquid_weight' => $total_liquid,
+                        'gross_weight' => $total_bruto,
+                        'cost' => $cost
+                    ]);
+            }
         }
         return "done";
     }

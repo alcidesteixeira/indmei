@@ -18,3 +18,33 @@ select {
     margin-top: 50px !important;
     margin-bottom: 50px !important;
 }
+
+.btn {
+    background-color: #fff !important;
+    color: #000 !important;
+    border-width: 2px !important;
+}
+
+.btn-success:hover {
+    background-color: #218838 !important;
+    color: #fff !important;
+}
+
+.btn-info:hover {
+    color: #fff !important;
+    background-color: #138496 !important;
+}
+
+.btn-danger:hover {
+    color: #fff !important;
+    background-color: #c82333 !important;
+}
+
+.btn-warning:hover {
+    color: #212529 !important;
+    background-color: #e0a800 !important;
+}
+
+.btn-default {
+    border-color: #000 !important;
+}

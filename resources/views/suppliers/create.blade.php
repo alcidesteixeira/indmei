@@ -23,7 +23,7 @@
                 <div class="col-md-3"></div>
                 <div class="form-group col-md-6">
                     <label for="nif">NIF:</label>
-                    <input type="number" class="form-control" name="nif" maxlength="9" value="{{@$supplier->nif}}" onKeyDown="limitText(this,9);" required>
+                    <input type="number" class="form-control" name="nif" maxlength="8" value="{{@$supplier->nif}}" onKeyDown="limitText(this,8);" required>
                 </div>
             </div>
             <div class="row">

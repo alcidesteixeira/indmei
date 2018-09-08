@@ -1,0 +1,27 @@
+/*html,body, #app {*/
+    /*!*padding:0;*!*/
+    /*!*margin:0;*!*/
+    /*height:100%;*/
+/*}*/
+/*.py-4 {*/
+    /*height:85%;*/
+/*}*/
+
+/*.col {*/
+    /*padding: 1em;*/
+    /*border: solid;*/
+/*}*/
+
+/*@media only screen and (min-width: 768px) {*/
+    /*.row {*/
+        /*display: flex; !* equal height of the children *!*/
+        /*height: 50%;*/
+    /*}*/
+
+    /*.col {*/
+        /*flex: 1; !* additionally, equal width *!*/
+
+        /*padding: 1em;*/
+        /*border: solid;*/
+    /*}*/
+/*}*/

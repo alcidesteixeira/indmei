@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Order;
 use App\SampleArticle;
 use App\SampleArticleColor;
 use App\SampleArticleGuiafio;
@@ -138,6 +139,7 @@ class SampleArticleController extends Controller
             }
         }
 
+
         flash('A Amostra de Artigo com a referência: "'. $sampleArticle->reference . '", e descrição: "'. $sampleArticle->description .'" foi criada com sucesso!')->success();
 
         return redirect()->action('SampleArticleController@index');
@@ -152,7 +154,7 @@ class SampleArticleController extends Controller
      */
     public function edit($id)
     {
-        Auth::user()->authorizeRoles(['1', '3']);
+        Auth::user()->authorizeRoles(['1', '3', '7']);
 
         $sampleArticle = SampleArticle::find($id);
 
@@ -269,6 +271,21 @@ class SampleArticleController extends Controller
                 $wireColor->save();
             }
         }
+
+
+        //Atualizar valores de Armazém, no momento em que uma amostra é editada
+        $sampleID = $sampleArticle->id;
+        //dd($sampleID);
+        //Update all OUT for gross calculations
+        $orders = Order::where('sample_article_id', $sampleID)->get();
+        //Ao fazer isto, estaria a atualizar sempre que entra na lista de encomendas, e isso iria afetar os resultados
+        foreach($orders as $order) {
+            if($order->sample_article_id) {
+                $grossCalcsResults = new Order();
+                $grossCalcsResults = $grossCalcsResults->addRowToStockHistory($order, $order->id);
+            }
+        }
+
 
         flash('A Amostra de Artigo com a referência: '. $sampleArticle->reference . ', e a descrição: '. $sampleArticle->description .' foi atualizada com sucesso!')->success();
 

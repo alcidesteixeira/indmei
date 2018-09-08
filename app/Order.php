@@ -145,13 +145,9 @@ class Order extends Model
         //dd($request->all());
 
         $wires = $this->checkWireSpentInOnePair($request);
-//        dd($wires);
         $clientName = Client::where('id', $request->client_id)->first()->client;
-//        dd($clientName);
         $paresPorCorLiquido = $this->pairsPerColorLiquid($request);
-//        dd($paresPorCorLiquido);
         $paresPorCorBruto = $this->pairsPerColorGross($id);
-//        dd($paresPorCorBruto);
 
         //Delete das entradas antes de atualizar.
         DB::table('warehouse_products_history')
@@ -159,9 +155,7 @@ class Order extends Model
             ->delete();
 
         //Obter imagem do produto
-//        dd($request->sample_article_id);
         $orderImage = SampleArticle::where('id', $request->sample_article_id)->first()->image_url;
-        //dd($orderImage);
 
         //Editar para conter historico de liquid weight e gross weight!!!!
         //Adicionar as quantidades de fio, dependendo das meias selecionadas: stock
@@ -175,7 +169,7 @@ class Order extends Model
                         'user_id' => Auth::id(),
                         'inout' => 'OUT_LIQUID',
                         'weight' => $wire->grams * $paresPorCorLiquido[$cor],
-                        'cost' => 0,
+                        'cost' => 'N/A',
                         'receipt' => $orderImage,
                         'description' => 'Encomenda para o cliente: ' . $clientName . ', com o identificador: ' . $request->client_identifier,
                         'created_at' => Carbon::now(),
@@ -188,7 +182,7 @@ class Order extends Model
                         'user_id' => Auth::id(),
                         'inout' => 'OUT_GROSS',
                         'weight' => $wire->grams * $paresPorCorBruto[$cor],
-                        'cost' => 0,
+                        'cost' => 'N/A',
                         'receipt' => $orderImage,
                         'description' => 'Encomenda para o cliente: ' . $clientName . ', com o identificador: ' . $request->client_identifier,
                         'created_at' => Carbon::now(),

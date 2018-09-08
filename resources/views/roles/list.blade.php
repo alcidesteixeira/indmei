@@ -7,7 +7,7 @@
 
 
 
-    <h2>Lista de Roles disponíveis</h2>
+    <h2>Lista de Permissões disponíveis</h2>
     <table class="table table-striped thead-dark" role="table">
         <thead role="rowgroup">
         <tr role="row">

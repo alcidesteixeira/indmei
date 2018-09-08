@@ -5,11 +5,18 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header">Criar novo Email</div>
+                    @if(@$content)
+                        <div class="card-header">Enviar Orçamentação</div>
+                    @elseif(@$prodSpecArray)
+                        <div class="card-header">Fazer pedido de Stock</div>
+                    @else
+                        <div class="card-header">Criar novo Email</div>
+                    @endif
 
                     <div class="card-body">
                         <form method="post" action="{{url('email/send/')}}" enctype="multipart/form-data">
                             @csrf
+                            @if(!@$prodSpecArray)
                             <div class="form-group">
                                 <label for="sel1">Enviar para</label>
                                 <select class="form-control" id="client" name="client">
@@ -26,6 +33,7 @@
                                     </optgroup>
                                 </select>
                             </div>
+                            @endif
                             <div class="form-group">
                                 <label for="usr">Novo Endereço de envio:</label>
                                 <input type="email" class="form-control" id="new_address" name="new_address">
@@ -38,6 +46,8 @@
                                 <label for="comment">Conteúdo:</label>
                                 @if(@$content)
                                     <div class="form-control" id="bodyQuotation" contenteditable="true">{!! @$content !!}</div>
+                                @elseif(@$prodSpecArray)
+                                    <div class="form-control" id="bodyContent" contenteditable="true">@foreach($prodSpecArray as $key => $val){!!$key.': '.$val.'; <br>' !!}@endforeach</div>
                                 @else
                                     <textarea class="form-control" rows="5" id="bodyEmail" required></textarea>
                                 @endif
@@ -69,6 +79,10 @@
                 //Before submit get html code of textarea
                 if("{!! @$content !!}" !== "") {
                     let body = $("#bodyQuotation").html().replace(/\n|\r/g,'<br />');
+                    $("#body2").val(body);
+                }
+                else if("{!! @$prodSpecArray['cor'] !!}" !== "") {
+                    let body = $("#bodyContent").html().replace(/\n|\r/g,'<br />');
                     $("#body2").val(body);
                 }
                 else {

@@ -69,6 +69,16 @@ class OrderController extends Controller
         //dd($request->all());
         Auth::user()->authorizeRoles(['1', '4']);
 
+        if(@$request->order_files_id) {
+            foreach ($request->order_files_id as $order_files_id) {
+                if (!str_contains($request->file('receipt')->getClientOriginalName(), ['pdf', 'jpg', 'png', 'gif'])) {
+                    flash('Por favor, insira uma extensão válida. (.pdf, .jpeg, .png, .gif)')->error();
+
+                    return redirect()->back();
+                }
+            }
+        }
+
         $order= new Order();
         $order->user_id =  Auth::id();
         $order->status_id = $request->status_id;
@@ -103,8 +113,9 @@ class OrderController extends Controller
         foreach ($request->order_files_id as $order_files_id) {
             $orderFile= new OrderFile();
             $file = $order_files_id;
-            if ($file) {
-                $filename = 'orders/' . explode('.', $file->getClientOriginalName())[0] . '-' . Carbon::now('Europe/London')->format('YmdHis') . '.jpg';
+            if($file) {
+                $extension = str_contains($file->getClientOriginalName(), 'pdf') ? '.pdf' : '.jpg';
+                $filename = 'orders/' . explode('.', $file->getClientOriginalName())[0] . '-' . Carbon::now('Europe/London')->format('YmdHis') . $extension;
                 Storage::disk('public')->put($filename, File::get($file));
                 $orderFile->order_id = $order->id;
                 $orderFile->url = $filename;
@@ -163,6 +174,17 @@ class OrderController extends Controller
         //dd($request->all());
         Auth::user()->authorizeRoles(['1', '4']);
 
+        if(@$request->order_files_id) {
+            foreach ($request->order_files_id as $order_files_id) {
+                //dd($order_files_id);
+                if (!str_contains($order_files_id->getClientOriginalName(), ['pdf', 'jpg', 'png', 'gif'])) {
+                    flash('Por favor, insira uma extensão válida. (.pdf, .jpeg, .png, .gif)')->error();
+
+                    return redirect()->back();
+                }
+            }
+        }
+
         $order= Order::find($id);
         $order->status_id = $request->status_id;
         $order->sample_article_id =  $request->sample_article_id;
@@ -197,8 +219,9 @@ class OrderController extends Controller
             foreach ($request->order_files_id as $order_files_id) {
                 $orderFile = new OrderFile();
                 $file = $order_files_id;
-                if ($file) {
-                    $filename = 'orders/' . explode('.', $file->getClientOriginalName())[0] . '-' . Carbon::now('Europe/London')->format('YmdHis') . '.jpg';
+                if($file) {
+                    $extension = str_contains($file->getClientOriginalName(), 'pdf') ? '.pdf' : '.jpg';
+                    $filename = 'orders/' . explode('.', $file->getClientOriginalName())[0] . '-' . Carbon::now('Europe/London')->format('YmdHis') . $extension;
                     Storage::disk('public')->put($filename, File::get($file));
                     $orderFile->order_id = $order->id;
                     $orderFile->url = $filename;

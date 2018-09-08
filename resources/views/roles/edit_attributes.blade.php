@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container">
-        <h2>Editar user: {{@$user->name}}</h2><br/>
+        <h2>Editar Utilizador: {{@$user->name}}</h2><br/>
         <form method="post" action="{{url('roles/attribute/edit/'.$user->id)}}" enctype="multipart/form-data">
             @csrf
             <div class="row">
@@ -22,7 +22,7 @@
             <div class="row">
                 <div class="col-md-3"></div>
                 <div class="form-group col-md-6">
-                    <label for="Description">Roles Selecionados:</label>
+                    <label for="Description">Permissões Selecionadas:</label>
                     @foreach($roles as $role)
                     <div class="checkbox">
                         <label><input type="checkbox" name="{{$role->id}}" value="{{$role->id}}" {{in_array($role->id, $userRoles) ? 'checked' : ''}}>{{$role->name}}</label>

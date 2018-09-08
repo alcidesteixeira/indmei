@@ -101,7 +101,8 @@ class QuotationController extends Controller
         $order = Order::where('id', $request->order_id)->first();
 
         $content =
-            'Custo total: ' . intval($request->order_cost1 + $request->order_cost2 + $request->order_cost3 + $request->order_cost4) .
+            'Custo total: ' . intval($request->order_cost1 * $request->color1 + $request->order_cost2 * $request->color2
+                + $request->order_cost3 * $request->color3 + $request->order_cost4 * $request->color4) .
             ',<br> Etiquetas: ' . $request->tag .
             ',<br>Caixas: ' . $request->boxes .
             ',<br>Defeito: ' . $request->defect .

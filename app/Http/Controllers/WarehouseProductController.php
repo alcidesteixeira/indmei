@@ -24,15 +24,9 @@ class WarehouseProductController extends Controller
 
         Auth::user()->authorizeRoles(['1', '5']);
 
-        //Update all OUT for gross calculations
-        $orders = Order::all();
-        foreach($orders as $order) {
-//            dump($order);
-            $grossCalcsResults = new Order();
-            $grossCalcsResults = $grossCalcsResults->addRowToStockHistory ($order, $order->id);
-        }
 
         //Calculate using historic;
+        //Only updates the stock that has changed
         $update = new WarehouseProduct();
         $update = $update->updateStocks();
 
@@ -49,8 +43,9 @@ class WarehouseProductController extends Controller
     {
         $historic = DB::table('warehouse_products_history')
             ->leftJoin('users', 'warehouse_products_history.user_id', 'users.id')
-            ->select('user_id', 'name', 'inout', 'weight', 'cost', 'description', 'receipt', 'warehouse_products_history.updated_at')
+            ->select('user_id', 'name', 'inout', 'weight', 'cost', 'description', 'receipt', 'warehouse_products_history.created_at')
             ->where('warehouse_product_spec_id', $id)
+            ->orderBy('warehouse_products_history.created_at', 'desc')
             ->get();
 
         return $historic;
@@ -201,6 +196,12 @@ class WarehouseProductController extends Controller
 
         Auth::user()->authorizeRoles(['1', '5']);
 
+        if(!str_contains($request->file('receipt')->getClientOriginalName(), ['pdf', 'jpg', 'png', 'gif'])) {
+            flash('Por favor, insira uma extensão válida. (.pdf, .jpeg, .png, .gif)')->error();
+
+            return redirect()->action('WarehouseProductController@receipt');
+        }
+
         for($i = 1; $i <= $request->rowCount; $i++) {
 
             //ir buscar warehouseproduct onde reference seja igual a inserida e obter id
@@ -234,16 +235,18 @@ class WarehouseProductController extends Controller
                 $warehouseProductSpec->warehouse_product_id = $warehouseProduct->id;
                 $warehouseProductSpec->description = $request->$description;
                 $warehouseProductSpec->color = $request->$color;
-                $warehouseProductSpec->liquid_weight = intval($request->$qtd) * 100;
-                $warehouseProductSpec->gross_weight = intval($request->$qtd) * 100;
+                $warehouseProductSpec->liquid_weight = intval($request->$qtd) * 1000;
+                $warehouseProductSpec->gross_weight = intval($request->$qtd) * 1000;
                 $warehouseProductSpec->cost = $request->$cost;
                 $warehouseProductSpec->threshold = $request->$threshold ? $request->$threshold : 1000;
                 $warehouseProductSpec->save();
             }
+//            dd("aa");
             //Em qualquer caso, adiciona sempre no histórico: caso nao exista fio; caso não exista cor; caso exista fio e cor
             $file = $request->file('receipt');
             if($file) {
-                $filename = 'receipts/' . explode('.', $file->getClientOriginalName())[0] . '-' . Carbon::now('Europe/London')->format('YmdHis') . '.jpg';
+                $extension = str_contains($file->getClientOriginalName(), 'pdf') ? '.pdf' : '.jpg';
+                $filename = 'receipts/' . explode('.', $file->getClientOriginalName())[0] . '-' . Carbon::now('Europe/London')->format('YmdHis') . $extension;
                 Storage::disk('public')->put($filename, File::get($file));
             }
 
@@ -252,7 +255,7 @@ class WarehouseProductController extends Controller
                     'warehouse_product_spec_id' => $warehouseProductSpec->id,
                     'user_id' => Auth::id(),
                     'inout' => $request->$inout,
-                    'weight' => intval($request->$qtd) * 100,
+                    'weight' => intval($request->$qtd) * 1000,
                     'cost' => $request->$cost,
                     'description' => $request->$description,
                     'receipt' => $filename,

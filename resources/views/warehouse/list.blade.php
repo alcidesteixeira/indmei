@@ -13,11 +13,11 @@
                 <th role="columnheader">Cor</th>
                 <th role="columnheader" title="Stock em armazém subtraíndo o valor produzido diariamente pelos operadores">Stock Bruto (Kg)</th>
                 <th role="columnheader" title="Stock em armazém subtraíndo o valor necessário para as encomendas criadas">Stock Líquido (Kg)</th>
-                <th role="columnheader">Alerta mínimo (Kg)</th>
+                <th role="columnheader" title="Valor limite mínimo que o peso bruto de stock irá disparar">Alerta mínimo (Kg)</th>
                 <th role="columnheader">Custo (€/Kg)</th>
-                <th role="columnheader">Descrição</th>
                 <th role="columnheader">Atualizado Por</th>
                 <th role="columnheader">Última Atualização</th>
+                <th role="columnheader"></th>
                 <th role="columnheader"></th>
                 <th role="columnheader"></th>
             </tr>
@@ -27,20 +27,26 @@
                 <tr style="background-color: {{$product->threshold*100 >= $product->gross_weight ? '#f9a9a9' : ''}}" data-specid="{{$product->id}}" role="row">
                     <td role="columnheader" data-col1="Referência">{{$product->product->reference}}</td>
                     <td role="columnheader" data-col2="Cor">{{$product->color}}</td>
-                    <td role="columnheader" data-col3="Stock Bruto (Kg)">{{$product->gross_weight / 100}}</td>
-                    <td role="columnheader" data-col4="Stock Líquido (Kg)">{{$product->liquid_weight / 100}}</td>
+                    <td role="columnheader" data-col3="Stock Bruto (Kg)">{{$product->gross_weight / 1000}}</td>
+                    <td role="columnheader" data-col4="Stock Líquido (Kg)">{{$product->liquid_weight / 1000}}</td>
                     <td role="columnheader" data-col5="Alerta mínimo (Kg)">{{$product->threshold}}</td>
                     <td role="columnheader" data-col6="Custo (€/Kg)">{{$product->cost}}</td>
-                    <td role="columnheader" data-col7="Descrição">{{$product->description}}</td>
-                    <td role="columnheader" data-col8="Atualizado Por">{{$product->product->user->name}}</td>
-                    <td role="columnheader" data-col9="Última Atualização">{{$product->updated_at}}</td>
-                    <td role="columnheader" data-col10="">
+                    <td role="columnheader" data-col7="Atualizado Por">{{$product->product->user->name}}</td>
+                    <td role="columnheader" data-col8="Última Atualização">{{$product->updated_at}}</td>
+                    <td role="columnheader" data-col9="">
                         <form method="get" action="{{url('stock/edit/'.$product->id)}}" id="edit" enctype="multipart/form-data">
                             <button type="submit" class="btn btn-warning">Editar</button>
                         </form>
                     </td>
-                    <td role="columnheader" data-col11="">
+                    <td role="columnheader" data-col10="">
                         <button type="button" data-id="{{$product->id}}" data-role="{{$product->product->reference}}" id="delete" class="apagarform btn btn-danger">Apagar</button>
+                    </td>
+                    <td role="columnheader" data-col11="">
+                        @if($product->threshold*100 >= $product->gross_weight)
+                        <form method="get" action="{{url('/email/create/'.$product->id)}}" id="email" enctype="multipart/form-data">
+                            <button type="submit" class="btn btn-success">Pedir stock</button>
+                        </form>
+                        @endif
                     </td>
                 </tr>
             @endforeach
@@ -156,7 +162,7 @@
         //Select table row from stock to show details
         //$(".stock-history").css('display', 'none');
 
-        $("#stock tr").click(function(){
+        $("#stock tbody tr").click(function(){
             $(this).addClass('selected').siblings().removeClass('selected');
             let value=$(this).data('specid');
             //alert(value);
@@ -172,8 +178,8 @@
                         '<td role="columnheader" data-col3="Custo (€)">'+v["cost"]+'</td>' +
                         '<td role="columnheader" data-col4="Descrição">'+v["description"]+'</td>' +
                         '<td role="columnheader" data-col5="Atualizado Por">'+v["name"]+'</td>' +
-                        '<td role="columnheader" data-col6="Última Atualização">'+v["updated_at"]+'</td>' +
-                        '<td role="columnheader" data-col7="Fatura"><img style="width: 50px" src="../../storage/'+v["receipt"]+'"></td></tr>';
+                        '<td role="columnheader" data-col6="Última Atualização">'+v["created_at"]+'</td>' +
+                        '<td role="columnheader" data-col7="Anexo"><a href="../../storage/'+v["receipt"]+'" target="_blank">'+v['receipt'].substr(v['receipt'].length - 3)+'</a></td></tr>';
                 });
                 $(".stock-history tbody").empty();
                 $(".stock-history tbody").append(toAppend);
@@ -182,7 +188,7 @@
             $("#history").modal('show');
         });
 
-        $('#edit, #delete').click(function(event){
+        $('#edit, #delete, #email').click(function(event){
             event.stopPropagation();
         });
 

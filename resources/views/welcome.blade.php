@@ -91,7 +91,7 @@
                     INDMEI - Fabrico de Meias, Lda
                 </div>
 
-                <a href="{{ url('/home') }}">
+                <a href="{{ Auth::id() ? url('/home') : url('login') }}">
                     <img src="{{asset('images/empresa.png')}}" style="max-width: 100%">
                 </a>
                 <h3><a href="{{ url('/home') }}">Clique para entrar</a></h3>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Client;
 use App\Mail\sendSimpleEmail;
 use App\Supplier;
+use App\WarehouseProductSpec;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -19,7 +20,7 @@ class EmailController extends Controller
     public function index()
     {
 
-        Auth::user()->authorizeRoles(['1', '3', '5', '7']);
+        Auth::user()->authorizeRoles(['1', '3', '4', '5', '7']);
 
         return view('emails.list');
     }
@@ -29,15 +30,27 @@ class EmailController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($stock_id = null)
     {
+        //dd($stock_id);
 
-        Auth::user()->authorizeRoles(['1', '3', '5', '7']);
+        if(@$stock_id) {
+            $prodSpec = WarehouseProductSpec::where('id', $stock_id)->first();
+            $prodSpecArray = [];
+            $prodSpecArray['descrição'] = $prodSpec->description;
+            $prodSpecArray['referência'] = $prodSpec->product->reference;
+            $prodSpecArray['cor'] = $prodSpec->color;
+            $prodSpecArray['peso liquido'] = $prodSpec->liquid_weight;
+            $prodSpecArray['peso bruto'] = $prodSpec->gross_weight;
+            $prodSpecArray['custo pago por kg'] = $prodSpec->cost;
+        }
+
+        Auth::user()->authorizeRoles(['1', '3', '4', '5', '7']);
 
         $clients = Client::all();
         $suppliers = Supplier::all();
 
-        return view('emails.create', compact('clients', 'suppliers'));
+        return view('emails.create', compact('clients', 'suppliers', 'prodSpecArray'));
     }
 
     /**

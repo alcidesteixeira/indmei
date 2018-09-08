@@ -69,7 +69,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 //Emails
     Route::get('/email/list', 'EmailController@index');
-    Route::get('/email/create', 'EmailController@create');
+    Route::get('/email/create/{stock_id?}', 'EmailController@create');
     Route::post('/email/send', 'EmailController@send');
 
 //Orders
@@ -80,6 +80,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/orders/edit/{id}', 'OrderController@edit');
     Route::post('/orders/update/{id}', 'OrderController@update');
     Route::get('/orders/delete/{id}', 'OrderController@destroy');
+//Orders
+    Route::get('/order/production/{id}', 'OrderProductionController@list');
+    Route::get('/order/production/insert/{id}/{id_user?}', 'OrderProductionController@create');
+    Route::post('/order/production/update/{id}', 'OrderProductionController@update');
+    Route::get('/to/subtract/{id}', 'OrderProductionController@toSubtract');
 
 //Suppliers
     Route::get('/suppliers/list', 'SupplierController@index');
@@ -97,13 +102,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/clients/update/{id}', 'ClientController@update');
     Route::get('/clients/delete/{id}', 'ClientController@destroy');
 
-//Orders
-    Route::get('/order/production/{id}', 'OrderProductionController@list');
-    Route::get('/order/production/insert/{id}/{id_user?}', 'OrderProductionController@create');
-    Route::post('/order/production/update/{id}', 'OrderProductionController@update');
-    Route::get('/to/subtract/{id}', 'OrderProductionController@toSubtract');
-
 //Emails
     Route::get('/email/manage', 'OrderProductionController@toSubtract');
+
+//Stats
+    Route::get('/stats', 'StatisticsController@index');
 
 });
