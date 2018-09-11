@@ -107,5 +107,6 @@ Route::group(['middleware' => 'auth'], function () {
 
 //Stats
     Route::get('/stats', 'StatisticsController@index');
+    Route::post('/stats/update', 'StatisticsController@update');
 
 });

@@ -25,3 +25,8 @@
         /*border: solid;*/
     /*}*/
 /*}*/
+
+.btn-info {
+    background-color: #17a2b8 !important;
+    color: #fff !important;
+}

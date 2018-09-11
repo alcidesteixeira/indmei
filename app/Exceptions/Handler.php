@@ -48,14 +48,17 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-//        dd($exception->getMessage());
+        //dd($exception->getStatusCode());
 //        dd("a");
         if($exception->getMessage() == 'Unauthenticated.') {
            return response()->view('errors.500');
-            return view('welcome');
+            //return view('welcome');
+        }
+        else if($exception->getStatusCode() == 405) {
+            return response()->view('welcome');
         }
         else if($exception->getStatusCode() !== 404) {
-            dd("asd");
+            //dd("asd");
             $message = $exception->getMessage();
             $file = $exception->getFile();
             $line = $exception->getLine();

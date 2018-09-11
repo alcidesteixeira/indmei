@@ -6,22 +6,30 @@
 
 <div class="container" style="margin-bottom: 50px;">
 
-    <div class="row">
-        <div class="form-group col-md-6">
-            <label for="delivery_date">Data de início:</label>
-            <input type="date" class="form-control" name="start_date" value="{{@$order->start_date}}" required>
+    <form method="POST" id="form" action="{{ url('/stats/update') }}">
+        @csrf
+        <div class="row">
+            <div class="form-group col-md-6">
+                <label for="delivery_date">Data de início:</label>
+                <input type="date" class="form-control" name="start_date" value="{{$start_date}}" required>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="delivery_date">Data de fim:</label>
+                <input type="date" class="form-control" name="end_date" value="{{$end_date}}" required>
+            </div>
+            <div class="form-group col-md-12">
+                <label for="delivery_date">Tipo de filtro:</label>
+                <input type="button" class="btn {{$filter == 'Dia' ? 'btn-info' : ''}} form-control col-sm-2" name="daily" value="Dia">
+                <input type="button" class="btn {{$filter == 'Mês' ? 'btn-info' : ''}} form-control col-sm-2" name="monthly" value="Mês">
+                <input type="button" class="btn {{$filter == 'Ano' ? 'btn-info' : ''}} form-control col-sm-2" name="yearly" value="Ano">
+                <input type="hidden" id="filter" name="filter">
+                <button type="submit" class="btn btn-primary" style="float:right">
+                    Submeter
+                </button>
+            </div>
         </div>
-        <div class="form-group col-md-6">
-            <label for="delivery_date">Data de fim:</label>
-            <input type="date" class="form-control" name="end_date" value="{{@$order->end_date}}" required>
-        </div>
-        <div class="form-group col-md-12">
-            <label for="delivery_date">Tipo de filtro:</label>
-            <button class="btn form-control" value="">Dia</button>
-            <button class="btn form-control" value="">Mês</button>
-            <button class="btn form-control" value="">Ano</button>
-        </div>
-    </div>
+
+    </form>
 
 
     <div class="row" style="margin-bottom: 30px;">
@@ -46,25 +54,66 @@
     </div>
 </div>
 
-<script>
-    $(".btn").click( function () {
-        $("this").toggleClass('btn-info');
-    });
-</script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
 
+
 <script>
+    $(".btn").click( function () {
+        $(".btn").removeClass("btn-info");
+        $( this ).addClass("btn-info");
+    });
+
+    $(document).ready(function () {
+        //Verificar pelo que é feito o Filtro
+        let filter = $("input:button").val();
+
+        $("input:button").click( function () {
+           filter = $(this).val();
+
+        });
+
+        $("#form").submit( function () {
+            $("#filter").val(filter);
+        });
+    });
+
+
+
+</script>
+
+<script>
+
+    //Obter os Resultados do Gráfico 1
+    let socksData = {!! json_encode($socks) !!};
+    let socks = [];
+    // console.log(socksData);
+
+    //Obter a Label
+    let labelArr = {!! json_encode($label) !!};
+    let label = [];
+    $.each(labelArr, function (k, v) {
+        label.push(v);
+        if(socksData[v]) {
+            socks.push(socksData[v]);
+        } else {
+            socks.push(0);
+        }
+    });
+    // console.log(label);
+    // console.log(socks);
+
+
     //Gráfico 1
     var ctx1 = document.getElementById("myChart1").getContext('2d');
     var myChart1 = new Chart(ctx1, {
         type: 'line',
         data: {
-            labels: [1500,1600,1700,1750,1800,1850,1900,1950,1999,2050],
+            labels: label,
             datasets: [{
-                data: [282,350,411,502,635,809,947,1402,3700,5267],
-                label: "Asia",
+                data: socks,
+                label: "Meias Produzidas",
                 borderColor: "#8e5ea2",
                 fill: false
             }]
