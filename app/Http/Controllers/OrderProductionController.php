@@ -124,6 +124,14 @@ class OrderProductionController extends Controller
             }
         }
 
+        //FALTA ATUALIZAR OS VALORES GASTOS EM ARMAZÉM
+        //ATUALIZA HISTÓRICO DO PRODUTO DEPOIS DE INSERIR OS PARES PRODUZIDOS DO DIA
+        $order = Order::where('id', $id)->first();
+        $wireSpent = new Order();
+        $wireSpent = $wireSpent->addRowToStockHistory ($order, $id);
+
+//        dd($wireSpent);
+
 
         flash('Valores atualizador para o dia: '. Carbon::now(). ' com sucesso!')->success();
 

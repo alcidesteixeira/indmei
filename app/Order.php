@@ -142,6 +142,7 @@ class Order extends Model
      */
     public function addRowToStockHistory ($request, $id) {
 
+        //Request da Order e Id da Order
         //dd($request->all());
 
         $wires = $this->checkWireSpentInOnePair($request);
