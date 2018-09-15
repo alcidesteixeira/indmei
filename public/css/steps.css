@@ -1,3 +1,20 @@
+
+.btn-highlighted {
+    width: 70px;
+    height: 70px;
+    border: 2px solid #4285F4;
+    color: #4285F4 !important;
+    background-color: white !important;
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+    border-radius: 50%;
+    padding: 15px 18px 15px 18px;
+    margin-top: -22px;
+}
+
+[type=reset], [type=submit], button, html [type=button] {
+     -webkit-appearance: none;
+}
+
 .steps-form-2 {
     display: table;
     width: 100%;
@@ -34,6 +51,22 @@
     border: 2px solid #4285F4;
     color: #4285F4 !important;
     background-color: white !important; }
-.steps-form-2 .steps-row-2 .steps-step-2 .btn-circle-2 .fa {
+.steps-form-2 .steps-row-2 .steps-step-2 .btn-circle-2 .fas, .fab, .btn-highlighted {
     font-size: 1.7rem; }
-Vertical registration form steps
+
+@media (max-width:767px) {
+    .display-big {
+        display: none;
+    }
+    .display-small {
+         display: inherit;
+     }
+}
+@media (min-width:768px) {
+    .display-big {
+        display: inherit;
+    }
+    .display-small {
+        display: none;
+    }
+}

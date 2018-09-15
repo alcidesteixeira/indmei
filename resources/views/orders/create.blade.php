@@ -9,31 +9,55 @@
     <div class="container">
         @include('flash::message')
         <h2>{{@$order->client_identifier ? 'Atualizar Encomenda' : 'Criar Nova Encomenda'}}</h2><br/>
-        <form method="post" action="{{@$order->client_identifier ? url('orders/update/'.$order->id) : url('orders/create')}}" enctype="multipart/form-data">
+        <form method="post" id="sendOrder" action="{{@$order->client_identifier ? url('orders/update/'.$order->id) : url('orders/create')}}" enctype="multipart/form-data">
             @csrf
-            <div class="row">
-                <div class="form-group col-md-3">
-                    <label for="Status">Status:</label>
-                    <select class="form-control" name="status_id">
+            <input type="text" name="status_id" id="status_id">
+            <div class="row display-small">
+                <div class="form-group col-sm-6">
+                    <label for="status_id">Status:</label>
+                    <select class="form-control" id="viaSelect">
                         @foreach($statuses as $status)
                             <option value="{{$status->id}}" {{$status->id == @$order->status_id ? 'selected' : ''}}>{{$status->status}}</option>
                         @endforeach
                     </select>
                 </div>
             </div>
-            <div class="steps-form-2">
-                <div class="steps-row-2 setup-panel-2 d-flex justify-content-between">
-                    <div class="steps-step-2">
-                        <a href="#step-1" type="button" class="btn btn-amber btn-circle-2 waves-effect ml-0" data-toggle="tooltip" data-placement="top" title="Basic Information"><i class="fa fa-folder-open-o" aria-hidden="true"></i></a>
-                    </div>
-                    <div class="steps-step-2">
-                        <a href="#step-2" type="button" class="btn btn-blue-grey btn-circle-2 waves-effect" data-toggle="tooltip" data-placement="top" title="Personal Data"><i class="fa fa-pencil" aria-hidden="true"></i></a>
-                    </div>
-                    <div class="steps-step-2">
-                        <a href="#step-3" type="button" class="btn btn-blue-grey btn-circle-2 waves-effect" data-toggle="tooltip" data-placement="top" title="Terms and Conditions"><i class="fa fa-photo" aria-hidden="true"></i></a>
-                    </div>
-                    <div class="steps-step-2">
-                        <a href="#step-4" type="button" class="btn btn-blue-grey btn-circle-2 waves-effect mr-0" data-toggle="tooltip" data-placement="top" title="Finish"><i class="fa fa-check" aria-hidden="true"></i></a>
+            <div class="row display-big" style="margin-bottom: 20px;">
+                <label for="Status" style="margin-bottom: 40px;">Status:</label>
+                <div class="steps-form-2">
+                    <div class="steps-row-2 setup-panel-2 d-flex justify-content-between">
+                        <div class="steps-step-2">
+                            <a href="#" id="step-1" data-id="1" type="button" class="btn btn-blue-grey {{@$order->status_id < 1 ? 'btn-circle-2' : 'btn-highlighted' }} waves-effect ml-0" data-toggle="tooltip" data-placement="top" title="Encomenda Recebida">
+                                <i class="fas fa-folder-open"></i></a>
+                        </div>
+                        <div class="steps-step-2">
+                            <a href="#" id="step-2" data-id="2" type="button" class="btn btn-blue-grey {{@$order->status_id < 2 ? 'btn-circle-2' : 'btn-highlighted' }}  waves-effect" data-toggle="tooltip" data-placement="top" title="A Produzir Amostra">
+                                <i class="fas fa-shoe-prints"></i></a>
+                        </div>
+                        <div class="steps-step-2">
+                            <a href="#" id="step-3" data-id="3" type="button" class="btn btn-blue-grey {{@$order->status_id < 3 ? 'btn-circle-2' : 'btn-highlighted' }} waves-effect" data-toggle="tooltip" data-placement="top" title="A Criar Orçamento">
+                                <i class="fas fa-money-bill-wave"></i></a>
+                        </div>
+                        <div class="steps-step-2">
+                            <a href="#" id="step-4" data-id="4" type="button" class="btn btn-blue-grey {{@$order->status_id < 4 ? 'btn-circle-2' : 'btn-highlighted' }} waves-effect mr-0" data-toggle="tooltip" data-placement="top" title="A Aguardar Resposta do Cliente">
+                                <i class="fas fa-user-tie"></i></a>
+                        </div>
+                        <div class="steps-step-2">
+                            <a href="#" id="step-5" data-id="5" type="button" class="btn btn-blue-grey {{@$order->status_id < 5 ? 'btn-circle-2' : 'btn-highlighted' }} waves-effect mr-0" data-toggle="tooltip" data-placement="top" title="Em Produção">
+                                <i class="fab fa-product-hunt"></i></a>
+                        </div>
+                        <div class="steps-step-2">
+                            <a href="#" id="step-6" data-id="6" type="button" class="btn btn-blue-grey {{@$order->status_id < 6 ? 'btn-circle-2' : 'btn-highlighted' }} waves-effect mr-0" data-toggle="tooltip" data-placement="top" title="À Espera de Matéria-Prima">
+                                <i class="fas fa-warehouse"></i></a>
+                        </div>
+                        <div class="steps-step-2">
+                            <a href="#" id="step-7" data-id="7" type="button" class="btn btn-blue-grey {{@$order->status_id < 7 ? 'btn-circle-2' : 'btn-highlighted' }} waves-effect mr-0" data-toggle="tooltip" data-placement="top" title="Produzido">
+                                <i class="fas fa-check" aria-hidden="true"></i></a>
+                        </div>
+                        <div class="steps-step-2">
+                            <a href="#" id="step-8" data-id="8" type="button" class="btn btn-blue-grey {{@$order->status_id < 8 ? 'btn-circle-2' : 'btn-highlighted' }} waves-effect mr-0" data-toggle="tooltip" data-placement="top" title="Em Distribuição">
+                                <i class="fas fa-truck-moving"></i></a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -216,5 +240,35 @@
             $("#pedido3").text(parseInt($("#tamanho31").val())+parseInt($("#tamanho32").val())+parseInt($("#tamanho33").val())+parseInt($("#tamanho34").val()));
             $("#pedido4").text(parseInt($("#tamanho41").val())+parseInt($("#tamanho42").val())+parseInt($("#tamanho43").val())+parseInt($("#tamanho44").val()));
         }
+
+        //Behaviour of the changed status on desktop
+        $(".btn-blue-grey").click( function() {
+            let id = $( this ).data('id');
+            //alert(id);
+            $(".btn-blue-grey").removeClass('btn-highlighted');
+            $(".btn-blue-grey").addClass('btn-circle-2');
+            for(let i = 1; i <= id; i++) {
+                $( "#step-"+i ).removeClass('btn-circle-2');
+                $( "#step-"+i ).addClass('btn-highlighted');
+            }
+        });
+
+        $(document).ready(function () {
+            $("#sendOrder").submit( function() {
+                let width = $( "body" ).width();
+                if(width >= 752) {
+                    //armazenar valor de desktop
+                    let status1 = $(".btn-highlighted").length;
+                    $("#status_id").val(status1);
+                }
+                else {
+                    //armazenar valor de mobile
+                    let status2 = $("#viaSelect").val();
+                    $("#status_id").val(status2);
+                }
+            });
+        });
+
+
     </script>
 @endsection
