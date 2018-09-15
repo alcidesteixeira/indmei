@@ -11,7 +11,8 @@
         <h2>{{@$order->client_identifier ? 'Atualizar Encomenda' : 'Criar Nova Encomenda'}}</h2><br/>
         <form method="post" id="sendOrder" action="{{@$order->client_identifier ? url('orders/update/'.$order->id) : url('orders/create')}}" enctype="multipart/form-data">
             @csrf
-            <input type="text" name="status_id" id="status_id">
+            {{--Envio do status para desktop e mobile comum--}}
+            <input type="hidden" name="status_id" id="status_id">
             <div class="row display-small">
                 <div class="form-group col-sm-6">
                     <label for="status_id">Status:</label>
@@ -27,7 +28,7 @@
                 <div class="steps-form-2">
                     <div class="steps-row-2 setup-panel-2 d-flex justify-content-between">
                         <div class="steps-step-2">
-                            <a href="#" id="step-1" data-id="1" type="button" class="btn btn-blue-grey {{@$order->status_id < 1 ? 'btn-circle-2' : 'btn-highlighted' }} waves-effect ml-0" data-toggle="tooltip" data-placement="top" title="Encomenda Recebida">
+                            <a href="#" id="step-1" data-id="1" type="button" class="btn btn-blue-grey btn-highlighted waves-effect ml-0" data-toggle="tooltip" data-placement="top" title="Encomenda Recebida">
                                 <i class="fas fa-folder-open"></i></a>
                         </div>
                         <div class="steps-step-2">

@@ -249,7 +249,7 @@
         </div>
 
 
-        <form method="post" action="{{url('order/production/update/'.$order->id)}}" enctype="multipart/form-data">
+        <form method="post" id="submitToday" action="{{url('order/production/update/'.$order->id)}}" enctype="multipart/form-data">
             @csrf
             <div class="row">
 
@@ -365,6 +365,40 @@
                         valFromDB = arraySub['cor'+i+j];
                     }
                     $(".missing"+j+i).text($("#tam"+j+i).text() - valFromDB - arrayToSubtract['cor'+i+j]);
+
+                    //Alterar a cor de acordo com os valores que faltem
+                    let delivery = "{{$order->delivery_date}}";
+                    let d = new Date(),
+                        month = '' + (d.getMonth() + 1),
+                        day = '' + d.getDate(),
+                        year = d.getFullYear();
+
+                    if (month.length < 2) month = '0' + month;
+                    if (day.length < 2) day = '0' + day;
+
+                    let today = [year, month, day].join('-');
+                    if(delivery >= today) {
+                        //ainda falta tempo - verde
+                        if($(".missing"+j+i).text() <= 0) {
+                            $(".missing"+j+i).removeClass('btn-danger');
+                            $(".missing"+j+i).addClass('btn-success');
+                        }
+                        else {
+                            $(".missing"+j+i).removeClass('btn-success');
+                        }
+                    }
+                    else {
+                        if($(".missing"+j+i).text() > 0) {
+                            //Sem mais prazo - se nao estiver a zero, meter vermelho vermelho
+                            $(".missing"+j+i).removeClass('btn-success');
+                            $(".missing"+j+i).addClass('btn-danger');
+                        }
+                        else {
+                            $(".missing"+j+i).removeClass('btn-danger');
+                            $(".missing"+j+i).addClass('btn-success');
+                        }
+                    }
+                    //Fim de alterar a cor de acordo com os valores que faltem
                 }
             }
             //END - Retorna um array com todos os valores somados que se terão de subtrair ao total - END
@@ -407,6 +441,22 @@
             }
         }
 
+    </script>
+
+    <script>
+    //Enviar email caso a encomenda esteja concluída
+        $("#submitToday").submit( function () {
+           let allDone = $(".btn-success").length;
+           if(allDone == 17){
+               //Enviar email
+               $.ajax({
+                   url: "/order/ended/"+{!! $order->id !!},
+                   success: function(result){
+                       console.log("success");
+                   }
+               });
+           }
+        });
     </script>
 
 @endsection

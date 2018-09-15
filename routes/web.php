@@ -85,6 +85,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/order/production/insert/{id}/{id_user?}', 'OrderProductionController@create');
     Route::post('/order/production/update/{id}', 'OrderProductionController@update');
     Route::get('/to/subtract/{id}', 'OrderProductionController@toSubtract');
+    Route::get('/order/ended/{id}', 'OrderProductionController@orderEnded');
 
 //Suppliers
     Route::get('/suppliers/list', 'SupplierController@index');

@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\sendSimpleEmail;
 use App\Order;
 use App\OrderProduction;
+use App\Role;
 use App\SampleArticleGuiafio;
 use App\SampleArticleStep;
 use App\WarehouseProduct;
@@ -12,6 +14,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class OrderProductionController extends Controller
 {
@@ -154,5 +157,26 @@ class OrderProductionController extends Controller
             $arrayTotals['cor'.$total->tamanho.$total->cor] = abs($total->total);
         }
         return($arrayTotals);
+    }
+
+    public function orderEnded($id) {
+        $order = Order::where('id', $id)->first();
+
+        //Enviar email para criadores de encomendas indicando que uma amostra acabou de ser criada
+        $users = Role::find(4)->users()->orderBy('name')->get();
+        $subject = "Encomenda finalizada.";
+        $body = "A encomenda abaixo descrita está finalizada: 
+                <br>Nome do Cliente: ". $order->client->client ."
+                <br>Identificador do Cliente: ". $order->client_identifier ."
+                <br>Data de entrega da encomenda: ". $order->delivery_date ."
+                <br>Descrição da encomenda: ". $order->description ."
+                <br><br>
+                Para aceder à encomenda, dirija-se à plataforma, ou clique 
+                <a href='".url("/orders/list/")."' target='_blank'>aqui</a>.";
+        foreach($users as $user) {
+            Mail::to($user->email)->send(new sendSimpleEmail($subject, $body));
+        }
+
+        return ("email sended");
     }
 }

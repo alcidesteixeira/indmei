@@ -3,12 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Client;
+use App\Mail\sendSimpleEmail;
 use App\Order;
 use App\OrderStatus;
 use App\Quotation;
+use App\Role;
 use App\Supplier;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class QuotationController extends Controller
 {
@@ -44,6 +47,21 @@ class QuotationController extends Controller
             ',<br>Total: ' . $request->total_sent;
 
         //dd($content);
+
+        //Enviar email para criadores de encomendas indicando que um orçamento acabou de ser criado
+        $users = Role::find(4)->users()->orderBy('name')->get();
+        $subject = "Novo orçamento efetuado.";
+        $body = "Foi efetuada a orçamentação do produto descrito abaixo, e enviada ao cliente: 
+                        <br>Identificador do Cliente: ". $order->client_identifier ."
+                        <br>Cliente: ". $order->client->client ."
+                        <br><br>
+                        Para aceder à encomenda, dirija-se à plataforma, ou clique 
+                        <a href='".url("/orders/list/")."' target='_blank'>aqui</a>.";
+        foreach($users as $user) {
+            Mail::to($user->email)->send(new sendSimpleEmail($subject, $body));
+        }
+
+
             flash('Orçamento para a encomenda com Identificador: '. $order->client_identifier. ' do Cliente: ' . $order->client->client . ' foi criado com sucesso!<br>
                             Edite o email para enviar ao cliente que pretende.')->success();
 
@@ -110,6 +128,19 @@ class QuotationController extends Controller
             ',<br>Outros Custos: ' . $request->other_costs .
             ',<br>Total: ' . $request->total_sent;
 
+
+        //Enviar email para criadores de encomendas indicando que um orçamento acabou de ser criado
+        $users = Role::find(4)->users()->orderBy('name')->get();
+        $subject = "Novo orçamento efetuado.";
+        $body = "Foi efetuada a orçamentação do produto descrito abaixo, e enviada ao cliente: 
+                        <br>Identificador do Cliente: ". $order->client_identifier ."
+                        <br>Cliente: ". $order->client->client ."
+                        <br><br>
+                        Para aceder à encomenda, dirija-se à plataforma, ou clique 
+                        <a href='".url("/orders/list/")."' target='_blank'>aqui</a>.";
+        foreach($users as $user) {
+            Mail::to($user->email)->send(new sendSimpleEmail($subject, $body));
+        }
 
         flash('Orçamento para a encomenda com Identificador: '. $order->client_identifier. ' do Cliente: ' . $order->client->client . ' foi atualizado com sucesso!<br>
                             Edite o email para enviar ao cliente que pretende.')->success();
