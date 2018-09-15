@@ -38,6 +38,12 @@
             </tbody>
         </table>
     </div>
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="form-group col-md-6" style="margin-top:60px;margin-bottom:40px;">
+            <button type="button" style="float:right" onclick="window.history.back();" class="btn btn-info col-md-5">Voltar</button>
+        </div>
+    </div>
 
     <script>
 
