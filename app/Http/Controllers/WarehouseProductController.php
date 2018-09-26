@@ -196,7 +196,7 @@ class WarehouseProductController extends Controller
 
         Auth::user()->authorizeRoles(['1', '5']);
 
-        if(!str_contains($request->file('receipt')->getClientOriginalName(), ['pdf', 'jpg', 'png', 'gif'])) {
+        if(!str_contains($request->file('receipt')->getClientOriginalName(), ['pdf', 'jpg', 'png', 'gif', 'JPG', 'PNG', 'GIF'])) {
             flash('Por favor, insira uma extensão válida. (.pdf, .jpeg, .png, .gif)')->error();
 
             return redirect()->action('WarehouseProductController@receipt');

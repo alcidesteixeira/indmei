@@ -74,7 +74,7 @@ class OrderController extends Controller
 
         if(@$request->order_files_id) {
             foreach ($request->order_files_id as $order_files_id) {
-                if (!str_contains($order_files_id->getClientOriginalName(), ['pdf', 'jpg', 'png', 'gif'])) {
+                if (!str_contains($order_files_id->getClientOriginalName(), ['pdf', 'jpg', 'png', 'gif', 'JPG', 'PNG', 'GIF'])) {
                     flash('Por favor, insira uma extensão válida. (.pdf, .jpeg, .png, .gif)')->error();
 
                     return redirect()->back();
@@ -237,7 +237,7 @@ class OrderController extends Controller
         if(@$request->order_files_id) {
             foreach ($request->order_files_id as $order_files_id) {
                 //dd($order_files_id);
-                if (!str_contains($order_files_id->getClientOriginalName(), ['pdf', 'jpg', 'png', 'gif'])) {
+                if (!str_contains($order_files_id->getClientOriginalName(), ['pdf', 'jpg', 'png', 'gif', 'JPG', 'PNG', 'GIF'])) {
                     flash('Por favor, insira uma extensão válida. (.pdf, .jpeg, .png, .gif)')->error();
 
                     return redirect()->back();
