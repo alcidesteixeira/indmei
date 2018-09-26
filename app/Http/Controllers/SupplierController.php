@@ -107,19 +107,9 @@ class SupplierController extends Controller
 
         $supplier = Supplier::find($id);
 
-        $ordersWithThisSupplier = Supplier::find($id)->orders()->first();
-        //dd($usersWithThisRole);
-        if($ordersWithThisSupplier) {
+        $supplier->delete();
 
-            flash('Atenção! O Fornecedor '. $supplier->supplier . ' não pode ser eliminado pois está associado a alguma encomenda! <br> Altere o fornecedor da encomenda antes de poder apagar o fornecedor!')->error();
-
-        }
-        else {
-
-            $supplier->delete();
-
-            flash('Fornecedor '. $supplier->supplier . ' foi eliminado com sucesso!')->success();
-        }
+        flash('Fornecedor '. $supplier->supplier . ' foi eliminado com sucesso!')->success();
 
         return redirect()->action('SupplierController@index');
     }
