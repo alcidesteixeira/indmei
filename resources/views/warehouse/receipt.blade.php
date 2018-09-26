@@ -25,7 +25,7 @@
             <div class="col-md-3"></div>
             <div class="form-group col-md-6">
                 <h2 class="new2">Nova entrada de matéria-prima:</h2>
-                <h2 style="display:none;" class="new2">Atualizar matéria-prima:</h2>
+                <h2 style="display:none;" class="new2">Criar matéria-prima:</h2>
             </div>
         </div>
 
