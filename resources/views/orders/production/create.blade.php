@@ -124,6 +124,8 @@
                 <tbody>
 
                 @for($i = 1; $i < sizeof($steps); $i++)
+                    {{--Esconder linhas com gramas iguais a zero--}}
+                    @if($order->sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->grams !== '0')
                     <tr>
                         <td data-col1="Guiafios">
                                 @foreach($guiafios as $guia)
@@ -194,6 +196,7 @@
                             @endif
                         </td>
                     </tr>
+                    @endif
                 @endfor
             </tbody>
         </table>
