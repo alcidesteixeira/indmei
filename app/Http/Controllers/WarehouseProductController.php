@@ -80,7 +80,6 @@ class WarehouseProductController extends Controller
         $warehouseProduct->save();
 
         //Store on WarehouseProductSpec Class
-
         $spec = new WarehouseProductSpec();
         $spec->warehouse_product_id = $warehouseProduct->id;
         $spec->description = $request->description;
@@ -90,6 +89,21 @@ class WarehouseProductController extends Controller
         $spec->cost = $request->cost;
         $spec->threshold = $request->threshold;
         $spec->save();
+
+        //Inserir no history
+        DB::table('warehouse_products_history')
+            ->insert([
+                'warehouse_product_spec_id' => $spec->id,
+                'user_id' => Auth::id(),
+                'inout' => 'IN',
+                'weight' => $request->liquid_weight,
+                'cost' => $request->cost,
+                'description' => $request->description,
+                'receipt' => 'receipts/na.jpg',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
+            ]
+        );
 
         flash('Matéria-Prima com a referência: "'. $warehouseProduct->reference . '", e descrição: "'. $spec->description .'" foi criada com sucesso!')->success();
 
