@@ -121,7 +121,7 @@
         $( document ).ready( function () {
             //Filter and order table
             $('#stock').DataTable({
-                columnDefs: [ { orderable: false, targets: [-1, -2] } ],
+                columnDefs: [ { orderable: false, targets: [-1, -2,-3] } ],
                 "pageLength": 10,
                 dom: 'lBfrtip',
                 buttons: [
@@ -153,7 +153,7 @@
                 let id = $( this ).data('id');
                 let name = $( this ).data('role');
                 $(".modal-body").append('');
-                $(".modal-body").append('<p>Amostra de Artigo: ' + name + '</p>');
+                $(".modal-body").append('<p>Matéria-prima: ' + name + '</p>');
                 $('#apagar').attr('action', 'delete/'+id);
                 $("#modalApagar").modal('show');
             });

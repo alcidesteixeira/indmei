@@ -82,7 +82,7 @@ class StatisticsController extends Controller
 
         $i = 0;
         $g4Data = [];
-        //Para cada cliente, obter o valor enviado, por dia, para os clientes
+        //Para cada cliente, obter o valor enviado no orçamento, por dia, para os clientes
         foreach($clientes as $client) {
             $quotPerDate = [];
 

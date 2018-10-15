@@ -336,14 +336,14 @@ class SampleArticleController extends Controller
 
         //dd($sampleArticle->sampleArticleWires()->get()->pluck('id')->toArray());
 
-        $isLastStatus = $sampleArticle->where('sample_article_status_id', '6')->first();
+        $isUsed = Order::where('sample_article_id', $id)->first();
 
         //dd($isNotLastStatus);
 
-        if($isLastStatus) {
+        if($isUsed) {
 
-            flash('Atenção! A Amostra de Artigo com a referência '. $sampleArticle->reference . ' não pode ser eliminado pois ainda não se encontra no estado "Em Distribuição"!
-                <br> Altere o estado do Artigo para "Em distribuição" antes de poder apagar a Amostra de Artigo!')->error();
+            flash('Atenção! A Amostra de Artigo com a referência '. $sampleArticle->reference . ' não pode ser eliminado pois encontra-se associado a Encomendas!
+                <br> Remova esta amostra das encomendas para poder ser eliminada!')->error();
 
         }
         else {

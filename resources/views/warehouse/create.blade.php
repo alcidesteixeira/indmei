@@ -42,15 +42,23 @@
                     <input type="text" class="form-control" name="liquid_weight" value="{{@$stock->liquid_weight}}" required {{@$stock->product->reference ? 'readonly' : ''}}>
                 </div>
                 <div class="form-group col-md-1">
-                    <button style="margin-top:31px;" type="button" onclick="window.location = '/stock/receipt';" class="btn btn-warning">Ajustar</button>
+                    <button style="margin-top:31px;" type="button" onclick="window.location = '/stock/receipt';" class="btn btn-warning"{{@$stock->product->reference ? '' : 'disabled'}}>Ajustar</button>
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-md-3"></div>
                 <div class="form-group col-md-6">
-                    <label for="threshold">Valor de aviso mínimo:</label>
+                    <label for="threshold">Valor de aviso mínimo (Kg):</label>
                     <input type="number" step="0.01" class="form-control" name="threshold" value="{{@$stock->threshold}}" required>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3"></div>
+                <div class="form-group col-md-6">
+                    <label for="cost">Custo por Kg:</label>
+                    <input type="number" step="0.01" class="form-control" id="cost" name="cost" value="{{@$stock->cost}}" required>
                 </div>
             </div>
 

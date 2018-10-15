@@ -246,6 +246,7 @@
         obj = {};
     });
 
+    console.log(label);
     console.log(arrayData4);
     //Gráfico 4
     var ctx4 = document.getElementById("myChart4").getContext('2d');
@@ -258,7 +259,7 @@
         options: {
             title: {
                 display: false,
-                text: 'World population per region (in millions)'
+                text: ''
             }
         }
     });

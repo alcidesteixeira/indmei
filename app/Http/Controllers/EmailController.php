@@ -60,10 +60,9 @@ class EmailController extends Controller
      */
     public function send(Request $request)
     {
-
         Auth::user()->authorizeRoles(['1', '3', '5', '7']);
 
-        $receiver = $request->client !== '0' ? $request->client : $request->new_address;
+        $receiver = $request->client !== '0' ? $request->client : $request->client ? $request->client : $request->new_address;
 
         Mail::to($receiver)->send(new sendSimpleEmail($request->subject, $request->body2));
 

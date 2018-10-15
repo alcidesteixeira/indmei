@@ -132,7 +132,6 @@ class Order extends Model
         }
 
         //dd($paresPorCor);
-
         return ($paresPorCor);
         //FIM Selecionar as quantidades de pares de meias, POR COR, já executados
     }
