@@ -42,7 +42,7 @@
                     <input type="text" class="form-control" name="liquid_weight" value="{{@$stock->liquid_weight}}" required {{@$stock->product->reference ? 'readonly' : ''}}>
                 </div>
                 <div class="form-group col-md-1">
-                    <button style="margin-top:31px;" type="button" onclick="window.location = '/stock/receipt';" class="btn btn-warning"{{@$stock->product->reference ? '' : 'disabled'}}>Ajustar</button>
+                    <button style="margin-top:31px;" type="button" onclick="window.location = '{{url('/stock/receipt')}}';" class="btn btn-warning"{{@$stock->product->reference ? '' : 'disabled'}}>Ajustar</button>
                 </div>
             </div>
 
