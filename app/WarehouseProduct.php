@@ -69,10 +69,8 @@ class WarehouseProduct extends Model
                     }
                 }
             }
-
             //Apenas atualiza os valores de stock que sofreram alterações
             $currentValsStored = WarehouseProductSpec::where('id', $product->id)->first();
-
             if(strcmp($currentValsStored->liquid_weight, $total_liquid) ||
                 strcmp($currentValsStored->gross_weight, $total_bruto) ||
                 strcmp($currentValsStored->cost, $cost)) {

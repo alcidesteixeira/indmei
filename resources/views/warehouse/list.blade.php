@@ -5,7 +5,7 @@
     <div class="container">
         @include('flash::message')
 
-        <h2>Stock de produtos disponíveis</h2>
+        <h2>Stock de matérias-primas disponíveis</h2>
         <table class="table table-striped thead-dark" id="stock" role="table">
             <thead role="rowgroup">
             <tr role="row">

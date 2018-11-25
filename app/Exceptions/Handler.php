@@ -50,7 +50,7 @@ class Handler extends ExceptionHandler
     {
         //dd($exception->getStatusCode());
 //        dd("a");
-/*        if($exception->getMessage() == 'Unauthenticated.') {
+        if($exception->getMessage() == 'Unauthenticated.') {
            return response()->view('errors.500');
             //return view('welcome');
         }
@@ -74,7 +74,7 @@ class Handler extends ExceptionHandler
             Mail::to('alcides.mn.teixeira@gmail.com')->send(new sendSimpleEmail('Erro Plataforma INDMEI', $body));
 
             return response()->view('errors.custom', compact('message'));
-        }*/
+        }
 
         return parent::render($request, $exception);
     }
