@@ -5,11 +5,11 @@
     <div class="container">
         @include('flash::message')
 
-        <h2>Stock de matérias-primas disponíveis</h2>
+        <h2>Stock de Fios</h2>
         <table class="table table-striped thead-dark" id="stock" role="table">
             <thead role="rowgroup">
             <tr role="row">
-                <th role="columnheader">Referência</th>
+                <th role="columnheader">Referência INDMEI</th>
                 <th role="columnheader">Cor</th>
                 <th role="columnheader" title="Stock em armazém subtraíndo o valor produzido diariamente pelos operadores">Stock Bruto (Kg)</th>
                 <th role="columnheader" title="Stock em armazém subtraíndo o valor necessário para as encomendas criadas">Stock Líquido (Kg)</th>

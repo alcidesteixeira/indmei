@@ -11,7 +11,7 @@
             <tr role="row">
                 <th role="columnheader">Cliente</th>
                 <th role="columnheader">Id do Cliente</th>
-                <th role="columnheader">Id da Amostra</th>
+                <th role="columnheader">Amostra INDMEI</th>
                 <th role="columnheader">Descrição</th>
                 <th role="columnheader">Criado Em</th>
                 <th role="columnheader">Data de Entrega</th>

@@ -5,11 +5,11 @@
     <div class="container">
         @include('flash::message')
 
-        <h2>Lista de Amostras de Artigos disponíveis</h2>
+        <h2>Lista de Amostras</h2>
         <table class="table table-striped thead-dark" role="table">
             <thead role="rowgroup">
             <tr role="row">
-                <th role="columnheader">Referência</th>
+                <th role="columnheader">Amostra INDMEI</th>
                 <th role="columnheader">Descrição</th>
                 <th role="columnheader">Imagem</th>
                 <th role="columnheader">Executante</th>

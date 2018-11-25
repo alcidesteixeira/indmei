@@ -117,7 +117,7 @@
             <div class="row">
                 <div class="col-md-3"></div>
                 <div class="form-group col-md-6">
-                    <label for="Description">Identificador INDMEI:</label>
+                    <label for="Description">Amostra INDMEI:</label>
                     <select class="form-control" name="sample_article_id" id="sampleArticleChange">
                         <option value=""></option>
                         @foreach($sampleArticles as $sample)

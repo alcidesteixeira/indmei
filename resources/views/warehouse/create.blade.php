@@ -15,7 +15,7 @@
             <div class="row">
                 <div class="col-md-3"></div>
                 <div class="form-group col-md-6">
-                    <label for="Reference">Referência:</label>
+                    <label for="Reference">Referência INDMEI:</label>
                     <input type="text" class="form-control" name="reference" value="{{@$stock->product->reference}}" required>
                 </div>
             </div>

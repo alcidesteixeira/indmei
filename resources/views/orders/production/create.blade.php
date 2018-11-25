@@ -22,12 +22,12 @@
     </style>
 
     <div class="container">
-        <h2>Atualizar Quantidade Produzida</h2><br/>
+        <h2>Folha de Produção</h2><br/>
 
             <div class="row">
                 <div class="col-md-3"></div>
                 <div class="form-group col-md-6">
-                    <label for="Description">Identificador INDMEI:</label>
+                    <label for="Description">Amostra INDMEI:</label>
                     <span style="font-weight: bold;">{{$order->sampleArticle->reference}}</span>
                 </div>
             </div>
@@ -114,7 +114,7 @@
                     <th>Guiafios</th>
                     <th>Step</th>
                     <th>Gramas</th>
-                    <th>Referência do Fio</th>
+                    <th>Referência INDMEI</th>
                     <th>Cor #1</th>
                     <th>Cor #2</th>
                     <th>Cor #3</th>
