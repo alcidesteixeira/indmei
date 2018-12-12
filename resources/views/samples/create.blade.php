@@ -285,7 +285,7 @@
         function requestWiresToDB (wireSelectedId, rowSelected)
         {
             $.ajax({
-                url: "http://www.indmei.net/samples/updatewirespecs/"+wireSelectedId,
+                url: "/samples/updatewirespecs/"+wireSelectedId,
                 success: function(result){
                     console.log(result);
                     $( "#row-"+rowSelected+"-color1, #row-"+rowSelected+"-color2, #row-"+rowSelected+"-color3, #row-"+rowSelected+"-color4").empty();
