@@ -285,10 +285,9 @@
         function requestWiresToDB (wireSelectedId, rowSelected)
         {
             $.ajax({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
                 url: "/samples/updatewirespecs/"+wireSelectedId,
+                contentType: "application/json",
+                type: "GET",
                 success: function(result){
                     console.log(result);
                     $( "#row-"+rowSelected+"-color1, #row-"+rowSelected+"-color2, #row-"+rowSelected+"-color3, #row-"+rowSelected+"-color4").empty();
