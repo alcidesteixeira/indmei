@@ -190,7 +190,6 @@ class SampleArticleController extends Controller
 
     public function updateWireSpecs($id)
     {
-        return ("aaaaaa");
 
         $warehousetWireSpecs = WarehouseProduct::find($id)->warehouseProductSpecs()->get();
 
