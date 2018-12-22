@@ -49,7 +49,10 @@ class OrderController extends Controller
 
         $statuses = OrderStatus::all();
 
-        return view('orders.create', compact('sampleArticles', 'clients', 'statuses'));
+        $highestID = DB::table('orders')->max('id');
+        $highestID = $highestID+1;
+
+        return view('orders.create', compact('sampleArticles', 'clients', 'statuses', 'highestID'));
     }
 
     public function getSampleArticleId ($id) {
@@ -69,7 +72,6 @@ class OrderController extends Controller
     public function store(Request $request)
     {
 
-        //dd($request->all());
         Auth::user()->authorizeRoles(['1', '4']);
 
         if(@$request->order_files_id) {
@@ -82,12 +84,17 @@ class OrderController extends Controller
             }
         }
 
+        //dd($request->all());
+        $highestID = DB::table('orders')->max('id');
+        $highestID = $highestID+1;
+
         $order= new Order();
         $order->user_id =  Auth::id();
         $order->status_id = $request->status_id;
         $order->sample_article_id =  $request->sample_article_id;
         $order->client_id =  $request->client_id;
-        $order->client_identifier = $request->client_identifier;
+        //$order->client_identifier = $request->client_identifier;
+        $order->client_identifier = date('Y').'-'.$highestID;
         $order->delivery_date = $request->delivery_date;
         $order->description = $request->description;
         $order->cor1 = $request->cor1;
@@ -113,16 +120,18 @@ class OrderController extends Controller
         $order->save();
 
         //Store Image
-        foreach ($request->order_files_id as $order_files_id) {
-            $orderFile= new OrderFile();
-            $file = $order_files_id;
-            if($file) {
-                $extension = str_contains($file->getClientOriginalName(), 'pdf') ? '.pdf' : '.jpg';
-                $filename = 'orders/' . explode('.', $file->getClientOriginalName())[0] . '-' . Carbon::now('Europe/London')->format('YmdHis') . $extension;
-                Storage::disk('public')->put($filename, File::get($file));
-                $orderFile->order_id = $order->id;
-                $orderFile->url = $filename;
-                $orderFile->save();
+        if(!empty($order->filesToDelete)) {
+            foreach ($request->order_files_id as $order_files_id) {
+                $orderFile = new OrderFile();
+                $file = $order_files_id;
+                if ($file) {
+                    $extension = str_contains($file->getClientOriginalName(), 'pdf') ? '.pdf' : '.jpg';
+                    $filename = 'orders/' . explode('.', $file->getClientOriginalName())[0] . '-' . Carbon::now('Europe/London')->format('YmdHis') . $extension;
+                    Storage::disk('public')->put($filename, File::get($file));
+                    $orderFile->order_id = $order->id;
+                    $orderFile->url = $filename;
+                    $orderFile->save();
+                }
             }
         }
         //End Store Image

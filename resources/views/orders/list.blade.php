@@ -10,7 +10,7 @@
             <thead role="rowgroup">
             <tr role="row">
                 <th role="columnheader">Cliente</th>
-                <th role="columnheader">Id do Cliente</th>
+                <th role="columnheader">Nº Encomenda</th>
                 <th role="columnheader">Amostra INDMEI</th>
                 <th role="columnheader">Descrição</th>
                 <th role="columnheader">Criado Em</th>
@@ -34,7 +34,7 @@
             @foreach($orders as $order)
                 <tr role="row">
                     <td role="columnheader" data-col1="Cliente">{{$order->client->client}}</td>
-                    <td role="columnheader" data-col2="Id do Cliente">{{$order->client_identifier}}</td>
+                    <td role="columnheader" data-col2="Nº de Encomenda">{{$order->client_identifier}}</td>
                     <td role="columnheader" data-col3="Id da Amostra">{{@$order->sampleArticle->reference}}</td>
                     <td role="columnheader" data-col4="Descrição">{{$order->description}}</td>
                     <td role="columnheader" data-col5="Criado Em">{{substr($order->created_at, 0, 10)}}</td>

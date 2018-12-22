@@ -13,7 +13,7 @@ class OrderStatusTableSeeder extends Seeder
     public function run()
     {
         $status = new OrderStatus();
-        $status->status = 'Encomenda Recebida';
+        $status->status = 'Por Produzir';
         $status->save();
         $status = new OrderStatus();
         $status->status = 'A produzir amostra';

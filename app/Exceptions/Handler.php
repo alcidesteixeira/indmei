@@ -48,9 +48,12 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        //dd($exception->getStatusCode());
+       // dd($exception->getStatusCode());
 //        dd("a");
-        if($exception->getMessage() == 'Unauthenticated.') {
+
+
+        //Ver o que se passa com o handler!!
+     /*   if($exception->getMessage() == 'Unauthenticated.') {
            return response()->view('errors.500');
             //return view('welcome');
         }
@@ -75,7 +78,7 @@ class Handler extends ExceptionHandler
 
             return response()->view('errors.custom', compact('message'));
         }
-
+*/
         return parent::render($request, $exception);
     }
 }

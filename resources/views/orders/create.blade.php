@@ -18,7 +18,9 @@
                     <label for="status_id">Status:</label>
                     <select class="form-control" id="viaSelect">
                         @foreach($statuses as $status)
+                            @if(in_array($status->id, [1, 5, 7]))
                             <option value="{{$status->id}}" {{$status->id == @$order->status_id ? 'selected' : ''}}>{{$status->status}}</option>
+                            @endif
                         @endforeach
                     </select>
                 </div>
@@ -28,34 +30,37 @@
                 <div class="steps-form-2">
                     <div class="steps-row-2 setup-panel-2 d-flex justify-content-between">
                         <div class="steps-step-2">
-                            <a href="#" id="step-1" data-id="1" type="button" class="btn btn-blue-grey btn-highlighted waves-effect ml-0" data-toggle="tooltip" data-placement="top" title="Encomenda Recebida">
+                            <a href="#" id="step-1" data-id="1" type="button" class="btn btn-blue-grey btn-highlighted waves-effect ml-0" data-toggle="tooltip" data-placement="top" title="Por Produzir">
                                 <i class="fas fa-folder-open"></i></a>
+                            <p style="margin-left: -10px">Por Produzir</p>
                         </div>
-                        <div class="steps-step-2">
+                        <div class="steps-step-2" style="display:none">
                             <a href="#" id="step-2" data-id="2" type="button" class="btn btn-blue-grey {{@$order->status_id < 2 ? 'btn-circle-2' : 'btn-highlighted' }}  waves-effect" data-toggle="tooltip" data-placement="top" title="A Produzir Amostra">
                                 <i class="fas fa-shoe-prints"></i></a>
                         </div>
-                        <div class="steps-step-2">
+                        <div class="steps-step-2" style="display:none">
                             <a href="#" id="step-3" data-id="3" type="button" class="btn btn-blue-grey {{@$order->status_id < 3 ? 'btn-circle-2' : 'btn-highlighted' }} waves-effect" data-toggle="tooltip" data-placement="top" title="A Criar Orçamento">
                                 <i class="fas fa-money-bill-wave"></i></a>
                         </div>
-                        <div class="steps-step-2">
+                        <div class="steps-step-2" style="display:none">
                             <a href="#" id="step-4" data-id="4" type="button" class="btn btn-blue-grey {{@$order->status_id < 4 ? 'btn-circle-2' : 'btn-highlighted' }} waves-effect mr-0" data-toggle="tooltip" data-placement="top" title="A Aguardar Resposta do Cliente">
                                 <i class="fas fa-user-tie"></i></a>
                         </div>
                         <div class="steps-step-2">
                             <a href="#" id="step-5" data-id="5" type="button" class="btn btn-blue-grey {{@$order->status_id < 5 ? 'btn-circle-2' : 'btn-highlighted' }} waves-effect mr-0" data-toggle="tooltip" data-placement="top" title="Em Produção">
                                 <i class="fab fa-product-hunt"></i></a>
+                            <p>Em Produção</p>
                         </div>
-                        <div class="steps-step-2">
+                        <div class="steps-step-2" style="display:none">
                             <a href="#" id="step-6" data-id="6" type="button" class="btn btn-blue-grey {{@$order->status_id < 6 ? 'btn-circle-2' : 'btn-highlighted' }} waves-effect mr-0" data-toggle="tooltip" data-placement="top" title="À Espera de Matéria-Prima">
                                 <i class="fas fa-warehouse"></i></a>
                         </div>
                         <div class="steps-step-2">
                             <a href="#" id="step-7" data-id="7" type="button" class="btn btn-blue-grey {{@$order->status_id < 7 ? 'btn-circle-2' : 'btn-highlighted' }} waves-effect mr-0" data-toggle="tooltip" data-placement="top" title="Produzido">
                                 <i class="fas fa-check" aria-hidden="true"></i></a>
+                            <p>Produzido</p>
                         </div>
-                        <div class="steps-step-2">
+                        <div class="steps-step-2" style="display:none">
                             <a href="#" id="step-8" data-id="8" type="button" class="btn btn-blue-grey {{@$order->status_id < 8 ? 'btn-circle-2' : 'btn-highlighted' }} waves-effect mr-0" data-toggle="tooltip" data-placement="top" title="Em Distribuição">
                                 <i class="fas fa-truck-moving"></i></a>
                         </div>
@@ -77,14 +82,14 @@
             <div class="row">
                 <div class="col-md-3"></div>
                 <div class="form-group col-md-6">
-                    <label for="client_identifier">Identificador do Cliente:</label>
-                    <input type="text" class="form-control" name="client_identifier" value="{{@$order->client_identifier}}" required>
+                    <label for="client_identifier">Número de Encomenda:</label>
+                    <input type="text" class="form-control" name="client_identifier" value="{{@$order->client_identifier}}" required disabled>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-3"></div>
                 <div class="form-group col-md-6">
-                    <label for="Description">Descrição:</label>
+                    <label for="Description">Observações:</label>
                     <input type="text" class="form-control" name="description" value="{{@$order->description}}" required>
                 </div>
             </div>
@@ -115,13 +120,14 @@
             </div>
             <hr>
             <div class="row">
-                <div class="col-md-3"></div>
+                <div class="col-md-3" id="image_sample">
+                </div>
                 <div class="form-group col-md-6">
                     <label for="Description">Amostra INDMEI:</label>
                     <select class="form-control" name="sample_article_id" id="sampleArticleChange">
                         <option value=""></option>
                         @foreach($sampleArticles as $sample)
-                        <option value="{{$sample->id}}" {{$sample->id == @$order->sample_article_id ? 'selected' : ''}}>{{$sample->reference}}</option>
+                        <option data-src="{{$sample->image_url}}" value="{{$sample->id}}" {{$sample->id == @$order->sample_article_id ? 'selected' : ''}}>{{$sample->reference}} - {{$sample->description}}</option>
                         @endforeach
                     </select>
                     {{--<input type="text" class="form-control" name="sample_article_id" value="{{@$order->sample_article_id}}">--}}
@@ -233,6 +239,13 @@
                     $("#tamanho4").text(result['tamanho4']);
                 }
             });
+
+            //Display image
+            let src_img = $("#sampleArticleChange").find(':selected').data('src');
+            $("#image_sample").html('');
+            if(src_img !== undefined){
+                $("#image_sample").append('<img style="width:100px" src="../../storage/'+src_img+'">');
+            }
         }
 
         function updateAmounts () {
