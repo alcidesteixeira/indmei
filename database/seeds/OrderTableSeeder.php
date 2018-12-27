@@ -24,6 +24,10 @@ class OrderTableSeeder extends Seeder
         $order->cor2 = 'preto';
         $order->cor3 = 'rosa';
         $order->cor4 = 'verde';
+        $order->tamanho1 = '1';
+        $order->tamanho2 = '2';
+        $order->tamanho3 = '3';
+        $order->tamanho4 = '4';
         $order->tamanho11 = '300';
         $order->tamanho12 = '500';
         $order->tamanho13 = '700';

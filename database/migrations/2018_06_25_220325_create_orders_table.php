@@ -26,6 +26,10 @@ class CreateOrdersTable extends Migration
             $table->string('cor2')->nullable();
             $table->string('cor3')->nullable();
             $table->string('cor4')->nullable();
+            $table->string('tamanho1')->nullable();
+            $table->string('tamanho2')->nullable();
+            $table->string('tamanho3')->nullable();
+            $table->string('tamanho4')->nullable();
             $table->string('tamanho11')->nullable();
             $table->string('tamanho12')->nullable();
             $table->string('tamanho13')->nullable();

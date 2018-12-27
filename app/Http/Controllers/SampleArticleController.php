@@ -63,6 +63,7 @@ class SampleArticleController extends Controller
      */
     public function store(Request $request)
     {
+        //dump($request->all());
         Auth::user()->authorizeRoles(['1', '3']);
 
         $sampleCost = new SampleArticle();
@@ -117,12 +118,11 @@ class SampleArticleController extends Controller
 
         //Store on SampleArticleWire Class
         //Run for each row of the table
-        for($i = 1; $i <= $request->rowCount; $i++) {
+        for($i = 1; $i < $request->rowCount; $i++) {
             $step = 'row-'.$i.'-step';
             $grams = 'row-'.$i.'-grams';
             $reference = 'row-'.$i.'-reference';
             $guiafios = 'row-'.$i.'-guiafios';
-
             $wire = new sampleArticlesWire();
             $wire->sample_article_id = $sampleArticle->id;
             $wire->step_id = $request->$step ? $request->$step : '0';

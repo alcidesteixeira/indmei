@@ -149,7 +149,7 @@
                     @php $tamanho1 = "tamanho1".$i; $tamanho2 = "tamanho2".$i; $tamanho3 = "tamanho3".$i; $tamanho4 = "tamanho4".$i; @endphp
                     <tr>
                         <td data-col1="Tamanho">
-                            <span type="text" name="tamanho{{$i}}" id="tamanho{{$i}}" value=""></span>
+                            <input class="form-control" type="text" name="tamanho{{$i}}" id="tamanho{{$i}}" value="{{@$order->$tamanho1 ? @$order->$tamanho1 : 0}}">
                         </td>
                         <td data-col2="Cor1">
 
