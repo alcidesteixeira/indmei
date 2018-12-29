@@ -108,17 +108,21 @@
             </div>
 
 
-            <table class="table table-striped thead-dark">
+            <table class="table table-striped thead-dark" id="sampleArticleInUse">
                 <thead>
                 <tr>
+                    <th>Função</th>
                     <th>Guiafios</th>
-                    <th>Step</th>
                     <th>Gramas</th>
                     <th>Referência INDMEI</th>
                     <th>Cor #1</th>
+                    <th>Kg #1</th>
                     <th>Cor #2</th>
+                    <th>Kg #2</th>
                     <th>Cor #3</th>
+                    <th>Kg #3</th>
                     <th>Cor #4</th>
+                    <th>Kg #4</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -127,14 +131,14 @@
                     {{--Esconder linhas com gramas iguais a zero--}}
                     @if($order->sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->grams !== '0')
                     <tr>
-                        <td data-col1="Guiafios">
+                        <td data-col1="Função">
                                 @foreach($guiafios as $guia)
                                     @if($guia->id == $order->sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->guiafios_id)
                                         <span>{{$guia->description}}</span>
                                     @endif
                                 @endforeach
                         </td>
-                        <td data-col2="Step">
+                        <td data-col2="Guiafios">
                             @foreach($steps as $step)
                                 @if($step->id == $order->sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->step_id)
                                     <span>{{$step->step}}</span>
@@ -144,7 +148,7 @@
                         <td data-col3="Gramas">
                             <span>{{$order->sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->grams}}</span>
                         </td>
-                        <td data-col4="Refrência do Fio">
+                        <td data-col4="Refrência INDMEI">
                             @foreach($warehouseProducts as $product)
                                 @if($product->id == $order->sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->warehouse_product_id)
                                     <span>{{$product->reference}}</span>
@@ -162,7 +166,8 @@
                                 <span></span>
                             @endif
                         </td>
-                        <td data-col6="Cor #2">
+                        <td data-col6="Kg #1"></td>
+                        <td data-col7="Cor #2">
                             @if(@$order->sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->warehouseProduct)
                                 @foreach($order->sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->warehouseProduct->warehouseProductSpecs()->get() as $wireSpecs)
                                     @if($wireSpecs->id == $order->sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->wireColors()->get()->values()->get(1)->warehouse_product_spec_id)
@@ -173,7 +178,8 @@
                                 <span></span>
                             @endif
                         </td>
-                        <td data-col7="Cor #3">
+                        <td data-col8="Kg #2"></td>
+                        <td data-col9="Cor #3">
                             @if(@$order->sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->warehouseProduct)
                                 @foreach($order->sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->warehouseProduct->warehouseProductSpecs()->get() as $wireSpecs)
                                     @if($wireSpecs->id == $order->sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->wireColors()->get()->values()->get(2)->warehouse_product_spec_id)
@@ -184,7 +190,8 @@
                                 <span></span>
                             @endif
                         </td>
-                        <td data-col8="Cor #4">
+                        <td data-col10="Kg #3"></td>
+                        <td data-col11="Cor #4">
                             @if(@$order->sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->warehouseProduct)
                                 @foreach($order->sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->warehouseProduct->warehouseProductSpecs()->get() as $wireSpecs)
                                     @if($wireSpecs->id == $order->sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->wireColors()->get()->values()->get(3)->warehouse_product_spec_id)
@@ -195,6 +202,7 @@
                                 <span></span>
                             @endif
                         </td>
+                        <td data-col12="Kg #4"></td>
                     </tr>
                     @endif
                 @endfor
@@ -259,7 +267,7 @@
                 @for($i = 1; $i <=4; $i++)
                 @php($tamanho1 = 'tamanho1'.$i) @php($tamanho2 = 'tamanho2'.$i) @php($tamanho3 = 'tamanho3'.$i) @php($tamanho4 = 'tamanho4'.$i)
 
-                <table class="table table-striped thead-dark table-bordered col-sm-3" style="border:2px solid #dee2e6; text-align:center">
+                <table class="table table-striped thead-dark table-bordered col-sm-3" style="border:2px solid #dee2e6; text-align:center" id="prodTable{{$i}}">
                     <thead>
                         <tr>
                             <th id="tam1{{$i}}">{{round($order->$tamanho1 * 2 + ($order->$tamanho1 * 2 * 0.03))}}</th>
@@ -306,6 +314,7 @@
                     </tbody>
                 </table>
                 @endfor
+                <input type="button" class="btn btn-success" value="+ adicionar linha" onclick="addRow();">
             </div>
             <div class="row">
                 <div class="col-md-3"></div>
@@ -437,11 +446,42 @@
                 // console.log(ar2);
 
             for (let i = 1; i <= 4; i ++) {
-                console.log($("#pedido" + i).text());
-                console.log((ar2['x'+i] / 1.03 / 2).toFixed(0));
-                console.log((arrayToSubtract['a'+i] / 2).toFixed(0));
+                // console.log($("#pedido" + i).text());
+                // console.log((ar2['x'+i] / 1.03 / 2).toFixed(0));
+                // console.log((arrayToSubtract['a'+i] / 2).toFixed(0));
                 $("#falta" + i).text($("#pedido" + i).text() - (ar2['x'+i] / 1.03 / 2).toFixed(0) - (arrayToSubtract['a'+i] / 1.03 / 2).toFixed(0));
             }
+
+
+            //inserir colunas com gramas totais para cada linha da segunda tabela:
+            let rows = $("#sampleArticleInUse tbody tr").length; //nºlinhas
+            for(let j = 0; j < rows; j++){
+                let thirdTd = $("#sampleArticleInUse tbody tr:eq("+j+") td:eq(2)").text();
+
+                $("#sampleArticleInUse tbody tr:eq("+j+") td:eq(5)").append(Number($("#falta1").text()) * Number(thirdTd) / 1000);
+                $("#sampleArticleInUse tbody tr:eq("+j+") td:eq(7)").append(Number($("#falta2").text()) * Number(thirdTd) / 1000);
+                $("#sampleArticleInUse tbody tr:eq("+j+") td:eq(9)").append(Number($("#falta3").text()) * Number(thirdTd) / 1000);
+                $("#sampleArticleInUse tbody tr:eq("+j+") td:eq(11)").append(Number($("#falta4").text()) * Number(thirdTd) / 1000);
+            }
+            //fim de inserção
+
+            //Insere nova coluna à esquerda para colocar a máquina respetiva:
+            let selectMachine = '<select style="min-width:50px;max-width:50px;">';
+
+            for (let i = 1; i <= 40; i++) {
+                selectMachine += '<option value="'+i+'" name="'+i+'">M'+i+'</option>';
+            }
+            selectMachine += '</select>';
+            $("#prodTable1 tr").each( function() {
+                $(this).find("th:eq(0)").before("<th style='max-width: 50px'></th>");
+            });
+            $("#prodTable1 tr").not(':last').each( function() {
+                $(this).find("td:eq(0)").before("<td style='max-width: 50px'>" + selectMachine + "</td>");
+            });
+            $("#prodTable1 tr:last").each( function() {
+                $(this).find("td:eq(0)").before("<td style='max-width: 50px'>Falta</td>");
+            });
+            //fim de insercao de coluna da máquina
         }
 
     </script>
@@ -460,6 +500,10 @@
                });
            }
         });
+
+        function addRow() {
+            alert("asd");
+        }
     </script>
 
 @endsection
