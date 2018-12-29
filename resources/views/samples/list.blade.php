@@ -16,6 +16,7 @@
                 <th role="columnheader">Última Atualização</th>
                 <th role="columnheader"></th>
                 <th role="columnheader"></th>
+                <th role="columnheader"></th>
             </tr>
             </thead>
             <tbody role="rowgroup">
@@ -33,6 +34,11 @@
                     </td>
                     <td role="columnheader" data-col8="">
                         <button type="button" data-id="{{$sample->id}}" data-role="{{$sample->description}}"  class="apagarform btn btn-danger">Apagar</button>
+                    </td>
+                    <td role="columnheader" data-col9="">
+                        <form method="get" action="{{url('samples/getForDuplicate/'.$sample->id)}}" enctype="multipart/form-data">
+                            <button type="submit" class="btn btn-info">Duplicar</button>
+                        </form>
                     </td>
                 </tr>
             @endforeach

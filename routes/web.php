@@ -60,6 +60,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/samples/update/{id}', 'SampleArticleController@update');
     Route::get('/samples/updatewirespecs/{id}', 'SampleArticleController@updateWireSpecs');
     Route::get('/samples/delete/{id}', 'SampleArticleController@destroy');
+    Route::get('/samples/getForDuplicate/{id}', 'SampleArticleController@duplicate');
 
 //Quotations
     Route::get('/quotation/list', 'QuotationController@index');

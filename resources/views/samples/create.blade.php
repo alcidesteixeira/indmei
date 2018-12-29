@@ -4,14 +4,28 @@
 
 @section('content')
     <div class="container">
-        <h2>{{@$sampleArticle->reference ? 'Atualizar Amostra' : 'Criar Nova Amostra'}}</h2><br/>
-        <form method="post" action="{{@$sampleArticle->reference ? url('samples/update/'.$sampleArticle->id) : url('samples/create')}}" enctype="multipart/form-data">
+        <div class="row">
+            <h2>{{@$sampleArticle->reference && !@$isDuplicate ? 'Atualizar Amostra' : (@$isDuplicate ? 'Duplicar Amostra' : 'Criar Nova Amostra')}}</h2>
+            @if(!@$sampleArticle->reference || @$isDuplicate)
+            <span style="margin: 10px 0 0 30px;">
+                Criar amostra a partir de uma existente:
+                <select name="sampleBase" id="sampleArticleBase" class="form-control">
+                    <option value="0">-</option>
+                    @foreach($sampleIdsAndDesc as $sample)
+                    <option value="{{$sample->id}}" {{$sample->id == @$id ? 'selected' : ''}}>{{$sample->reference . ' - ' . $sample->description}}</option>
+                    @endforeach
+                </select>
+            </span>
+            @endif
+        </div>
+        <br/>
+        <form method="post" action="{{@$sampleArticle->reference && !@$isDuplicate ? url('samples/update/'.$sampleArticle->id) : (@$isDuplicate ? url('samples/create') : url('samples/create'))}}" enctype="multipart/form-data">
             @csrf
             <div class="row">
                 <div class="col-md-3"></div>
                 <div class="form-group col-md-3">
                     <label for="Reference">Amostra INDMEI:</label>
-                    <input type="text" class="form-control" name="reference" value="{{@$sampleArticle->reference}}" required>
+                    <input type="text" class="form-control" name="reference" value="{{@$isDuplicate ? '' : @$sampleArticle->reference}}" required>
                 </div>
                 <div class="form-group col-md-3">
                     <label for="Description">Descrição:</label>
@@ -27,6 +41,7 @@
                 <div class="col-md-3">
                     <img id="blah" style="width: 200px;margin-bottom: 20px;" src="../../storage/{{@$sampleArticle->image_url}}" />
                 </div>
+                <input type="hidden" value="{{@$sampleArticle->image_url}}" name="img_path_duplicated">
             </div>
 
 
@@ -39,38 +54,38 @@
                             @php($forma = 'forma'.$i)
                             <td style="border: 2px solid darkgray; text-align: center;">
                                 <div class="form-group" style="margin: auto;">
-                                    <label>T{{$i}}: <input type="text" name="tamanho{{$i}}" value="{{@$sampleArticle->$tamanho}}" required></label>
+                                    <label><input type="text" class="form-control" name="tamanho{{$i}}" value="{{@$sampleArticle->$tamanho}}"></label>
                                     <div class="row">
                                         <div class="col-md-1"></div>
                                         <div class="form-group col-md-5">
                                             <label for="pe">Pé:</label>
-                                            <input type="text" class="form-control" name="pe{{$i}}" value="{{@$sampleArticle->$pe}}" required>
+                                            <input type="text" class="form-control" name="pe{{$i}}" value="{{@$sampleArticle->$pe}}">
                                         </div>
                                         <div class="form-group col-md-5">
                                             <label for="Perna">Perna:</label>
-                                            <input type="text" class="form-control" name="perna{{$i}}" value="{{@$sampleArticle->$perna}}" required>
+                                            <input type="text" class="form-control" name="perna{{$i}}" value="{{@$sampleArticle->$perna}}">
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-1"></div>
                                         <div class="form-group col-md-5">
                                             <label for="Punho">Punho:</label>
-                                            <input type="text" class="form-control" name="punho{{$i}}" value="{{@$sampleArticle->$punho}}" required>
+                                            <input type="text" class="form-control" name="punho{{$i}}" value="{{@$sampleArticle->$punho}}">
                                         </div>
                                         <div class="form-group col-md-5">
                                             <label for="Malha">Malha:</label>
-                                            <input type="text" class="form-control" name="malha{{$i}}" value="{{@$sampleArticle->$malha}}" required>
+                                            <input type="text" class="form-control" name="malha{{$i}}" value="{{@$sampleArticle->$malha}}">
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-1"></div>
                                         <div class="form-group col-md-5">
                                             <label for="Maq">Maq:</label>
-                                            <input type="text" class="form-control" name="maq{{$i}}" value="{{@$sampleArticle->$maq}}" required>
+                                            <input type="text" class="form-control" name="maq{{$i}}" value="{{@$sampleArticle->$maq}}">
                                         </div>
                                         <div class="form-group col-md-5">
                                             <label for="Forma">Forma:</label>
-                                            <input type="text" class="form-control" name="forma{{$i}}" value="{{@$sampleArticle->$forma}}" required>
+                                            <input type="text" class="form-control" name="forma{{$i}}" value="{{@$sampleArticle->$forma}}">
                                         </div>
                                     </div>
                                 </div>
@@ -238,11 +253,15 @@
             <div class="row">
                 <div class="col-md-3"></div>
                 <div class="submit-buttons form-group col-md-6" style="margin-top:60px">
-                    <button type="submit" onclick="beforeInput();" class="btn btn-success">{{@$sampleArticle->reference ? 'Atualizar' : 'Criar'}}</button>
+                    <button type="submit" onclick="beforeInput();" class="btn btn-success">{{@$sampleArticle->reference && !@$isDuplicate ? 'Atualizar' : (@$isDuplicate ? 'Duplicar' : 'Criar')}}</button>
                     <button type="button" onclick="window.history.back();" class="btn btn-info">Voltar</button>
                 </div>
             </div>
         </form>
+        <div class="loaderContainer" style="display:none">
+            <div class="loader"></div>
+        </div>
+
     </div>
 
 
@@ -251,27 +270,27 @@
     @endif
 
     <script>
-        //Filter and order table
-        // $('table').DataTable({
-        //     "ordering": false,
-        //     "pageLength": 25,
-        //     "language": {
-        //         "lengthMenu": "Apresentar _MENU_ resultados por página",
-        //         "zeroRecords": "Nenhum resultado encontrado.",
-        //         "info": "Página _PAGE_ de _PAGES_",
-        //         "infoEmpty": "Sem resultados disponíveis",
-        //         "infoFiltered": "(Filtrado de _MAX_ resultados totais)",
-        //         "paginate": {
-        //             "first":      "Primeira",
-        //             "last":       "Última",
-        //             "next":       "Seguinte",
-        //             "previous":   "Anterior"
-        //         },
-        //         "loadingRecords": "A pesquisar...",
-        //         "processing":     "A processar...",
-        //         "search":         "Pesquisar:",
-        //     }
-        // });
+
+        //Duplicar oferta:
+        $("#sampleArticleBase").change(function () {
+            $(".loaderContainer").css('display', 'block');
+
+            let baseId = $(this).val();
+            window.location.replace('/samples/getForDuplicate/'+baseId);
+
+            // $.ajax({
+            //     url: "/samples/getForDuplicate/"+baseId,
+            //     contentType: "application/json",
+            //     type: "GET",
+            //     success: function(result){
+            //         console.log(result);
+            //         $(".loaderContainer").css('display', 'none');
+            //
+            //     }
+            // });
+
+        });
+        //Duplicar oferta end
 
         function beforeInput ()
         {

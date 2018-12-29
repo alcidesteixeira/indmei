@@ -52,7 +52,10 @@ class SampleArticleController extends Controller
 
         $guiafios = SampleArticleGuiafio::all();
 
-        return view('samples.create', compact('steps', 'warehouseProducts', 'warehouseFirstWireSpecs', 'guiafios'));
+        $sampleIdsAndDesc = SampleArticle::all('id', 'reference', 'description');
+        //dd($sampleIdsAndDesc);
+
+        return view('samples.create', compact('steps', 'warehouseProducts', 'warehouseFirstWireSpecs', 'guiafios', 'sampleIdsAndDesc'));
     }
 
     /**
@@ -81,39 +84,42 @@ class SampleArticleController extends Controller
             Storage::disk('public')->put($filename, File::get($file));
             $sampleArticle->image_url = $filename;
         }
+        else {
+            $sampleArticle->image_url = $request->img_path_duplicated;
+        }
         //End Store Image
-        $sampleArticle->tamanho1 = $request->tamanho1;
-        $sampleArticle->pe1 = $request->pe1;
-        $sampleArticle->perna1 = $request->perna1;
-        $sampleArticle->punho1 = $request->punho1;
-        $sampleArticle->malha1 = $request->malha1;
-        $sampleArticle->maq1 = $request->maq1;
-        $sampleArticle->forma1 = $request->forma1;
-        $sampleArticle->tamanho2 = $request->tamanho2;
-        $sampleArticle->pe2 = $request->pe2;
-        $sampleArticle->perna2 = $request->perna2;
-        $sampleArticle->punho2 = $request->punho2;
-        $sampleArticle->malha2 = $request->malha2;
-        $sampleArticle->maq2 = $request->maq2;
-        $sampleArticle->forma2 = $request->forma2;
-        $sampleArticle->tamanho3 = $request->tamanho3;
-        $sampleArticle->pe3 = $request->pe3;
-        $sampleArticle->perna3 = $request->perna3;
-        $sampleArticle->punho3 = $request->punho3;
-        $sampleArticle->malha3 = $request->malha3;
-        $sampleArticle->maq3 = $request->maq3;
-        $sampleArticle->forma3 = $request->forma3;
-        $sampleArticle->tamanho4 = $request->tamanho4;
-        $sampleArticle->pe4 = $request->pe4;
-        $sampleArticle->perna4 = $request->perna4;
-        $sampleArticle->punho4 = $request->punho4;
-        $sampleArticle->malha4 = $request->malha4;
-        $sampleArticle->maq4 = $request->maq4;
-        $sampleArticle->forma4 = $request->forma4;
-        $sampleArticle->cost1 = $sampleCost['cor1'];
-        $sampleArticle->cost2 = $sampleCost['cor2'];
-        $sampleArticle->cost3 = $sampleCost['cor3'];
-        $sampleArticle->cost4 = $sampleCost['cor4'];
+        $sampleArticle->tamanho1 = $request->tamanho1 ? $request->tamanho1 : '0';
+        $sampleArticle->pe1 = $request->pe1 ? $request->pe1 : '0';
+        $sampleArticle->perna1 = $request->perna1 ? $request->perna1 : '0';
+        $sampleArticle->punho1 = $request->punho1 ? $request->punho1 : '0';
+        $sampleArticle->malha1 = $request->malha1 ? $request->malha1 : '0';
+        $sampleArticle->maq1 = $request->maq1 ? $request->maq1 : '0';
+        $sampleArticle->forma1 = $request->forma1 ? $request->forma1 : '0';
+        $sampleArticle->tamanho2 = $request->tamanho2 ? $request->tamanho2 : '0';
+        $sampleArticle->pe2 = $request->pe2 ? $request->pe2 : '0';
+        $sampleArticle->perna2 = $request->perna2 ? $request->perna2 : '0';
+        $sampleArticle->punho2 = $request->punho2 ? $request->punho2 : '0';
+        $sampleArticle->malha2 = $request->malha2 ? $request->malha2 : '0';
+        $sampleArticle->maq2 = $request->maq2 ? $request->maq2 : '0';
+        $sampleArticle->forma2 = $request->forma2 ? $request->forma2 : '0';
+        $sampleArticle->tamanho3 = $request->tamanho3 ? $request->tamanho3 : '0';
+        $sampleArticle->pe3 = $request->pe3 ? $request->pe3 : '0';
+        $sampleArticle->perna3 = $request->perna3 ? $request->perna3 : '0';
+        $sampleArticle->punho3 = $request->punho3 ? $request->punho3 : '0';
+        $sampleArticle->malha3 = $request->malha3 ? $request->malha3 : '0';
+        $sampleArticle->maq3 = $request->maq3 ? $request->maq3 : '0';
+        $sampleArticle->forma3 = $request->forma3 ? $request->forma3 : '0';
+        $sampleArticle->tamanho4 = $request->tamanho4 ? $request->tamanho4 : '0';
+        $sampleArticle->pe4 = $request->pe4 ? $request->pe4 : '0';
+        $sampleArticle->perna4 = $request->perna4 ? $request->perna4 : '0';
+        $sampleArticle->punho4 = $request->punho4 ? $request->punho4 : '0';
+        $sampleArticle->malha4 = $request->malha4 ? $request->malha4 : '0';
+        $sampleArticle->maq4 = $request->maq4 ? $request->maq4 : '0';
+        $sampleArticle->forma4 = $request->forma4 ? $request->forma4 : '0';
+        $sampleArticle->cost1 = round($sampleCost['cor1'], 2);
+        $sampleArticle->cost2 = round($sampleCost['cor2'], 2);
+        $sampleArticle->cost3 = round($sampleCost['cor3'], 2);
+        $sampleArticle->cost4 = round($sampleCost['cor4'], 2);
         $sampleArticle->save();
 
         //Store on SampleArticleWire Class
@@ -227,34 +233,34 @@ class SampleArticleController extends Controller
             $sampleArticle->image_url = $filename;
         }
         //End Store Image Upload
-        $sampleArticle->tamanho1 = $request->tamanho1;
-        $sampleArticle->pe1 = $request->pe1;
-        $sampleArticle->perna1 = $request->perna1;
-        $sampleArticle->punho1 = $request->punho1;
-        $sampleArticle->malha1 = $request->malha1;
-        $sampleArticle->maq1 = $request->maq1;
-        $sampleArticle->forma1 = $request->forma1;
-        $sampleArticle->tamanho2 = $request->tamanho2;
-        $sampleArticle->pe2 = $request->pe2;
-        $sampleArticle->perna2 = $request->perna2;
-        $sampleArticle->punho2 = $request->punho2;
-        $sampleArticle->malha2 = $request->malha2;
-        $sampleArticle->maq2 = $request->maq2;
-        $sampleArticle->forma2 = $request->forma2;
-        $sampleArticle->tamanho3 = $request->tamanho3;
-        $sampleArticle->pe3 = $request->pe3;
-        $sampleArticle->perna3 = $request->perna3;
-        $sampleArticle->punho3 = $request->punho3;
-        $sampleArticle->malha3 = $request->malha3;
-        $sampleArticle->maq3 = $request->maq3;
-        $sampleArticle->forma3 = $request->forma3;
-        $sampleArticle->tamanho4 = $request->tamanho4;
-        $sampleArticle->pe4 = $request->pe4;
-        $sampleArticle->perna4 = $request->perna4;
-        $sampleArticle->punho4 = $request->punho4;
-        $sampleArticle->malha4 = $request->malha4;
-        $sampleArticle->maq4 = $request->maq4;
-        $sampleArticle->forma4 = $request->forma4;
+        $sampleArticle->tamanho1 = $request->tamanho1 ? $request->tamanho1 : '0';
+        $sampleArticle->pe1 = $request->pe1 ? $request->pe1 : '0';
+        $sampleArticle->perna1 = $request->perna1 ? $request->perna1 : '0';
+        $sampleArticle->punho1 = $request->punho1 ? $request->punho1 : '0';
+        $sampleArticle->malha1 = $request->malha1 ? $request->malha1 : '0';
+        $sampleArticle->maq1 = $request->maq1 ? $request->maq1 : '0';
+        $sampleArticle->forma1 = $request->forma1 ? $request->forma1 : '0';
+        $sampleArticle->tamanho2 = $request->tamanho2 ? $request->tamanho2 : '0';
+        $sampleArticle->pe2 = $request->pe2 ? $request->pe2 : '0';
+        $sampleArticle->perna2 = $request->perna2 ? $request->perna2 : '0';
+        $sampleArticle->punho2 = $request->punho2 ? $request->punho2 : '0';
+        $sampleArticle->malha2 = $request->malha2 ? $request->malha2 : '0';
+        $sampleArticle->maq2 = $request->maq2 ? $request->maq2 : '0';
+        $sampleArticle->forma2 = $request->forma2 ? $request->forma2 : '0';
+        $sampleArticle->tamanho3 = $request->tamanho3 ? $request->tamanho3 : '0';
+        $sampleArticle->pe3 = $request->pe3 ? $request->pe3 : '0';
+        $sampleArticle->perna3 = $request->perna3 ? $request->perna3 : '0';
+        $sampleArticle->punho3 = $request->punho3 ? $request->punho3 : '0';
+        $sampleArticle->malha3 = $request->malha3 ? $request->malha3 : '0';
+        $sampleArticle->maq3 = $request->maq3 ? $request->maq3 : '0';
+        $sampleArticle->forma3 = $request->forma3 ? $request->forma3 : '0';
+        $sampleArticle->tamanho4 = $request->tamanho4 ? $request->tamanho4 : '0';
+        $sampleArticle->pe4 = $request->pe4 ? $request->pe4 : '0';
+        $sampleArticle->perna4 = $request->perna4 ? $request->perna4 : '0';
+        $sampleArticle->punho4 = $request->punho4 ? $request->punho4 : '0';
+        $sampleArticle->malha4 = $request->malha4 ? $request->malha4 : '0';
+        $sampleArticle->maq4 = $request->maq4 ? $request->maq4 : '0';
+        $sampleArticle->forma4 = $request->forma4 ? $request->forma4 : '0';
         $sampleArticle->cost1 = round($sampleCost['cor1'], 2);
         $sampleArticle->cost2 = round($sampleCost['cor2'], 2);
         $sampleArticle->cost3 = round($sampleCost['cor3'], 2);
@@ -266,7 +272,7 @@ class SampleArticleController extends Controller
 
         //Store on SampleArticleWire Class
         //Run for each row of the table
-        for($i = 1; $i <= $request->rowCount; $i++) {
+        for($i = 1; $i < $request->rowCount; $i++) {
             $step = 'row-'.$i.'-step';
             $grams = 'row-'.$i.'-grams';
             $reference = 'row-'.$i.'-reference';
@@ -320,6 +326,36 @@ class SampleArticleController extends Controller
         flash('A Amostra de Artigo com a referência: '. $sampleArticle->reference . ', e a descrição: '. $sampleArticle->description .' foi atualizada com sucesso!')->success();
 
         return redirect()->action('SampleArticleController@index');
+    }
+
+    /**
+     * Duplicate Sample Article
+     */
+    public function duplicate($id){
+
+        Auth::user()->authorizeRoles(['1', '3', '7']);
+
+        $sampleArticle = SampleArticle::find($id);
+
+        $steps = SampleArticleStep::all();
+
+        $warehouseProducts = WarehouseProduct::all();
+
+        $guiafios = SampleArticleGuiafio::all();
+
+        $isDuplicate = 1;
+        $sampleIdsAndDesc = SampleArticle::all('id', 'reference', 'description');
+
+        return view('samples.create', compact('sampleArticle', 'steps', 'warehouseProducts', 'guiafios', 'id', 'isDuplicate', 'sampleIdsAndDesc'));
+
+
+//        $sampleArticle = SampleArticle::find($id);
+//        $sampleArticleWires = $sampleArticle->sampleArticleWires;
+//        $sampleArticleColors = [];
+//        foreach($sampleArticleWires as $wire) {
+//            array_push($sampleArticleColors, $wire->wireColors);
+//        }
+//        return ([$sampleArticle, $sampleArticleWires, $sampleArticleColors]);
     }
 
     /**
