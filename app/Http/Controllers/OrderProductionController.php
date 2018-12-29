@@ -64,8 +64,9 @@ class OrderProductionController extends Controller
         $warehouseProducts = WarehouseProduct::all();
         $warehouseProductSpecs = WarehouseProductSpec::all();
         $production = OrderProduction::where('order_id', $id)->where('user_id', $id_user ? $id_user : Auth::id())->get();
+
         //create array of values to subtract stored
-        $start = $order->created_at;
+        /*$start = $order->created_at;
         $start=substr($start, 0, 10);
         $end = $order->delivery_date;
         $period = [];
@@ -99,16 +100,23 @@ class OrderProductionController extends Controller
                 }
             }
             $prod_days[$date] = $prod_array;
-        }
-
-        $todayProduction = OrderProduction::where('order_id', $id)->where('user_id', Auth::id())->where('created_at', '>', Carbon::today())->get();
+        }*/
 
         //dd($prod_days);
         //dd(@$order->sampleArticle->sampleArticleWires()->get()->values()->get(13)->warehouseProduct);
 
+        /*
+         * 1º levar todas as produções daquela encomenda e ordenar por data mais antiga primeiro
+         * 2º adicionar uma linha em branco
+         */
+        dd($production);
+
+
         return view(
             'orders.production.create', compact('order', 'guiafios', 'steps', 'warehouseProducts',
-            'warehouseProductSpecs', 'prod_days'));
+            'warehouseProductSpecs'
+//              ,  'prod_days'
+            ));
     }
 
     /**
@@ -120,6 +128,10 @@ class OrderProductionController extends Controller
      */
     public function update(Request $request, $id)
     {
+        /*
+         * Ao gravar, vai ter de procurar as linhas que são dessa encomenda, e atualizá-las ou criar novas se não existirem
+         */
+
         $orderProd = OrderProduction::where('created_at', '>', Carbon::today())
             ->where('created_at', '<', Carbon::tomorrow())
             ->where('user_id', Auth::id())
