@@ -146,10 +146,10 @@
                 <tbody>
 
                 @for($i = 1; $i < 5; $i++)
-                    @php $tamanho1 = "tamanho1".$i; $tamanho2 = "tamanho2".$i; $tamanho3 = "tamanho3".$i; $tamanho4 = "tamanho4".$i; @endphp
+                    @php $tamanho1 = "tamanho1".$i; $tamanho2 = "tamanho2".$i; $tamanho3 = "tamanho3".$i; $tamanho4 = "tamanho4".$i; $tamanho = "tamanho".$i; @endphp
                     <tr>
                         <td data-col1="Tamanho">
-                            <input class="form-control" type="text" name="tamanho{{$i}}" id="tamanho{{$i}}" value="{{@$order->$tamanho1 ? @$order->$tamanho1 : 0}}">
+                            <input class="form-control" type="text" name="tamanho{{$i}}" id="tamanho{{$i}}" value="{{@$order->$tamanho}}" placeholder="T{{$i}}">
                         </td>
                         <td data-col2="Cor1">
 
