@@ -32,7 +32,7 @@
         <div class="row">
             <div class="col-md-3"></div>
             <div class="form-group col-md-6">
-                <label for="Description">Descrição:</label>
+                <label for="Description">Referência do Fornecedor:</label>
                 <input type="text" class="form-control" id="description" required>
             </div>
         </div>
@@ -71,11 +71,11 @@
             </div>
         </div>
 
-        <div class="row">
+        <div class="row new-material hide">
             <div class="col-md-3"></div>
             <div class="form-group col-md-6">
                 <label for="cost">Custo por Kg:</label>
-                <input type="number" step="0.01" class="form-control" id="cost" required>
+                <input type="number" step="0.01" class="form-control" id="cost">
             </div>
         </div>
 
@@ -119,7 +119,7 @@
 
             <div class="form-group col-md-6">
                 <label for="receipt">Carregar Fatura (.pdf, .png, .jpeg, .gif):</label>
-                <input type="file" class="form-control-file" name="receipt" id="receipt" accept="image/x-png,image/gif,image/jpeg,application/pdf" required>
+                <input type="file" class="form-control-file" name="receipt" id="receipt" accept="image/x-png,image/gif,image/jpeg,application/pdf">
             </div>
 
             <div class="col-md-3"></div>
@@ -155,6 +155,7 @@
         $.ajax({
             url: "/stock/choosecolor/"+key,
             success: function(result){
+                console.log(result);
                 $( "#color2" ).html('');
                 $.each( result, function( key, value ) {
                     $( "#color2" ).append ('<option value="'+key+'">'+value+'</option>');

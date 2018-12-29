@@ -16,6 +16,7 @@ class CreateOrderProductionsTable extends Migration
         Schema::create('order_productions', function (Blueprint $table) {
             $table->increments('id');
             $table->string('user_id');
+            $table->string('machine_id');
             $table->string('order_id');
             $table->string('tamanho');
             $table->string('cor');

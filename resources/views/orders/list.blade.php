@@ -55,7 +55,7 @@
                     @endif
                     @if (Auth::user()->hasAnyRole(['1', '3', '4', '7']) && in_array($view, ['production', 'orders']))
                     <td role="columnheader" data-col11="">
-                        <form method="get" action="{{url('/order/production/'.$order->id)}}" enctype="multipart/form-data">
+                        <form method="get" action="{{url('/order/production/insert/'.$order->id.'/'.Auth()->id())}}" enctype="multipart/form-data">
                             <button type="submit" class="btn btn-info">Produção Atual</button>
                         </form>
                     </td>

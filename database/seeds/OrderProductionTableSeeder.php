@@ -15,6 +15,7 @@ class OrderProductionTableSeeder extends Seeder
         $orderProduction = new OrderProduction();
         $orderProduction->order_id = '1';
         $orderProduction->user_id = '1';
+        $orderProduction->machine_id = '1';
         $orderProduction->tamanho = '1';
         $orderProduction->cor = '1';
         $orderProduction->value = '100';
@@ -23,6 +24,7 @@ class OrderProductionTableSeeder extends Seeder
         $orderProduction = new OrderProduction();
         $orderProduction->order_id = '1';
         $orderProduction->user_id = '1';
+        $orderProduction->machine_id = '2';
         $orderProduction->tamanho = '1';
         $orderProduction->cor = '1';
         $orderProduction->value = '50';
@@ -31,6 +33,7 @@ class OrderProductionTableSeeder extends Seeder
         $orderProduction = new OrderProduction();
         $orderProduction->order_id = '1';
         $orderProduction->user_id = '1';
+        $orderProduction->machine_id = '3';
         $orderProduction->tamanho = '1';
         $orderProduction->cor = '1';
         $orderProduction->value = '160';

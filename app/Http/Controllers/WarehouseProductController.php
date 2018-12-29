@@ -84,8 +84,8 @@ class WarehouseProductController extends Controller
         $spec->warehouse_product_id = $warehouseProduct->id;
         $spec->description = $request->description;
         $spec->color = $request->color;
-        $spec->liquid_weight = $request->liquid_weight;
-        $spec->gross_weight = $request->gross_weight;
+        $spec->liquid_weight = intval($request->liquid_weight) * 1000; //guardar em gramas
+        $spec->gross_weight = @$request->gross_weight ? intval(@$request->gross_weight) * 1000 : intval($request->liquid_weight) * 1000; //ao criar, usa-se o bruto, ao atualizar, pode ser líquido
         $spec->cost = $request->cost;
         $spec->threshold = $request->threshold;
         $spec->save();
@@ -96,7 +96,7 @@ class WarehouseProductController extends Controller
                 'warehouse_product_spec_id' => $spec->id,
                 'user_id' => Auth::id(),
                 'inout' => 'IN',
-                'weight' => $request->liquid_weight,
+                'weight' => intval($request->liquid_weight) * 1000,
                 'cost' => $request->cost,
                 'description' => $request->description,
                 'receipt' => 'receipts/na.jpg',
@@ -169,10 +169,18 @@ class WarehouseProductController extends Controller
         Auth::user()->authorizeRoles(['1', '5']);
 
         $spec = WarehouseProductSpec::find($id);
+        $productAmount = WarehouseProductSpec::where('warehouse_product_id', $spec->product->id)->get();
 
-        $ref = $spec->product->warehouse_product_id;
-
+        $ref = $spec->product->reference;
         $spec->delete();
+
+        //Caso seja a última referência daquela matéria prima, apagar tbm a matéria.
+        if(count($productAmount) == 1){
+            $product = WarehouseProduct::find($spec->product->id);
+            $product->delete();
+        }
+
+        //$product->delete();
 
         flash('O Artigo com a referência: '. $ref . ', e a descrição: '. $spec->description .' foi eliminado com sucesso!')->success();
 
@@ -210,7 +218,7 @@ class WarehouseProductController extends Controller
 
         Auth::user()->authorizeRoles(['1', '5']);
 
-        if(!str_contains($request->file('receipt')->getClientOriginalName(), ['pdf', 'jpg', 'png', 'gif', 'JPG', 'PNG', 'GIF'])) {
+        if($request->file('receipt') && !str_contains($request->file('receipt')->getClientOriginalName(), ['pdf', 'jpg', 'png', 'gif', 'JPG', 'PNG', 'GIF'])) {
             flash('Por favor, insira uma extensão válida. (.pdf, .jpeg, .png, .gif)')->error();
 
             return redirect()->action('WarehouseProductController@receipt');
@@ -255,13 +263,16 @@ class WarehouseProductController extends Controller
                 $warehouseProductSpec->threshold = $request->$threshold ? $request->$threshold : 1000;
                 $warehouseProductSpec->save();
             }
-//            dd("aa");
+
             //Em qualquer caso, adiciona sempre no histórico: caso nao exista fio; caso não exista cor; caso exista fio e cor
             $file = $request->file('receipt');
             if($file) {
                 $extension = str_contains($file->getClientOriginalName(), 'pdf') ? '.pdf' : '.jpg';
                 $filename = 'receipts/' . explode('.', $file->getClientOriginalName())[0] . '-' . Carbon::now('Europe/London')->format('YmdHis') . $extension;
                 Storage::disk('public')->put($filename, File::get($file));
+            }
+            else {
+                $filename = 'receipts/white.png';
             }
 
             DB::table('warehouse_products_history')->insert(
@@ -270,7 +281,7 @@ class WarehouseProductController extends Controller
                     'user_id' => Auth::id(),
                     'inout' => $request->$inout,
                     'weight' => intval($request->$qtd) * 1000,
-                    'cost' => $request->$cost,
+                    'cost' => @$request->$cost ? @$request->$cost : $warehouseProductSpec->cost,
                     'description' => $request->$description,
                     'receipt' => $filename,
                     'created_at' => Carbon::now()->timezone('Europe/London'),

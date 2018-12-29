@@ -34,16 +34,16 @@
                     <td role="columnheader" data-col7="Atualizado Por">{{$product->product->user->name}}</td>
                     <td role="columnheader" data-col8="Última Atualização">{{$product->updated_at}}</td>
                     <td role="columnheader" data-col9="">
-                        <form method="get" action="{{url('stock/edit/'.$product->id)}}" id="edit" enctype="multipart/form-data">
+                        <form method="get" action="{{url('stock/edit/'.$product->id)}}" class="edit" enctype="multipart/form-data">
                             <button type="submit" class="btn btn-warning">Editar</button>
                         </form>
                     </td>
                     <td role="columnheader" data-col10="">
-                        <button type="button" data-id="{{$product->id}}" data-role="{{$product->product->reference}}" id="delete" class="apagarform btn btn-danger">Apagar</button>
+                        <button type="button" data-id="{{$product->id}}" data-role="{{$product->product->reference}}" class="delete apagarform btn btn-danger">Apagar</button>
                     </td>
                     <td role="columnheader" data-col11="">
                         @if($product->threshold*100 >= $product->gross_weight)
-                        <form method="get" action="{{url('/email/create/'.$product->id)}}" id="email" enctype="multipart/form-data">
+                        <form method="get" action="{{url('/email/create/'.$product->id)}}" class="email" enctype="multipart/form-data">
                             <button type="submit" class="btn btn-success">Pedir stock</button>
                         </form>
                         @endif
@@ -148,15 +148,15 @@
                 }
             });
 
+        });
 
-            $('.apagarform').click(function() {
-                let id = $( this ).data('id');
-                let name = $( this ).data('role');
-                $(".modal-body").append('');
-                $(".modal-body").append('<p>Matéria-prima: ' + name + '</p>');
-                $('#apagar').attr('action', 'delete/'+id);
-                $("#modalApagar").modal('show');
-            });
+        $('.apagarform').click(function() {
+            let id = $( this ).data('id');
+            let name = $( this ).data('role');
+            $(".modal-body").html('');
+            $(".modal-body").append('<p>Matéria-prima: ' + name + '</p>');
+            $('#apagar').attr('action', 'delete/'+id);
+            $("#modalApagar").modal('show');
         });
 
         //Select table row from stock to show details
@@ -188,7 +188,7 @@
             $("#history").modal('show');
         });
 
-        $('#edit, #delete, #email').click(function(event){
+        $('.edit, .delete, .email').click(function(event){
             event.stopPropagation();
         });
 

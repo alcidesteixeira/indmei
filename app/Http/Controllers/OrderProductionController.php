@@ -27,7 +27,7 @@ class OrderProductionController extends Controller
     {
         Auth::user()->authorizeRoles(['1', '3', '4', '6', '7']);
 
-        $orders = Order::all();
+        $orders = Order::where('status_id', 5)->get();
 
         $view = 'production';
 
