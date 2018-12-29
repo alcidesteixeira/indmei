@@ -69,7 +69,7 @@
                     Gestão de Orçamentação <span class="caret"></span>
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="{{ url('orders/list') }}">Listar Orçamentos</a>
+                    <a class="dropdown-item" href="{{ url('quotation/list') }}">Listar Orçamentos</a>
                     <a class="dropdown-item" href="{{ url('email/create') }}">Enviar Email</a>
                     <a class="dropdown-item" href="{{ url('email/list') }}">Gerir Emails</a>
                 </div>
@@ -95,7 +95,7 @@
                     Encomendas em Produção <span class="caret"></span>
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="{{ url('orders/list') }}">Listar Encomendas para Produção</a>
+                    <a class="dropdown-item" href="{{ url('orders/production/list') }}">Listar Encomendas para Produção</a>
                 </div>
             </li>
         @endif

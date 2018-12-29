@@ -17,15 +17,17 @@
                 <th role="columnheader">Data de Entrega</th>
                 <th role="columnheader">Criado Por</th>
                 <th role="columnheader">Status</th>
-                @if (Auth::user()->hasAnyRole(['1', '3', '4', '7']))
-                <th role="columnheader"></th>
+                @if (Auth::user()->hasAnyRole(['1', '3', '4', '7']) && $view == 'orders')
                 <th role="columnheader"></th>
                 <th role="columnheader"></th>
                 @endif
-                @if (Auth::user()->hasAnyRole(['1', '6']))
+                @if(Auth::user()->hasAnyRole(['1', '3', '4', '7']) && in_array($view, ['production', 'orders']))
                 <th role="columnheader"></th>
                 @endif
-                @if (Auth::user()->hasAnyRole(['1', '7']))
+                {{--@if (Auth::user()->hasAnyRole(['1', '6']))--}}
+                {{--<th role="columnheader"></th>--}}
+                {{--@endif--}}
+                @if (Auth::user()->hasAnyRole(['1', '7']) && $view == 'quotations')
                     <th role="columnheader"></th>
                 @endif
             </tr>
@@ -41,7 +43,7 @@
                     <td role="columnheader" data-col6="Data de Entrega">{{$order->delivery_date}}</td>
                     <td role="columnheader" data-col7="Criado Por">{{$order->user->name}}</td>
                     <td role="columnheader" data-col8="Status">{{$order->status->status}}</td>
-                    @if (Auth::user()->hasAnyRole(['1', '3', '4', '7']))
+                    @if (Auth::user()->hasAnyRole(['1', '3', '4', '7']) && $view == 'orders')
                     <td role="columnheader" data-col9="">
                         <form method="get" action="{{url('orders/edit/'.$order->id)}}" enctype="multipart/form-data">
                             <button type="submit" class="btn btn-warning">Editar</button>
@@ -50,20 +52,22 @@
                     <td role="columnheader" data-col10="">
                         <button type="button" data-id="{{$order->id}}" data-role="{{$order->client_identifier}}"  class="apagarform btn btn-danger">Apagar</button>
                     </td>
+                    @endif
+                    @if (Auth::user()->hasAnyRole(['1', '3', '4', '7']) && in_array($view, ['production', 'orders']))
                     <td role="columnheader" data-col11="">
                         <form method="get" action="{{url('/order/production/'.$order->id)}}" enctype="multipart/form-data">
                             <button type="submit" class="btn btn-info">Produção Atual</button>
                         </form>
                     </td>
                     @endif
-                    @if (Auth::user()->hasAnyRole(['1', '6']))
-                    <td role="columnheader" data-col10="">
-                        <form method="get" action="{{url('/order/production/insert/'.$order->id.'/')}}" enctype="multipart/form-data">
-                            <button type="submit" class="btn btn-info">A minha produção</button>
-                        </form>
-                    </td>
-                    @endif
-                    @if (Auth::user()->hasAnyRole(['1', '7']))
+                    {{--@if (Auth::user()->hasAnyRole(['1', '6']))--}}
+                    {{--<td role="columnheader" data-col10="">--}}
+                        {{--<form method="get" action="{{url('/order/production/insert/'.$order->id.'/')}}" enctype="multipart/form-data">--}}
+                            {{--<button type="submit" class="btn btn-info">A minha produção</button>--}}
+                        {{--</form>--}}
+                    {{--</td>--}}
+                    {{--@endif--}}
+                    @if (Auth::user()->hasAnyRole(['1', '7']) && $view == 'quotations')
                         <td role="columnheader" data-col11="">
                             <form method="get" action="{{url('/quotation/edit/'.$order->id.'/')}}" enctype="multipart/form-data">
                                 <button type="submit" class="btn btn-success">Ver Orçamentação</button>

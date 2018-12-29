@@ -11,10 +11,26 @@ use App\Role;
 use App\Supplier;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 
 class QuotationController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        Auth::user()->authorizeRoles(['1', '3', '4', '6', '7']);
+
+        $orders = Order::all();
+
+        $view = 'quotations';
+
+        return view('orders.list', compact('orders', 'view'));
+    }
 
     /**
      * Criar novo orçamento pela primeira vez

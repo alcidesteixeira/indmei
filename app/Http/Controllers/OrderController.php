@@ -31,7 +31,9 @@ class OrderController extends Controller
 
         $orders = Order::all();
 
-        return view('orders.list', compact('orders'));
+        $view = 'orders';
+
+        return view('orders.list', compact('orders', 'view'));
     }
 
     /**

@@ -106,6 +106,9 @@ Route::group(['middleware' => 'auth'], function () {
 //Emails
     Route::get('/email/manage', 'OrderProductionController@toSubtract');
 
+//Orders Production
+    Route::get('/orders/production/list', 'OrderProductionController@index');
+
 //Stats
     Route::get('/stats', 'StatisticsController@index');
     Route::post('/stats/update', 'StatisticsController@update');

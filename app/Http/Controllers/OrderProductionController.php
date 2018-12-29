@@ -23,6 +23,22 @@ class OrderProductionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function index()
+    {
+        Auth::user()->authorizeRoles(['1', '3', '4', '6', '7']);
+
+        $orders = Order::all();
+
+        $view = 'production';
+
+        return view('orders.list', compact('orders', 'view'));
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function list($id)
     {
         Auth::user()->authorizeRoles(['1', '3', '4', '7']);
