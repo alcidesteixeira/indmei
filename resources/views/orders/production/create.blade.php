@@ -304,6 +304,22 @@
                             </td>
                         </tr>
                         @endforeach
+                        <tr class="toSubtract">
+                            <td class="">
+                                <input type="number" data-table="{{$i}}" value="" class="value-added tabela{{$i}} "
+                                       style="width:100%;">
+                            </td>
+                            <td class="">
+                                <input type="number" data-table="{{$i}}" value="" class="value-added tabela{{$i}} "
+                                       style="width:100%;">
+                            </td><td class="">
+                                <input type="number" data-table="{{$i}}" value="" class="value-added tabela{{$i}} "
+                                       style="width:100%;">
+                            </td><td class="">
+                                <input type="number" data-table="{{$i}}" value="" class="value-added tabela{{$i}} "
+                                       style="width:100%;">
+                            </td>
+                        </tr>
                         <tr class="missing">
                             <td class="missing1{{$i}}">
                                                     {{round($order->$tamanho1 * 2 + ($order->$tamanho1 * 2 * 0.03))}}</td>

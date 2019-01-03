@@ -109,13 +109,14 @@ class OrderProductionController extends Controller
          * 1º levar todas as produções daquela encomenda e ordenar por data mais antiga primeiro
          * 2º adicionar uma linha em branco
          */
-        dd($production);
+        //dd($production);
+        $prod_days = [];
 
 
         return view(
             'orders.production.create', compact('order', 'guiafios', 'steps', 'warehouseProducts',
             'warehouseProductSpecs'
-//              ,  'prod_days'
+              ,  'prod_days'
             ));
     }
 
