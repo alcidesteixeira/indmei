@@ -533,28 +533,30 @@
         });
 
         function addRow() {
+            let rows = $("#bodyToSubtract1 tr").length ;
+            console.log(rows);
             for(let i = 1; i <= 4; i++) {
                 $("#bodyToSubtract"+i+" tr:last").before(
                     '<tr class="toSubtract">' +
                     '    <td class="">' +
-                    '        <input type="number" data-table="{{$i}}" value="0" name="cor1{{$i}}1" class="value-added tabela{{$i}} cor{{$i}}1"' +
+                    '        <input type="number" data-table="'+i+'" value="0" name="cor'+rows+i+'1" class="value-added tabela'+i+' cor'+i+'1"' +
                     '               style="width:100%;">' +
                     '    </td>' +
                     '    <td class="">' +
-                    '        <input type="number" data-table="{{$i}}" value="0" name="cor1{{$i}}2" class="value-added tabela{{$i}} cor{{$i}}2"' +
+                    '        <input type="number" data-table="'+i+'" value="0" name="cor'+rows+i+'2" class="value-added tabela'+i+' cor'+i+'2"' +
                     '               style="width:100%;">' +
                     '    </td><td class="">' +
-                    '        <input type="number" data-table="{{$i}}" value="0" name="cor1{{$i}}3" class="value-added tabela{{$i}} cor{{$i}}3"' +
+                    '        <input type="number" data-table="'+i+'" value="0" name="cor'+rows+i+'3" class="value-added tabela'+i+' cor'+i+'3"' +
                     '               style="width:100%;">' +
                     '    </td><td class="">' +
-                    '        <input type="number" data-table="{{$i}}" value="0" name="cor1{{$i}}4" class="value-added tabela{{$i}} cor{{$i}}4"' +
+                    '        <input type="number" data-table="'+i+'" value="0" name="cor'+rows+i+'4" class="value-added tabela'+i+' cor'+i+'4"' +
                     '               style="width:100%;">' +
                     '    </td>' +
                     '</tr>');
             }
-            let rows = $("#bodyToSubtract1 tr").length;
-            console.log(rows-1);
-            addColumnWithMachine(rows-1);
+            addColumnWithMachine(rows);
+            $(".value-added").change( updateValues ).keyup( updateValues );
+            $(".value-added").change( updateEmFalta ).keyup( updateEmFalta );
 
         }
     </script>
