@@ -282,7 +282,7 @@
                             <th>{{$order->cor4}}</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="bodyToSubtract{{$i}}">
                         @foreach($prod_days as $key=>$day)
                         <tr class="toSubtract">
                             <td class=""><span style="position:absolute;left:4px; font-size:8px;">{{$key}}</span>
@@ -306,23 +306,22 @@
                         @endforeach
                         <tr class="toSubtract">
                             <td class="">
-                                <input type="number" data-table="{{$i}}" value="" class="value-added tabela{{$i}} "
+                                <input type="number" data-table="{{$i}}" value="0" name="cor1{{$i}}1" class="value-added tabela{{$i}} cor{{$i}}1"
                                        style="width:100%;">
                             </td>
                             <td class="">
-                                <input type="number" data-table="{{$i}}" value="" class="value-added tabela{{$i}} "
+                                <input type="number" data-table="{{$i}}" value="0" name="cor1{{$i}}2" class="value-added tabela{{$i}} cor{{$i}}2"
                                        style="width:100%;">
                             </td><td class="">
-                                <input type="number" data-table="{{$i}}" value="" class="value-added tabela{{$i}} "
+                                <input type="number" data-table="{{$i}}" value="0" name="cor1{{$i}}3" class="value-added tabela{{$i}} cor{{$i}}3"
                                        style="width:100%;">
                             </td><td class="">
-                                <input type="number" data-table="{{$i}}" value="" class="value-added tabela{{$i}} "
+                                <input type="number" data-table="{{$i}}" value="0" name="cor1{{$i}}4" class="value-added tabela{{$i}} cor{{$i}}4"
                                        style="width:100%;">
                             </td>
                         </tr>
                         <tr class="missing">
-                            <td class="missing1{{$i}}">
-                                                    {{round($order->$tamanho1 * 2 + ($order->$tamanho1 * 2 * 0.03))}}</td>
+                            <td class="missing1{{$i}}">{{round($order->$tamanho1 * 2 + ($order->$tamanho1 * 2 * 0.03))}}</td>
                             <td class="missing2{{$i}}">{{round($order->$tamanho2 * 2 + ($order->$tamanho2 * 2 * 0.03))}}</td>
                             <td class="missing3{{$i}}">{{round($order->$tamanho3 * 2 + ($order->$tamanho3 * 2 * 0.03))}}</td>
                             <td class="missing4{{$i}}">{{round($order->$tamanho4 * 2 + ($order->$tamanho4 * 2 * 0.03))}}</td>
@@ -348,6 +347,9 @@
         let arraySub = [];
         $( document ).ready( function () {
 
+            // $(".value-added").keyup( updateValues );
+            // $(".value-added").keyup( updateEmFalta );
+
             //Arranjar array com key,val que traga a soma de cores desde cor11 a cor44
             //Parametro é o order_id, retorna o arrayToSubtract [cor11 => 10, cor12 => 30]
             $.ajax({
@@ -358,8 +360,22 @@
                     //Depois de ter os valores antigos da BD, atualiza
                     updateValues ();
                     updateEmFalta ();
-                    $(".value-added").keyup( updateValues );
-                    $(".value-added").keyup( updateEmFalta );
+                    $(".value-added").change( updateValues ).keyup( updateValues );
+                    $(".value-added").change( updateEmFalta ).keyup( updateEmFalta );
+
+                    //inserir colunas com gramas totais para cada linha da segunda tabela:
+                    let rows = $("#sampleArticleInUse tbody tr").length; //nºlinhas
+                    for(let j = 0; j < rows; j++){
+                        let thirdTd = $("#sampleArticleInUse tbody tr:eq("+j+") td:eq(2)").text();
+
+                        $("#sampleArticleInUse tbody tr:eq("+j+") td:eq(5)").append(Number($("#falta1").text()) * Number(thirdTd) / 1000);
+                        $("#sampleArticleInUse tbody tr:eq("+j+") td:eq(7)").append(Number($("#falta2").text()) * Number(thirdTd) / 1000);
+                        $("#sampleArticleInUse tbody tr:eq("+j+") td:eq(9)").append(Number($("#falta3").text()) * Number(thirdTd) / 1000);
+                        $("#sampleArticleInUse tbody tr:eq("+j+") td:eq(11)").append(Number($("#falta4").text()) * Number(thirdTd) / 1000);
+                    }
+                    //fim de inserção
+
+                    addColumnWithMachine ();
                 }
             });
             //End array
@@ -467,19 +483,9 @@
                 // console.log((arrayToSubtract['a'+i] / 2).toFixed(0));
                 $("#falta" + i).text($("#pedido" + i).text() - (ar2['x'+i] / 1.03 / 2).toFixed(0) - (arrayToSubtract['a'+i] / 1.03 / 2).toFixed(0));
             }
+        }
 
-
-            //inserir colunas com gramas totais para cada linha da segunda tabela:
-            let rows = $("#sampleArticleInUse tbody tr").length; //nºlinhas
-            for(let j = 0; j < rows; j++){
-                let thirdTd = $("#sampleArticleInUse tbody tr:eq("+j+") td:eq(2)").text();
-
-                $("#sampleArticleInUse tbody tr:eq("+j+") td:eq(5)").append(Number($("#falta1").text()) * Number(thirdTd) / 1000);
-                $("#sampleArticleInUse tbody tr:eq("+j+") td:eq(7)").append(Number($("#falta2").text()) * Number(thirdTd) / 1000);
-                $("#sampleArticleInUse tbody tr:eq("+j+") td:eq(9)").append(Number($("#falta3").text()) * Number(thirdTd) / 1000);
-                $("#sampleArticleInUse tbody tr:eq("+j+") td:eq(11)").append(Number($("#falta4").text()) * Number(thirdTd) / 1000);
-            }
-            //fim de inserção
+        function addColumnWithMachine(row = null) {
 
             //Insere nova coluna à esquerda para colocar a máquina respetiva:
             let selectMachine = '<select style="min-width:50px;max-width:50px;">';
@@ -488,16 +494,25 @@
                 selectMachine += '<option value="'+i+'" name="'+i+'">M'+i+'</option>';
             }
             selectMachine += '</select>';
+
+            //Caso esteja a fazer a primeira vez, faz a todas as linhas exceto primeira e ultima
+            //No momento em que row tem um valor, significa que se está a adicionar apenas nessa linha!
+            if(!row) {
             $("#prodTable1 tr").each( function() {
                 $(this).find("th:eq(0)").before("<th style='max-width: 50px'></th>");
             });
             $("#prodTable1 tr").not(':last').each( function() {
                 $(this).find("td:eq(0)").before("<td style='max-width: 50px'>" + selectMachine + "</td>");
             });
+
             $("#prodTable1 tr:last").each( function() {
                 $(this).find("td:eq(0)").before("<td style='max-width: 50px'>Falta</td>");
             });
-            //fim de insercao de coluna da máquina
+            } else {
+                $("#prodTable1 tr:nth-child("+row+")").find("td:eq(0)").before("<td style='max-width: 50px'>" + selectMachine + "</td>");
+            }
+
+        //fim de insercao de coluna da máquina
         }
 
     </script>
@@ -518,7 +533,29 @@
         });
 
         function addRow() {
-            alert("asd");
+            for(let i = 1; i <= 4; i++) {
+                $("#bodyToSubtract"+i+" tr:last").before(
+                    '<tr class="toSubtract">' +
+                    '    <td class="">' +
+                    '        <input type="number" data-table="{{$i}}" value="0" name="cor1{{$i}}1" class="value-added tabela{{$i}} cor{{$i}}1"' +
+                    '               style="width:100%;">' +
+                    '    </td>' +
+                    '    <td class="">' +
+                    '        <input type="number" data-table="{{$i}}" value="0" name="cor1{{$i}}2" class="value-added tabela{{$i}} cor{{$i}}2"' +
+                    '               style="width:100%;">' +
+                    '    </td><td class="">' +
+                    '        <input type="number" data-table="{{$i}}" value="0" name="cor1{{$i}}3" class="value-added tabela{{$i}} cor{{$i}}3"' +
+                    '               style="width:100%;">' +
+                    '    </td><td class="">' +
+                    '        <input type="number" data-table="{{$i}}" value="0" name="cor1{{$i}}4" class="value-added tabela{{$i}} cor{{$i}}4"' +
+                    '               style="width:100%;">' +
+                    '    </td>' +
+                    '</tr>');
+            }
+            let rows = $("#bodyToSubtract1 tr").length;
+            console.log(rows-1);
+            addColumnWithMachine(rows-1);
+
         }
     </script>
 
