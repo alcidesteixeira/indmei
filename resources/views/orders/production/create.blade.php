@@ -19,6 +19,12 @@
         input:read-only {
             background-color: #e9ecef;
         }
+
+        select[readonly] {
+            background: #eee;
+            pointer-events: none;
+            touch-action: none;
+        }
     </style>
 
     <div class="container">
@@ -218,7 +224,7 @@
                         @php($forma = 'forma'.$i)
                         <td style="border: 2px solid darkgray; text-align: center;">
                             <div class="form-group" style="margin: auto;">
-                                <label>T{{$i}}: {{$order->sampleArticle->$tamanho}}</label>
+                                <label>T{{$i}}: {{$order->$tamanho}}</label>
                                 <div class="row">
                                     <div class="col-md-1"></div>
                                     <div class="form-group col-md-5">
@@ -266,16 +272,19 @@
 
                 @for($i = 1; $i <=4; $i++)
                 @php($tamanho1 = 'tamanho1'.$i) @php($tamanho2 = 'tamanho2'.$i) @php($tamanho3 = 'tamanho3'.$i) @php($tamanho4 = 'tamanho4'.$i)
+                @php($tamanho = 'tamanho'.$i)
 
                 <table class="table table-striped thead-dark table-bordered col-sm-3" style="border:2px solid #dee2e6; text-align:center" id="prodTable{{$i}}">
                     <thead>
                         <tr>
+                            @if($i == 1)<th></th>@endif
                             <th id="tam1{{$i}}">{{round($order->$tamanho1 * 2 + ($order->$tamanho1 * 2 * 0.03))}}</th>
                             <th id="tam2{{$i}}">{{round($order->$tamanho2 * 2 + ($order->$tamanho2 * 2 * 0.03))}}</th>
                             <th id="tam3{{$i}}">{{round($order->$tamanho3 * 2 + ($order->$tamanho3 * 2 * 0.03))}}</th>
                             <th id="tam4{{$i}}">{{round($order->$tamanho4 * 2 + ($order->$tamanho4 * 2 * 0.03))}}</th>
                         </tr>
                         <tr>
+                            @if($i == 1)<th></th>@endif
                             <th>{{$order->cor1}}</th>
                             <th>{{$order->cor2}}</th>
                             <th>{{$order->cor3}}</th>
@@ -283,44 +292,56 @@
                         </tr>
                     </thead>
                     <tbody id="bodyToSubtract{{$i}}">
-                        @foreach($prod_days as $key=>$day)
+                        @php($rowsInserted = [])
+                        @foreach($production as $key=>$val)
+                            @php($row = $key +1)
                         <tr class="toSubtract">
-                            <td class=""><span style="position:absolute;left:4px; font-size:8px;">{{$key}}</span>
-                                         <input type="number" data-table="{{$i}}" value="@php($valor = 'val'.$i.'1'){{array_key_exists('val'.$i.'1', $day) ? $day[$valor]: '0'}}"
-                                                class="value-added tabela{{$i}} {{strtotime($key) == strtotime(date("Y-m-d")) ? 'cor'.$i.'1' : ''}}"
-                                                style="width:100%;" {{strtotime($key) == strtotime(date("Y-m-d")) ? 'name=cor'.$i.'1' : 'readonly'}}>
+                            @if($i == 1)
+                                <td style='max-width: 50px; vertical-align: bottom;'>
+                                    <select style='max-width: 50px; min-width: 50px;' name="machineRow{{$row}}" {{substr($val->created_at,0,10) == date("Y-m-d") ? '' : 'readonly="readonly"'}}>
+                                        @for($j = 1; $j <=40; $j++)<option value="{{$j}}" name="{{$j}}" {{$j == $val->machine_id ? 'selected' : ''}}>M{{$j}}
+                                        </option> @endfor
+                                    </select>
+                                </td>
+                            @endif
+                            <td class=""><span style="position:absolute;left:4px; font-size:8px;">{{substr($val->created_at, 0, 10)}}</span>
+                                         <input type="number" data-table="{{$i}}" value="{{$val->cor == '1' && $val->tamanho == $order->$tamanho ? $val->value : '0'}}"
+                                                class="value-added tabela{{$i}} {{substr($val->created_at,0,10) == $lastDateWithData ? 'cor'.$i.'1' : ''}}"
+                                                style="width:100%;" {{substr($val->created_at,0,10) == date("Y-m-d") ? 'name=cor'.$row.$i.'1' : 'readonly'}}>
                             </td>
-                            <td class=""><input type="number" data-table="{{$i}}" value="@php($valor = 'val'.$i.'2'){{array_key_exists('val'.$i.'2', $day) ? $day[$valor]: '0'}}"
-                                                class="value-added tabela{{$i}} {{strtotime($key) == strtotime(date("Y-m-d")) ? 'cor'.$i.'2' : ''}}"
-                                                style="width:100%;" {{strtotime($key) == strtotime(date("Y-m-d")) ? 'name=cor'.$i.'2' : 'readonly'}}>
+                            <td class=""><input type="number" data-table="{{$i}}" value="{{$val->cor == '2' && $val->tamanho == $order->$tamanho ? $val->value : '0'}}"
+                                                class="value-added tabela{{$i}} {{substr($val->created_at,0,10) == $lastDateWithData ? 'cor'.$i.'2' : ''}}"
+                                                style="width:100%;" {{substr($val->created_at,0,10) == date("Y-m-d") ? 'name=cor'.$row.$i.'2' : 'readonly'}}>
                             </td>
-                            <td class=""><input type="number" data-table="{{$i}}" value="@php($valor = 'val'.$i.'3'){{array_key_exists('val'.$i.'3', $day) ? $day[$valor]: '0'}}"
-                                                class="value-added tabela{{$i}} {{strtotime($key) == strtotime(date("Y-m-d")) ? 'cor'.$i.'3' : ''}}"
-                                                style="width:100%;" {{strtotime($key) == strtotime(date("Y-m-d")) ? 'name=cor'.$i.'3' : 'readonly'}}>
+                            <td class=""><input type="number" data-table="{{$i}}" value="{{$val->cor == '3' && $val->tamanho == $order->$tamanho ? $val->value : '0'}}"
+                                                class="value-added tabela{{$i}} {{substr($val->created_at,0,10) == $lastDateWithData ? 'cor'.$i.'3' : ''}}"
+                                                style="width:100%;" {{substr($val->created_at,0,10) == date("Y-m-d") ? 'name=cor'.$row.$i.'3' : 'readonly'}}>
                             </td>
-                            <td class=""><input type="number" data-table="{{$i}}" value="@php($valor = 'val'.$i.'4'){{array_key_exists('val'.$i.'4', $day) ? $day[$valor]: '0'}}"
-                                                class="value-added tabela{{$i}} {{strtotime($key) == strtotime(date("Y-m-d")) ? 'cor'.$i.'4' : ''}}"
-                                                style="width:100%;" {{strtotime($key) == strtotime(date("Y-m-d")) ? 'name=cor'.$i.'4' : 'readonly'}}>
+                            <td class=""><input type="number" data-table="{{$i}}" value="{{$val->cor == '4' && $val->tamanho == $order->$tamanho ? $val->value : '0'}}"
+                                                class="value-added tabela{{$i}} {{substr($val->created_at,0,10) == $lastDateWithData ? 'cor'.$i.'4' : ''}}"
+                                                style="width:100%;" {{substr($val->created_at,0,10) == date("Y-m-d") ? 'name=cor'.$row.$i.'4' : 'readonly'}}>
                             </td>
                         </tr>
+                        @php(substr($val->created_at,0,10) == date("Y-m-d") ? array_push($rowsInserted, $row) : '')
                         @endforeach
-                        <tr class="toSubtract">
-                            <td class="">
-                                <input type="number" data-table="{{$i}}" value="0" name="cor1{{$i}}1" class="value-added tabela{{$i}} cor{{$i}}1"
-                                       style="width:100%;">
-                            </td>
-                            <td class="">
-                                <input type="number" data-table="{{$i}}" value="0" name="cor1{{$i}}2" class="value-added tabela{{$i}} cor{{$i}}2"
-                                       style="width:100%;">
-                            </td><td class="">
-                                <input type="number" data-table="{{$i}}" value="0" name="cor1{{$i}}3" class="value-added tabela{{$i}} cor{{$i}}3"
-                                       style="width:100%;">
-                            </td><td class="">
-                                <input type="number" data-table="{{$i}}" value="0" name="cor1{{$i}}4" class="value-added tabela{{$i}} cor{{$i}}4"
-                                       style="width:100%;">
-                            </td>
-                        </tr>
+                        {{--<tr class="toSubtract">--}}
+                            {{--<td class=""><span style="position:absolute;left:4px; font-size:8px;">{{date('Y-m-d')}}</span>--}}
+                                {{--<input type="number" data-table="{{$i}}" value="0" name="cor1{{$i}}1" class="value-added tabela{{$i}} cor{{$i}}1"--}}
+                                       {{--style="width:100%;">--}}
+                            {{--</td>--}}
+                            {{--<td class="">--}}
+                                {{--<input type="number" data-table="{{$i}}" value="0" name="cor1{{$i}}2" class="value-added tabela{{$i}} cor{{$i}}2"--}}
+                                       {{--style="width:100%;">--}}
+                            {{--</td><td class="">--}}
+                                {{--<input type="number" data-table="{{$i}}" value="0" name="cor1{{$i}}3" class="value-added tabela{{$i}} cor{{$i}}3"--}}
+                                       {{--style="width:100%;">--}}
+                            {{--</td><td class="">--}}
+                                {{--<input type="number" data-table="{{$i}}" value="0" name="cor1{{$i}}4" class="value-added tabela{{$i}} cor{{$i}}4"--}}
+                                       {{--style="width:100%;">--}}
+                            {{--</td>--}}
+                        {{--</tr>--}}
                         <tr class="missing">
+                            @if($i == 1)<td></td>@endif
                             <td class="missing1{{$i}}">{{round($order->$tamanho1 * 2 + ($order->$tamanho1 * 2 * 0.03))}}</td>
                             <td class="missing2{{$i}}">{{round($order->$tamanho2 * 2 + ($order->$tamanho2 * 2 * 0.03))}}</td>
                             <td class="missing3{{$i}}">{{round($order->$tamanho3 * 2 + ($order->$tamanho3 * 2 * 0.03))}}</td>
@@ -329,6 +350,8 @@
                     </tbody>
                 </table>
                 @endfor
+                {{--Para enviar quais as linhas inseridas--}}
+                    <input type="text" name="rowsInserted" id="rowsInserted" value="{{implode(", ", $rowsInserted)}}">
                 <input type="button" class="btn btn-success" value="+ adicionar linha" onclick="addRow();">
             </div>
             <div class="row">
@@ -374,8 +397,7 @@
                         $("#sampleArticleInUse tbody tr:eq("+j+") td:eq(11)").append(Number($("#falta4").text()) * Number(thirdTd) / 1000);
                     }
                     //fim de inserção
-
-                    addColumnWithMachine ();
+                    //addColumnWithMachine ();
                 }
             });
             //End array
@@ -408,7 +430,7 @@
                     if(arraySub['cor'+i+j]) {
                         valFromDB = arraySub['cor'+i+j];
                     }
-                    $(".missing"+j+i).text($("#tam"+j+i).text() - valFromDB - arrayToSubtract['cor'+i+j]);
+                    $(".missing"+j+i).text($("#tam"+j+i).text() /*- valFromDB*/ - arrayToSubtract['cor'+i+j]);
 
                     //Alterar a cor de acordo com os valores que faltem
                     let delivery = "{{$order->delivery_date}}";
@@ -487,8 +509,9 @@
 
         function addColumnWithMachine(row = null) {
 
+            if(row) { var theMachineRow = 'machineRow'+row;} else {  var theMachineRow = 'machineRow-1';}
             //Insere nova coluna à esquerda para colocar a máquina respetiva:
-            let selectMachine = '<select style="min-width:50px;max-width:50px;">';
+            let selectMachine = '<select style="min-width:50px;max-width:50px;" name="'+theMachineRow+'">';
 
             for (let i = 1; i <= 40; i++) {
                 selectMachine += '<option value="'+i+'" name="'+i+'">M'+i+'</option>';
@@ -502,14 +525,14 @@
                 $(this).find("th:eq(0)").before("<th style='max-width: 50px'></th>");
             });
             $("#prodTable1 tr").not(':last').each( function() {
-                $(this).find("td:eq(0)").before("<td style='max-width: 50px'>" + selectMachine + "</td>");
+                $(this).find("td:eq(0)").before("<td style='max-width: 50px; vertical-align: bottom;'>" + selectMachine + "</td>");
             });
 
             $("#prodTable1 tr:last").each( function() {
                 $(this).find("td:eq(0)").before("<td style='max-width: 50px'>Falta</td>");
             });
             } else {
-                $("#prodTable1 tr:nth-child("+row+")").find("td:eq(0)").before("<td style='max-width: 50px'>" + selectMachine + "</td>");
+                $("#prodTable1 tr:nth-child("+row+")").find("td:eq(0)").before("<td style='max-width: 50px; vertical-align: bottom;'>" + selectMachine + "</td>");
             }
 
         //fim de insercao de coluna da máquina
@@ -518,8 +541,14 @@
     </script>
 
     <script>
-    //Enviar email caso a encomenda esteja concluída
+
+        let rowsInserted = [];
         $("#submitToday").submit( function () {
+            console.log(rowsInserted);
+            //Adicionar linhas inseridas ao enviar
+            let currentRowsEditable = $("#rowsInserted").val() !== '' && rowsInserted.length > 0 ? $("#rowsInserted").val() + ', ' : $("#rowsInserted").val();
+            $("#rowsInserted").val(currentRowsEditable + rowsInserted);
+            //Enviar email caso a encomenda esteja concluída
            let allDone = $(".btn-success").length;
            if(allDone == 17){
                //Enviar email
@@ -538,7 +567,7 @@
             for(let i = 1; i <= 4; i++) {
                 $("#bodyToSubtract"+i+" tr:last").before(
                     '<tr class="toSubtract">' +
-                    '    <td class="">' +
+                    '    <td class=""><span style="position:absolute;left:4px; font-size:8px;">{{date("Y-m-d")}}</span>' +
                     '        <input type="number" data-table="'+i+'" value="0" name="cor'+rows+i+'1" class="value-added tabela'+i+' cor'+i+'1"' +
                     '               style="width:100%;">' +
                     '    </td>' +
@@ -558,6 +587,8 @@
             $(".value-added").change( updateValues ).keyup( updateValues );
             $(".value-added").change( updateEmFalta ).keyup( updateEmFalta );
 
+            //Array com valor da menor linha inserida, até ao valor da linha máxima inserida.
+            rowsInserted.push(rows);
         }
     </script>
 

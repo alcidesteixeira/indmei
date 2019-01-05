@@ -63,7 +63,9 @@ class OrderProductionController extends Controller
         $steps = SampleArticleStep::all();
         $warehouseProducts = WarehouseProduct::all();
         $warehouseProductSpecs = WarehouseProductSpec::all();
-        $production = OrderProduction::where('order_id', $id)->where('user_id', $id_user ? $id_user : Auth::id())->get();
+        $production = OrderProduction::where('order_id', $id)->get();
+        $lastDateWithData = OrderProduction::orderBy('created_at', 'desc')->first()->created_at->format('Y-m-d');
+
 
         //create array of values to subtract stored
         /*$start = $order->created_at;
@@ -110,13 +112,11 @@ class OrderProductionController extends Controller
          * 2º adicionar uma linha em branco
          */
         //dd($production);
-        $prod_days = [];
 
 
         return view(
             'orders.production.create', compact('order', 'guiafios', 'steps', 'warehouseProducts',
-            'warehouseProductSpecs'
-              ,  'prod_days'
+            'warehouseProductSpecs', 'production', 'lastDateWithData'
             ));
     }
 
@@ -133,25 +133,30 @@ class OrderProductionController extends Controller
          * Ao gravar, vai ter de procurar as linhas que são dessa encomenda, e atualizá-las ou criar novas se não existirem
          */
 
-        $orderProd = OrderProduction::where('created_at', '>', Carbon::today())
+        OrderProduction::where('created_at', '>', Carbon::today())
             ->where('created_at', '<', Carbon::tomorrow())
             ->where('user_id', Auth::id())
             ->delete();
 
         //dd($request->all());
-        for($i = 1; $i <= 4; $i++) {
-            for($j = 1; $j <= 4; $j++) {
-                $cor = 'cor'.$i.$j;
-                if($request->$cor !== '0') {
-                    $orderProd = new OrderProduction;
-                    $orderProd->user_id = Auth::id();
-                    $orderProd->order_id = $id;
-                    $orderProd->tamanho = $i;
-                    $orderProd->cor = $j;
-                    $orderProd->value = $request->$cor;
-                    $orderProd->created_at = Carbon::now('Europe/Lisbon');
-                    $orderProd->updated_at = Carbon::now('Europe/Lisbon');
-                    $orderProd->save();
+        $rows = explode(',', $request->rowsInserted);
+        for($k = reset($rows); $k <= end($rows); $k++) {
+            for ($i = 1; $i <= 4; $i++) {
+                for ($j = 1; $j <= 4; $j++) {
+                    $cor = 'cor' . $k . $i . $j;
+                    $machine = 'machineRow' . $k;
+                    if ($request->$cor !== '0') {
+                        $orderProd = new OrderProduction;
+                        $orderProd->user_id = Auth::id();
+                        $orderProd->machine_id = $request->$machine;
+                        $orderProd->order_id = $id;
+                        $orderProd->tamanho = $i;
+                        $orderProd->cor = $j;
+                        $orderProd->value = $request->$cor;
+                        $orderProd->created_at = Carbon::now('Europe/Lisbon');
+                        $orderProd->updated_at = Carbon::now('Europe/Lisbon');
+                        $orderProd->save();
+                    }
                 }
             }
         }
