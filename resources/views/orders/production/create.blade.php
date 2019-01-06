@@ -25,9 +25,22 @@
             pointer-events: none;
             touch-action: none;
         }
+         .loader {
+             margin: 0;
+             float: left;
+             border: 4px solid #d0c3c3;
+             border-radius: 50%;
+             border-top: 4px solid #3498db;
+             width: 20px;
+             height: 20px;
+             -webkit-animation: spin 2s linear infinite; /* Safari */
+             animation: spin 2s linear infinite;
+         }
     </style>
 
     <div class="container">
+        @include('flash::message')
+
         <h2>Folha de Produção</h2><br/>
 
             <div class="row">
@@ -292,15 +305,17 @@
                         </tr>
                     </thead>
                     <tbody id="bodyToSubtract{{$i}}">
-                        @php($rowsInserted = [])
+                        @php($rowsInserted = []) @php($lastMachine = '')
                         @foreach($production as $key=>$val)
                             @php($row = $key +1)
+                        {{--Se a máquina atual for igual à anterior, vai substituir em cima da linha anterior--}}
                         <tr class="toSubtract">
                             @if($i == 1)
                                 <td style='max-width: 50px; vertical-align: bottom;'>
                                     <select style='max-width: 50px; min-width: 50px;' name="machineRow{{$row}}" {{substr($val->created_at,0,10) == date("Y-m-d") ? '' : 'readonly="readonly"'}}>
-                                        @for($j = 1; $j <=40; $j++)<option value="{{$j}}" name="{{$j}}" {{$j == $val->machine_id ? 'selected' : ''}}>M{{$j}}
-                                        </option> @endfor
+                                        @for($j = 1; $j <=40; $j++)
+                                            <option value="{{$j}}" name="{{$j}}" {{$j == $val->machine_id ? 'selected' : ''}}>M{{$j}}</option>
+                                        @endfor
                                     </select>
                                 </td>
                             @endif
@@ -323,6 +338,7 @@
                             </td>
                         </tr>
                         @php(substr($val->created_at,0,10) == date("Y-m-d") ? array_push($rowsInserted, $row) : '')
+                        @php($lastMachine = $val->machine_id)
                         @endforeach
                         {{--<tr class="toSubtract">--}}
                             {{--<td class=""><span style="position:absolute;left:4px; font-size:8px;">{{date('Y-m-d')}}</span>--}}
@@ -351,14 +367,14 @@
                 </table>
                 @endfor
                 {{--Para enviar quais as linhas inseridas--}}
-                    <input type="text" name="rowsInserted" id="rowsInserted" value="{{implode(", ", $rowsInserted)}}">
+                    <input type="hidden" name="rowsInserted" id="rowsInserted" value="{{implode(", ", $rowsInserted)}}">
                 <input type="button" class="btn btn-success" value="+ adicionar linha" onclick="addRow();">
             </div>
             <div class="row">
                 <div class="col-md-3"></div>
                 <div class="form-group col-md-6" style="margin-top:60px;margin-bottom:40px;">
-                    <button type="submit" class="btn btn-success">Atualizar</button>
-                    <button type="button" onclick="window.history.back();" class="btn btn-info">Voltar</button>
+                    <button type="submit" class="btn btn-success">Atualizar <span class="loader" style="display:none;"></span></button>
+                    <button type="button" onclick="window.location = '{{url('/orders/list')}}'" class="btn btn-info">Voltar</button>
                 </div>
             </div>
 
@@ -366,6 +382,15 @@
     </div>
 
     <script>
+
+        //Inserir valores nas posições corretas da tabela:
+        let valuesForProductionTable = {!! $arrayProdByMachine !!};
+        $.each(valuesForProductionTable, function(key, value) {
+            $.each(value, function(k, v) {
+                $("[name='cor"+key+k+"']").val(v);
+            });
+        });
+        //FIM - Inserir valores nas posições corretas da tabela
 
         let arraySub = [];
         $( document ).ready( function () {
@@ -543,19 +568,22 @@
     <script>
 
         let rowsInserted = [];
-        $("#submitToday").submit( function () {
-            console.log(rowsInserted);
+        $("#submitToday").submit( function (e) {
+            e.preventDefault();
             //Adicionar linhas inseridas ao enviar
             let currentRowsEditable = $("#rowsInserted").val() !== '' && rowsInserted.length > 0 ? $("#rowsInserted").val() + ', ' : $("#rowsInserted").val();
             $("#rowsInserted").val(currentRowsEditable + rowsInserted);
             //Enviar email caso a encomenda esteja concluída
            let allDone = $(".btn-success").length;
-           if(allDone == 17){
+           if(allDone == 18){
+               $(".loader").css('display', 'block');
                //Enviar email
                $.ajax({
                    url: "/order/ended/"+{!! $order->id !!},
                    success: function(result){
-                       console.log("success");
+
+                       $("#submitToday").unbind('submit').submit();
+                       $(".loader").css('display', 'none');
                    }
                });
            }

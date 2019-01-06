@@ -63,9 +63,23 @@ class OrderProductionController extends Controller
         $steps = SampleArticleStep::all();
         $warehouseProducts = WarehouseProduct::all();
         $warehouseProductSpecs = WarehouseProductSpec::all();
-        $production = OrderProduction::where('order_id', $id)->get();
         $lastDateWithData = OrderProduction::orderBy('created_at', 'desc')->first()->created_at->format('Y-m-d');
+        $production = OrderProduction::where('order_id', $id)->groupBy('created_at')->groupBy('machine_id')->get();
 
+        //Criar array com valores para inserir em cada linha
+        $productionTotal = OrderProduction::where('order_id', $id)->get();
+        $arrayProdByMachine = [];
+        foreach($production as $key =>$prod){
+            $array = [];
+            foreach ($productionTotal as $k => $v) {
+                //Se data e maquina igual, entao trata-se da mesma linha
+                if($prod->created_at == $v->created_at && $prod->machine_id == $v->machine_id) {
+                    $array[$v->tamanho . $v->cor] = $v->value;
+                }
+            }
+            $arrayProdByMachine[$key+1] = $array;
+        }
+        $arrayProdByMachine = json_encode($arrayProdByMachine);
 
         //create array of values to subtract stored
         /*$start = $order->created_at;
@@ -116,7 +130,7 @@ class OrderProductionController extends Controller
 
         return view(
             'orders.production.create', compact('order', 'guiafios', 'steps', 'warehouseProducts',
-            'warehouseProductSpecs', 'production', 'lastDateWithData'
+            'warehouseProductSpecs', 'production', 'lastDateWithData', 'arrayProdByMachine'
             ));
     }
 
@@ -129,50 +143,58 @@ class OrderProductionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        /*
-         * Ao gravar, vai ter de procurar as linhas que são dessa encomenda, e atualizá-las ou criar novas se não existirem
-         */
 
-        OrderProduction::where('created_at', '>', Carbon::today())
-            ->where('created_at', '<', Carbon::tomorrow())
-            ->where('user_id', Auth::id())
-            ->delete();
+        if($request->rowsInserted) {
+            $rows = explode(',', $request->rowsInserted);
+            //Se máquinas inseridas forem repetidas, não grava e apresenta erro
+            $arrayValidatedRepeated = [];
+            for ($k = reset($rows); $k <= end($rows); $k++) {
+                $machine = 'machineRow' . $k;
+                if (in_array($request->$machine, $arrayValidatedRepeated)) {
+                    flash('Não foi possivel armazenar os valores porque existem máquinas repetidas para o dia que está a inserir.')->error();
+                    return redirect()->action('OrderProductionController@create', ['id' => $id]);
+                }
+                array_push($arrayValidatedRepeated, $request->$machine);
+            }
 
-        //dd($request->all());
-        $rows = explode(',', $request->rowsInserted);
-        for($k = reset($rows); $k <= end($rows); $k++) {
-            for ($i = 1; $i <= 4; $i++) {
-                for ($j = 1; $j <= 4; $j++) {
-                    $cor = 'cor' . $k . $i . $j;
-                    $machine = 'machineRow' . $k;
-                    if ($request->$cor !== '0') {
-                        $orderProd = new OrderProduction;
-                        $orderProd->user_id = Auth::id();
-                        $orderProd->machine_id = $request->$machine;
-                        $orderProd->order_id = $id;
-                        $orderProd->tamanho = $i;
-                        $orderProd->cor = $j;
-                        $orderProd->value = $request->$cor;
-                        $orderProd->created_at = Carbon::now('Europe/Lisbon');
-                        $orderProd->updated_at = Carbon::now('Europe/Lisbon');
-                        $orderProd->save();
+            OrderProduction::where('created_at', '>', Carbon::today())
+                ->where('created_at', '<', Carbon::tomorrow())
+                ->where('user_id', Auth::id())
+                ->delete();
+
+            //reset = primeiro valor de array; end = ultimo valor do array
+            for ($k = reset($rows); $k <= end($rows); $k++) {
+                for ($i = 1; $i <= 4; $i++) {
+                    for ($j = 1; $j <= 4; $j++) {
+                        $cor = 'cor' . $k . $i . $j;
+                        $machine = 'machineRow' . $k;
+                        if ($request->$cor !== '0') {
+                            $orderProd = new OrderProduction;
+                            $orderProd->user_id = Auth::id();
+                            $orderProd->machine_id = $request->$machine;
+                            $orderProd->order_id = $id;
+                            $orderProd->tamanho = $i;
+                            $orderProd->cor = $j;
+                            $orderProd->value = $request->$cor;
+                            $orderProd->created_at = Carbon::now('Europe/Lisbon');
+                            $orderProd->updated_at = Carbon::now('Europe/Lisbon');
+                            $orderProd->save();
+                        }
                     }
                 }
             }
+
+            //FALTA ATUALIZAR OS VALORES GASTOS EM ARMAZÉM
+            //ATUALIZA HISTÓRICO DO PRODUTO DEPOIS DE INSERIR OS PARES PRODUZIDOS DO DIA
+            $order = Order::where('id', $id)->first();
+            $wireSpent = new Order();
+            $wireSpent = $wireSpent->addRowToStockHistory($order, $id);
+
         }
-
-        //FALTA ATUALIZAR OS VALORES GASTOS EM ARMAZÉM
-        //ATUALIZA HISTÓRICO DO PRODUTO DEPOIS DE INSERIR OS PARES PRODUZIDOS DO DIA
-        $order = Order::where('id', $id)->first();
-        $wireSpent = new Order();
-        $wireSpent = $wireSpent->addRowToStockHistory ($order, $id);
-
-//        dd($wireSpent);
-
 
         flash('Valores atualizador para o dia: '. Carbon::now(). ' com sucesso!')->success();
 
-        return redirect()->action('OrderController@index');
+        return redirect()->action('OrderProductionController@create', ['id' => $id]);
     }
 
     public function toSubtract($id) {
@@ -211,6 +233,6 @@ class OrderProductionController extends Controller
             Mail::to($user->email)->send(new sendSimpleEmail($subject, $body));
         }
 
-        return ("email sended");
+        return ("email sent");
     }
 }

@@ -38,6 +38,7 @@ class sendSimpleEmail extends Mailable
     {
         return $this->from(Auth::user()->email, Auth::user()->name)
             ->bcc(Auth::user()->email)
+            ->replyTo(Auth::user()->email, Auth::user()->name)
             ->subject($this->subject)
             ->view('emails.emailContent')->with(['content' => $this->content]);
     }
