@@ -16,16 +16,17 @@
                     <div class="card-body">
                         <form method="post" action="{{url('email/send/')}}" enctype="multipart/form-data">
                             @csrf
-                            @if(!@$prodSpecArray)
                             <div class="form-group">
                                 <label for="sel1">Enviar para</label>
                                 <select class="form-control" id="client" name="client">
                                     <option value="0">Novo</option>
+                                    @if(!@$prodSpecArray)
                                     <optgroup label="Clientes">
                                         @foreach($clients as $client)
                                         <option value="{{$client->email}}">{{$client->client}} ({{$client->email}})</option>
                                         @endforeach
                                     </optgroup>
+                                    @endif
                                     <optgroup label="Fornecedores">
                                         @foreach($suppliers as $supplier)
                                         <option value="{{$supplier->email}}">{{$supplier->client}} ({{$supplier->email}})</option>
@@ -33,7 +34,6 @@
                                     </optgroup>
                                 </select>
                             </div>
-                            @endif
                             <div class="form-group">
                                 <label for="usr">Novo Endereço de envio:</label>
                                 <input type="email" class="form-control" id="new_address" name="new_address">

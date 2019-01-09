@@ -73,7 +73,7 @@
                     <label for="client_id">Nome do Cliente:</label>
                     <select class="form-control" name="client_id" id="">
                         @foreach($clients as $client)
-                        <option value="{{$client->id}}">{{$client->client}}</option>
+                        <option value="{{$client->id}}" {{@$order->client_id == $client->id ? 'selected' : ''}}>{{$client->client}}</option>
                         @endforeach
                     </select>
                     {{--<input type="text" class="form-control" name="client" value="{{@$order->client_id}}" required>--}}
@@ -133,6 +133,7 @@
                     {{--<input type="text" class="form-control" name="sample_article_id" value="{{@$order->sample_article_id}}">--}}
                 </div>
             </div>
+            <h3>Quantidades a produzir:</h3>
             <table class="table table-striped thead-dark">
                 <thead>
                 <tr>

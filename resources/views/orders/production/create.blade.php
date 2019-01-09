@@ -36,6 +36,11 @@
              -webkit-animation: spin 2s linear infinite; /* Safari */
              animation: spin 2s linear infinite;
          }
+        .warn {
+            border: 2px solid #dc3545;
+            font-weight: bold;
+
+        }
     </style>
 
     <div class="container">
@@ -109,7 +114,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td data-col1="">
+                            <td data-col1="" style="min-width: 80px">
                                 Em Falta
                             </td>
                             <td data-col2="Em Falta da Cor1" id="falta1">
@@ -311,8 +316,8 @@
                         {{--Se a máquina atual for igual à anterior, vai substituir em cima da linha anterior--}}
                         <tr class="toSubtract">
                             @if($i == 1)
-                                <td style='max-width: 50px; vertical-align: bottom;'>
-                                    <select style='max-width: 50px; min-width: 50px;' name="machineRow{{$row}}" {{substr($val->created_at,0,10) == date("Y-m-d") ? '' : 'readonly="readonly"'}}>
+                                <td style='max-width: 60px; vertical-align: bottom;'>
+                                    <select class="{{substr($val->created_at,0,10) == date('Y-m-d') ? 'machines' : ''}}" style='max-width: 60px; min-width: 60px;' name="machineRow{{$row}}" {{substr($val->created_at,0,10) == date("Y-m-d") ? '' : 'readonly="readonly"'}}>
                                         @for($j = 1; $j <=40; $j++)
                                             <option value="{{$j}}" name="{{$j}}" {{$j == $val->machine_id ? 'selected' : ''}}>M{{$j}}</option>
                                         @endfor
@@ -322,19 +327,19 @@
                             <td class=""><span style="position:absolute;left:4px; font-size:8px;">{{substr($val->created_at, 0, 10)}}</span>
                                          <input type="number" data-table="{{$i}}" value="{{$val->cor == '1' && $val->tamanho == $order->$tamanho ? $val->value : '0'}}"
                                                 class="value-added tabela{{$i}} {{substr($val->created_at,0,10) == $lastDateWithData ? 'cor'.$i.'1' : ''}}"
-                                                style="width:100%;" {{substr($val->created_at,0,10) == date("Y-m-d") ? 'name=cor'.$row.$i.'1' : 'readonly'}}>
+                                                style="width:100%;" name="cor{{$row.$i}}1" {{substr($val->created_at,0,10) == date("Y-m-d") ? '' : 'readonly'}}>
                             </td>
                             <td class=""><input type="number" data-table="{{$i}}" value="{{$val->cor == '2' && $val->tamanho == $order->$tamanho ? $val->value : '0'}}"
                                                 class="value-added tabela{{$i}} {{substr($val->created_at,0,10) == $lastDateWithData ? 'cor'.$i.'2' : ''}}"
-                                                style="width:100%;" {{substr($val->created_at,0,10) == date("Y-m-d") ? 'name=cor'.$row.$i.'2' : 'readonly'}}>
+                                                style="width:100%;" name="cor{{$row.$i}}2" {{substr($val->created_at,0,10) == date("Y-m-d") ? '' : 'readonly'}}>
                             </td>
                             <td class=""><input type="number" data-table="{{$i}}" value="{{$val->cor == '3' && $val->tamanho == $order->$tamanho ? $val->value : '0'}}"
                                                 class="value-added tabela{{$i}} {{substr($val->created_at,0,10) == $lastDateWithData ? 'cor'.$i.'3' : ''}}"
-                                                style="width:100%;" {{substr($val->created_at,0,10) == date("Y-m-d") ? 'name=cor'.$row.$i.'3' : 'readonly'}}>
+                                                style="width:100%;" name="cor{{$row.$i}}3" {{substr($val->created_at,0,10) == date("Y-m-d") ? '' : 'readonly'}}>
                             </td>
                             <td class=""><input type="number" data-table="{{$i}}" value="{{$val->cor == '4' && $val->tamanho == $order->$tamanho ? $val->value : '0'}}"
                                                 class="value-added tabela{{$i}} {{substr($val->created_at,0,10) == $lastDateWithData ? 'cor'.$i.'4' : ''}}"
-                                                style="width:100%;" {{substr($val->created_at,0,10) == date("Y-m-d") ? 'name=cor'.$row.$i.'4' : 'readonly'}}>
+                                                style="width:100%;" name="cor{{$row.$i}}4" {{substr($val->created_at,0,10) == date("Y-m-d") ? '' : 'readonly'}}>
                             </td>
                         </tr>
                         @php(substr($val->created_at,0,10) == date("Y-m-d") ? array_push($rowsInserted, $row) : '')
@@ -385,6 +390,7 @@
 
         //Inserir valores nas posições corretas da tabela:
         let valuesForProductionTable = {!! $arrayProdByMachine !!};
+        console.log(valuesForProductionTable);
         $.each(valuesForProductionTable, function(key, value) {
             $.each(value, function(k, v) {
                 $("[name='cor"+key+k+"']").val(v);
@@ -530,13 +536,16 @@
                 // console.log((arrayToSubtract['a'+i] / 2).toFixed(0));
                 $("#falta" + i).text($("#pedido" + i).text() - (ar2['x'+i] / 1.03 / 2).toFixed(0) - (arrayToSubtract['a'+i] / 1.03 / 2).toFixed(0));
             }
+
+
+            getDuplicatedMachines();
         }
 
         function addColumnWithMachine(row = null) {
 
             if(row) { var theMachineRow = 'machineRow'+row;} else {  var theMachineRow = 'machineRow-1';}
             //Insere nova coluna à esquerda para colocar a máquina respetiva:
-            let selectMachine = '<select style="min-width:50px;max-width:50px;" name="'+theMachineRow+'">';
+            let selectMachine = '<select class="machines" style="min-width:60px;max-width:60px;" name="'+theMachineRow+'">';
 
             for (let i = 1; i <= 40; i++) {
                 selectMachine += '<option value="'+i+'" name="'+i+'">M'+i+'</option>';
@@ -547,20 +556,54 @@
             //No momento em que row tem um valor, significa que se está a adicionar apenas nessa linha!
             if(!row) {
             $("#prodTable1 tr").each( function() {
-                $(this).find("th:eq(0)").before("<th style='max-width: 50px'></th>");
+                $(this).find("th:eq(0)").before("<th style='max-width: 60px'></th>");
             });
             $("#prodTable1 tr").not(':last').each( function() {
-                $(this).find("td:eq(0)").before("<td style='max-width: 50px; vertical-align: bottom;'>" + selectMachine + "</td>");
+                $(this).find("td:eq(0)").before("<td class='machines' style='max-width: 60px; vertical-align: bottom;'>" + selectMachine + "</td>");
             });
 
             $("#prodTable1 tr:last").each( function() {
-                $(this).find("td:eq(0)").before("<td style='max-width: 50px'>Falta</td>");
+                $(this).find("td:eq(0)").before("<td style='max-width: 60px'>Falta</td>");
             });
             } else {
-                $("#prodTable1 tr:nth-child("+row+")").find("td:eq(0)").before("<td style='max-width: 50px; vertical-align: bottom;'>" + selectMachine + "</td>");
+                $("#prodTable1 tr:nth-child("+row+")").find("td:eq(0)").before("<td style='max-width: 60px; vertical-align: bottom;'>" + selectMachine + "</td>");
             }
 
+            getDuplicatedMachines();
+            $("select").change( function () {
+                getDuplicatedMachines();
+            });
+
         //fim de insercao de coluna da máquina
+        }
+
+        function getDuplicatedMachines() {
+            //Get duplicates
+            let machines = [];
+            $(".machines").removeClass('warn');
+            $(".machines").each(function (k,v) {
+                machines.push($(this).val());
+            });
+            let sorted_arr = machines.slice().sort();
+            let duplicateMachines = [];
+            for (let i = 0; i < sorted_arr.length - 1; i++) {
+                if (sorted_arr[i + 1] == sorted_arr[i]) {
+                    duplicateMachines.push(sorted_arr[i]);
+                }
+            }
+            console.log(duplicateMachines);
+            if(duplicateMachines.length > 0) {
+                $.each(duplicateMachines, function (k,v) {
+                    console.log(v);
+                    $(".machines").each( function (key,value) {
+                        console.log($(this).val());
+                        if ($(this).val() == v) {
+                            $(this).addClass('warn');
+                        }
+                    });
+                });
+            }
+            //End Get duplicates
         }
 
     </script>
@@ -569,13 +612,13 @@
 
         let rowsInserted = [];
         $("#submitToday").submit( function (e) {
-            e.preventDefault();
             //Adicionar linhas inseridas ao enviar
             let currentRowsEditable = $("#rowsInserted").val() !== '' && rowsInserted.length > 0 ? $("#rowsInserted").val() + ', ' : $("#rowsInserted").val();
             $("#rowsInserted").val(currentRowsEditable + rowsInserted);
             //Enviar email caso a encomenda esteja concluída
            let allDone = $(".btn-success").length;
            if(allDone == 18){
+               e.preventDefault();
                $(".loader").css('display', 'block');
                //Enviar email
                $.ajax({
@@ -596,17 +639,17 @@
                 $("#bodyToSubtract"+i+" tr:last").before(
                     '<tr class="toSubtract">' +
                     '    <td class=""><span style="position:absolute;left:4px; font-size:8px;">{{date("Y-m-d")}}</span>' +
-                    '        <input type="number" data-table="'+i+'" value="0" name="cor'+rows+i+'1" class="value-added tabela'+i+' cor'+i+'1"' +
+                    '        <input type="number" min="0" data-table="'+i+'" value="0" name="cor'+rows+i+'1" class="value-added tabela'+i+' cor'+i+'1"' +
                     '               style="width:100%;">' +
                     '    </td>' +
                     '    <td class="">' +
-                    '        <input type="number" data-table="'+i+'" value="0" name="cor'+rows+i+'2" class="value-added tabela'+i+' cor'+i+'2"' +
+                    '        <input type="number" min="0" data-table="'+i+'" value="0" name="cor'+rows+i+'2" class="value-added tabela'+i+' cor'+i+'2"' +
                     '               style="width:100%;">' +
                     '    </td><td class="">' +
-                    '        <input type="number" data-table="'+i+'" value="0" name="cor'+rows+i+'3" class="value-added tabela'+i+' cor'+i+'3"' +
+                    '        <input type="number" min="0" data-table="'+i+'" value="0" name="cor'+rows+i+'3" class="value-added tabela'+i+' cor'+i+'3"' +
                     '               style="width:100%;">' +
                     '    </td><td class="">' +
-                    '        <input type="number" data-table="'+i+'" value="0" name="cor'+rows+i+'4" class="value-added tabela'+i+' cor'+i+'4"' +
+                    '        <input type="number" min="0" data-table="'+i+'" value="0" name="cor'+rows+i+'4" class="value-added tabela'+i+' cor'+i+'4"' +
                     '               style="width:100%;">' +
                     '    </td>' +
                     '</tr>');

@@ -32,7 +32,7 @@
                 <div class="col-md-3"></div>
                 <div class="form-group col-md-6">
                     <label for="weight">Peso Bruto (Kg):</label>
-                    <input type="text" class="form-control" name="gross_weight" value="{{@$stock->gross_weight}}" required {{@$stock->product->reference ? 'readonly' : ''}}>
+                    <input type="text" class="form-control" name="gross_weight" value="{{@$stock->gross_weight/1000}}" required {{@$stock->product->reference ? 'readonly' : ''}}>
                 </div>
             </div>
             @endif
@@ -41,7 +41,7 @@
                 <div class="col-md-3"></div>
                 <div class="form-group {{@$stock->product->reference ? 'col-md-5' : 'col-md-6'}}">
                     <label for="weight">Peso (Kg):</label>
-                    <input type="text" class="form-control" name="liquid_weight" value="{{@$stock->liquid_weight}}" required {{@$stock->product->reference ? 'readonly' : ''}}>
+                    <input type="text" class="form-control" name="liquid_weight" value="{{@$stock->liquid_weight/1000}}" required {{@$stock->product->reference ? 'readonly' : ''}}>
                 </div>
                 @if(@$stock->product->reference)
                 <div class="form-group col-md-1">

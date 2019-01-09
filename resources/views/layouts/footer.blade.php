@@ -10,7 +10,7 @@
                 <ul class="navbar-nav mr-auto">
 
                 </ul>
-                2018 - INDMEI - All Rights Reserved
+                2019 - INDMEI&reg;
             </div>
         </div>
     </nav>
