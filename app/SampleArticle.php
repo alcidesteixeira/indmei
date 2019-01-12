@@ -48,7 +48,7 @@ class SampleArticle extends Model
     public function getValuePerSample ($sample) {
 
         //Obter valor de cada fio (por Kg)
-        $wireCost = WarehouseProductSpec::all()->pluck('cost')->toArray();
+        $wireCost = WarehouseProductSpec::all()->pluck('cost', 'id')->toArray();
 
         //Para cada cor, pegar na quantidade de fio e multiplicar pelo preço/100 (pois o fio está em gramas)
         //ir somando sempre ao valor anterior
@@ -58,12 +58,12 @@ class SampleArticle extends Model
             'cor3' => 0,
             'cor4' => 0
         ];
-
+//        dd($sample);
         for ($j = 1; $j <= 4; $j++) {
             for ($i = 1; $i <= $sample['rowCount']; $i++) {
                 //Para o caso dos valores vazios, colocar aqui condição
-                $keyForWireCost = intval(@$sample['row-'.$i.'-color'.$j])-1 == -1 ? 0 : intval(@$sample['row-'.$i.'-color'.$j])-1;
-                $valueCor['cor'.$j] += intval(@$sample['row-'.$i.'-grams']) * $wireCost[$keyForWireCost] / 100;
+                $keyForWireCost = intval(@$sample['row-'.$i.'-color'.$j])-1 == -1 ? 0 : intval(@$sample['row-'.$i.'-color'.$j]);
+                $valueCor['cor'.$j] += $keyForWireCost == 0 ? '0' : intval(@$sample['row-'.$i.'-grams']) * $wireCost[$keyForWireCost] / 100;
             }
         }
 

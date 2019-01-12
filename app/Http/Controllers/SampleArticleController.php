@@ -49,10 +49,10 @@ class SampleArticleController extends Controller
         $warehouseProducts = WarehouseProduct::all();
 
         $warehouseFirstWireSpecs = WarehouseProduct::first();
-
         if($warehouseFirstWireSpecs) {
             $warehouseFirstWireSpecs = $warehouseFirstWireSpecs->warehouseProductSpecs()->get();
         }
+
         $guiafios = SampleArticleGuiafio::all();
 
         $sampleIdsAndDesc = SampleArticle::all('id', 'reference', 'description');
@@ -69,7 +69,7 @@ class SampleArticleController extends Controller
      */
     public function store(Request $request)
     {
-        //dump($request->all());
+        //dd($request->all());
         Auth::user()->authorizeRoles(['1', '3']);
 
         $sampleCost = new SampleArticle();
@@ -375,18 +375,16 @@ class SampleArticleController extends Controller
 
         //dd($sampleArticle->sampleArticleWires()->get()->pluck('id')->toArray());
 
-        $isUsed = Order::where('sample_article_id', $id)->first();
+        $isUsedOrders = Order::where('sample_article_id', $id)->first();
 
         //dd($isNotLastStatus);
 
-        if($isUsed) {
-
+        if($isUsedOrders) {
             flash('Atenção! A Amostra de Artigo com a referência '. $sampleArticle->reference . ' não pode ser eliminado pois encontra-se associado a Encomendas!
                 <br> Remova esta amostra das encomendas para poder ser eliminada!')->error();
 
         }
         else {
-
             //Delete Wire Specs
             $wireColorsIds = $sampleArticle->sampleArticleWires()->get()->pluck('id')->toArray();
             SampleArticleColor::whereIn('sample_articles_wire_id', $wireColorsIds)->delete();

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Order;
+use App\SampleArticleColor;
 use App\WarehouseProduct;
 use App\WarehouseProductSpec;
 use Carbon\Carbon;
@@ -172,6 +173,13 @@ class WarehouseProductController extends Controller
         $productAmount = WarehouseProductSpec::where('warehouse_product_id', $spec->product->id)->get();
 
         $ref = $spec->product->reference;
+
+        $isUsedSamples = SampleArticleColor::where('warehouse_product_spec_id', $id)->first();
+        if($isUsedSamples) {
+            flash('O Artigo com a referência: '. $ref . ', e a descrição: '. $spec->description .'Não foi eliminada por está a ser utilizada por alguma amostra!')->error();
+            return redirect()->action('WarehouseProductController@index');
+        }
+
         $spec->delete();
 
         //Caso seja a última referência daquela matéria prima, apagar tbm a matéria.
@@ -179,8 +187,6 @@ class WarehouseProductController extends Controller
             $product = WarehouseProduct::find($spec->product->id);
             $product->delete();
         }
-
-        //$product->delete();
 
         flash('O Artigo com a referência: '. $ref . ', e a descrição: '. $spec->description .' foi eliminado com sucesso!')->success();
 
