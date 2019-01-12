@@ -70,7 +70,7 @@ class OrderProductionController extends Controller
         }
 
 //        MUDAR AQUI - FAZER O WHERE CREATED AT IGUAL A LASTDATEWITHDATA.
-        $production = OrderProduction::where('order_id', $id)->where('created_at', $lastDateWithDataHMS)->groupBy('created_at')->groupBy('machine_id')->get();
+        $production = OrderProduction::where('order_id', $id)->where('created_at', @$lastDateWithDataHMS)->groupBy('created_at')->groupBy('machine_id')->get();
 
         //Criar array com valores para inserir em cada linha
         $productionTotal = OrderProduction::where('order_id', $id)->get();
@@ -241,7 +241,7 @@ class OrderProductionController extends Controller
 
         //Passar para estado terminado de produzir:
         $order = Order::find($id);
-        $order->status = 7;
+        $order->status_id = 7;
         $order->save();
 
         return ("email sent");

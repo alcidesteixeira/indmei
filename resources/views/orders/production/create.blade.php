@@ -79,7 +79,7 @@
                             @php $tamanho = "tamanho".$i; @endphp
                             <tr>
                                 <td data-col1="Tamanho">
-                                    <span type="text">{{$order->sampleArticle->$tamanho}}</span>
+                                    <span type="text">{{$order->$tamanho}}</span>
                                 </td>
                                 <td data-col2="Cor1">
 
@@ -317,14 +317,14 @@
                         <tr class="toSubtract">
                             @if($i == 1)
                                 <td style='max-width: 60px; vertical-align: bottom;'>
-                                    <select class="{{substr($val->created_at,0,10) == date('Y-m-d') ? 'machines' : ''}}" style='max-width: 60px; min-width: 60px;' name="machineRow{{$row}}" {{substr($val->created_at,0,10) == date("Y-m-d") ? '' : 'readonly="readonly"'}}>
+                                    <select class="machines" style='max-width: 60px; min-width: 60px;' name="machineRow{{$row}}" {{substr($val->created_at,0,10) == date("Y-m-d") ? '' : 'readonly="readonly"'}}>
                                         @for($j = 1; $j <=40; $j++)
                                             <option value="{{$j}}" name="{{$j}}" {{$j == $val->machine_id ? 'selected' : ''}}>M{{$j}}</option>
                                         @endfor
                                     </select>
                                 </td>
                             @endif
-                            <td class=""><span style="position:absolute;left:4px; font-size:8px;">{{substr($val->created_at, 0, 10)}}</span>
+                            <td class=""><span style="position:absolute;left:4px; font-size:8px;">{{date("Y-m-d")}}</span>
                                          <input type="number" data-table="{{$i}}" value="{{$val->cor == '1' && $val->tamanho == $order->$tamanho ? $val->value : '0'}}"
                                                 class="value-added tabela{{$i}} {{substr($val->created_at,0,10) == $lastDateWithData ? 'cor'.$i.'1' : ''}}"
                                                 style="width:100%;" name="cor{{$row.$i}}1" {{substr($val->created_at,0,10) == date("Y-m-d") ? '' : ''}}>
@@ -372,7 +372,7 @@
                 </table>
                 @endfor
                 {{--Para enviar quais as linhas inseridas--}}
-                    <input type="text" name="rowsInserted" id="rowsInserted" value="{{implode(", ", $rowsInserted)}}">
+                    <input type="hidden" name="rowsInserted" id="rowsInserted" value="{{implode(", ", $rowsInserted)}}">
                 <input type="button" class="btn btn-success" value="+ adicionar linha" onclick="addRow();">
             </div>
             <div class="row">
@@ -534,7 +534,7 @@
                 // console.log($("#pedido" + i).text());
                 // console.log((ar2['x'+i] / 1.03 / 2).toFixed(0));
                 // console.log((arrayToSubtract['a'+i] / 2).toFixed(0));
-                $("#falta" + i).text($("#pedido" + i).text() - (ar2['x'+i] / 1.03 / 2).toFixed(0) - (arrayToSubtract['a'+i] / 1.03 / 2).toFixed(0));
+                $("#falta" + i).text($("#pedido" + i).text() /*- (ar2['x'+i] / 1.03 / 2).toFixed(0)*/ - (arrayToSubtract['a'+i] / 1.03 / 2).toFixed(0));
             }
 
 
@@ -660,6 +660,8 @@
 
             //Array com valor da menor linha inserida, até ao valor da linha máxima inserida.
             rowsInserted.push(rows);
+
+            getDuplicatedMachines();
         }
     </script>
 
