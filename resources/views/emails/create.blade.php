@@ -20,6 +20,11 @@
                                 <label for="sel1">Enviar para</label>
                                 <select class="form-control" id="client" name="client">
                                     <option value="0">Novo</option>
+                                    <optgroup label="Utilizadores">
+                                        @foreach($users as $user)
+                                            <option value="{{$user->email}}">{{$user->name}} ({{$user->email}})</option>
+                                        @endforeach
+                                    </optgroup>
                                     @if(!@$prodSpecArray)
                                     <optgroup label="Clientes">
                                         @foreach($clients as $client)

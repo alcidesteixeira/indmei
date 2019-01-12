@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Client;
 use App\Mail\sendSimpleEmail;
 use App\Supplier;
+use App\User;
 use App\WarehouseProductSpec;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -49,8 +50,9 @@ class EmailController extends Controller
 
         $clients = Client::all();
         $suppliers = Supplier::all();
+        $users = User::all();
 
-        return view('emails.create', compact('clients', 'suppliers', 'prodSpecArray'));
+        return view('emails.create', compact('clients', 'suppliers', 'users', 'prodSpecArray'));
     }
 
     /**

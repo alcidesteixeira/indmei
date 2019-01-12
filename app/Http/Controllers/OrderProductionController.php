@@ -63,8 +63,14 @@ class OrderProductionController extends Controller
         $steps = SampleArticleStep::all();
         $warehouseProducts = WarehouseProduct::all();
         $warehouseProductSpecs = WarehouseProductSpec::all();
-        $lastDateWithData = OrderProduction::where('order_id', $id)->orderBy('created_at', 'desc')->first()->created_at->format('Y-m-d');
-        $production = OrderProduction::where('order_id', $id)->groupBy('created_at')->groupBy('machine_id')->get();
+        $lastDateWithData = OrderProduction::where('order_id', $id)->orderBy('created_at', 'desc')->first();
+        if($lastDateWithData) {
+            $lastDateWithDataHMS = $lastDateWithData->created_at;
+            $lastDateWithData = $lastDateWithData->created_at->format('Y-m-d');
+        }
+
+//        MUDAR AQUI - FAZER O WHERE CREATED AT IGUAL A LASTDATEWITHDATA.
+        $production = OrderProduction::where('order_id', $id)->where('created_at', $lastDateWithDataHMS)->groupBy('created_at')->groupBy('machine_id')->get();
 
         //Criar array com valores para inserir em cada linha
         $productionTotal = OrderProduction::where('order_id', $id)->get();
@@ -80,6 +86,7 @@ class OrderProductionController extends Controller
             $arrayProdByMachine[$key+1] = $array;
         }
         $arrayProdByMachine = json_encode($arrayProdByMachine);
+
         //create array of values to subtract stored
         /*$start = $order->created_at;
         $start=substr($start, 0, 10);

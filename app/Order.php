@@ -105,7 +105,9 @@ class Order extends Model
     public function pairsPerColorGross ($order_id) {
         //Selecionar as quantidades de pares de meias, POR COR, já executados
 
-        $currentProduction = OrderProduction::where('order_id', $order_id)->get();
+
+        $recentDate = OrderProduction::groupBy('created_at')->orderBy('created_at', 'desc')->first();
+        $currentProduction = OrderProduction::where('order_id', $order_id)->where('created_at', $recentDate)->get();
         $paresPorCor = [];
 
         foreach ($currentProduction as $newInsertion) {

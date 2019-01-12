@@ -327,22 +327,22 @@
                             <td class=""><span style="position:absolute;left:4px; font-size:8px;">{{substr($val->created_at, 0, 10)}}</span>
                                          <input type="number" data-table="{{$i}}" value="{{$val->cor == '1' && $val->tamanho == $order->$tamanho ? $val->value : '0'}}"
                                                 class="value-added tabela{{$i}} {{substr($val->created_at,0,10) == $lastDateWithData ? 'cor'.$i.'1' : ''}}"
-                                                style="width:100%;" name="cor{{$row.$i}}1" {{substr($val->created_at,0,10) == date("Y-m-d") ? '' : 'readonly'}}>
+                                                style="width:100%;" name="cor{{$row.$i}}1" {{substr($val->created_at,0,10) == date("Y-m-d") ? '' : ''}}>
                             </td>
                             <td class=""><input type="number" data-table="{{$i}}" value="{{$val->cor == '2' && $val->tamanho == $order->$tamanho ? $val->value : '0'}}"
                                                 class="value-added tabela{{$i}} {{substr($val->created_at,0,10) == $lastDateWithData ? 'cor'.$i.'2' : ''}}"
-                                                style="width:100%;" name="cor{{$row.$i}}2" {{substr($val->created_at,0,10) == date("Y-m-d") ? '' : 'readonly'}}>
+                                                style="width:100%;" name="cor{{$row.$i}}2" {{substr($val->created_at,0,10) == date("Y-m-d") ? '' : ''}}>
                             </td>
                             <td class=""><input type="number" data-table="{{$i}}" value="{{$val->cor == '3' && $val->tamanho == $order->$tamanho ? $val->value : '0'}}"
                                                 class="value-added tabela{{$i}} {{substr($val->created_at,0,10) == $lastDateWithData ? 'cor'.$i.'3' : ''}}"
-                                                style="width:100%;" name="cor{{$row.$i}}3" {{substr($val->created_at,0,10) == date("Y-m-d") ? '' : 'readonly'}}>
+                                                style="width:100%;" name="cor{{$row.$i}}3" {{substr($val->created_at,0,10) == date("Y-m-d") ? '' : ''}}>
                             </td>
                             <td class=""><input type="number" data-table="{{$i}}" value="{{$val->cor == '4' && $val->tamanho == $order->$tamanho ? $val->value : '0'}}"
                                                 class="value-added tabela{{$i}} {{substr($val->created_at,0,10) == $lastDateWithData ? 'cor'.$i.'4' : ''}}"
-                                                style="width:100%;" name="cor{{$row.$i}}4" {{substr($val->created_at,0,10) == date("Y-m-d") ? '' : 'readonly'}}>
+                                                style="width:100%;" name="cor{{$row.$i}}4" {{substr($val->created_at,0,10) == date("Y-m-d") ? '' : ''}}>
                             </td>
                         </tr>
-                        @php(substr($val->created_at,0,10) == date("Y-m-d") ? array_push($rowsInserted, $row) : '')
+                        @php( array_push($rowsInserted, $row))
                         @php($lastMachine = $val->machine_id)
                         @endforeach
                         {{--<tr class="toSubtract">--}}
@@ -372,7 +372,7 @@
                 </table>
                 @endfor
                 {{--Para enviar quais as linhas inseridas--}}
-                    <input type="hidden" name="rowsInserted" id="rowsInserted" value="{{implode(", ", $rowsInserted)}}">
+                    <input type="text" name="rowsInserted" id="rowsInserted" value="{{implode(", ", $rowsInserted)}}">
                 <input type="button" class="btn btn-success" value="+ adicionar linha" onclick="addRow();">
             </div>
             <div class="row">
