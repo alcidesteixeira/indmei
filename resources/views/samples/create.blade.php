@@ -336,7 +336,7 @@
             }
             else {
                 $("#row-"+rowSelected+"-reference, #row-"+rowSelected+"-color1, #row-"+rowSelected+"-color2, #row-"+rowSelected+"-color3, #row-"+rowSelected+"-color4").val("1");
-                requestWiresToDB(1, rowSelected);
+                requestWiresToDB({!! $warehouseFirstWireSpecs[0]->warehouse_product_id !!}, rowSelected);
                 $("#row-"+rowSelected+"-grams").val("0");
                 $("#row-"+rowSelected+"-guiafios").val("1");
             }
@@ -367,7 +367,7 @@
         //Run function
         for(let i = 1; i <= $('table tr').length - 1; i++) {
             if($("#row-"+i+"-step").val() !== '18') {
-                requestWiresToDB(1, i);
+                requestWiresToDB({!! $warehouseFirstWireSpecs[0]->warehouse_product_id !!}, i);
             }
         }
     </script>
