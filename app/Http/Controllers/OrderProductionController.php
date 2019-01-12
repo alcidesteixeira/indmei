@@ -239,6 +239,11 @@ class OrderProductionController extends Controller
             Mail::to($user->email)->send(new sendSimpleEmail($subject, $body));
         }
 
+        //Passar para estado terminado de produzir:
+        $order = Order::find($id);
+        $order->status = 7;
+        $order->save();
+
         return ("email sent");
     }
 }
