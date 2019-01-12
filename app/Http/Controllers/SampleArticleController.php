@@ -48,7 +48,7 @@ class SampleArticleController extends Controller
 
         $warehouseProducts = WarehouseProduct::all();
 
-        $warehouseFirstWireSpecs = WarehouseProduct::find(1)->warehouseProductSpecs()->get();
+        $warehouseFirstWireSpecs = WarehouseProduct::first()->warehouseProductSpecs()->get();
 
         $guiafios = SampleArticleGuiafio::all();
 
