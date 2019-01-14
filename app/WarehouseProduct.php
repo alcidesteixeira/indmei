@@ -39,6 +39,30 @@ class WarehouseProduct extends Model
 
         $products = WarehouseProductSpec::all();
 
+        $orders = Order::all();
+        $orderDescs = [];
+        foreach ($orders as $order) {
+            $clientName = Client::where('id', $order->client_id)->first()->client;
+            array_push($orderDescs, 'Encomenda para o cliente: ' . $clientName . ', com o identificador: ' . $order->client_identifier);
+        }
+
+        $descriptions = [];
+        $historyDescriptions = DB::table('warehouse_products_history')
+            ->select('description')
+            ->where('inout', '<>', 'IN')
+            ->groupBy('description')
+            ->get();
+        foreach($historyDescriptions as $desc) {
+            array_push($descriptions, $desc->description);
+
+            //Se não existir esta descrição, apaga histórico porque significa que a encomenda foi apagada
+            if(!in_array($desc->description, $orderDescs)) {
+                DB::table('warehouse_products_history')
+                ->where('description', $desc->description)
+                ->delete();
+            }
+        }
+
         //Para cada produto, precorre o array de histórico, e calcula o valor:
         //Se o valor de histórico tiver IN, soma; Se o valor histórico tiver OUT, subtrai.
         //Stock Líquido -> valor em stock menos o q foi associado para cada encomenda.

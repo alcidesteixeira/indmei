@@ -96,7 +96,7 @@
             </div>
 
             <hr>
-            <p>* Ao colocar o campo de <b>Guiafios</b> vazio, toda a linha correspondente ficará vazia.</p>
+            <p>* Ao colocar o campo de <b>Guiafios</b> vazia, toda a linha correspondente ficará sem dados.</p>
             <table class="table table-striped thead-dark">
                 <thead>
                 <tr>
@@ -128,7 +128,7 @@
                                 @foreach($steps as $step)
                                 {{--Primeiro if acontece ao criar para listar todos os steps direitinhos--}}
                                 {{--Segundo if é para no edit aparecer tudo o que está na BD guardado--}}
-                                <option value="{{$step->id}}" {{$step->id == $id ? 'selected' : @$sampleArticle && $step->id == $sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->step_id ?
+                                <option value="{{$step->id}}" {{$step->id == $i ? 'selected' : @$sampleArticle && $step->id == $sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->step_id ?
                                  'selected' : ''}}>
                                     {{$step->step}}
                                 </option>
@@ -136,7 +136,7 @@
                             </select>
                         </td>
                         <td data-col3="Gramas">
-                            <input type="number" id="row-{{$i}}-grams"  class="form-control" name="row-{{$i}}-grams"  style="max-width: 100px;"
+                            <input type="number" id="row-{{$i}}-grams"  class="form-control" name="row-{{$i}}-grams" style="max-width:100px"
                                    value="{{@$sampleArticle && $sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->grams
                             && $sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->step_id !== '18' ?
                             $sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->grams : '0'}}">
@@ -326,6 +326,23 @@
             requestWiresToDB(wireSelectedId, rowSelected);
         });
 
+        //Whenever user choses empty step, empties every field of the row
+        $(" .stepEmpty ").change( function () {
+            let val = ($(this).val());
+            let rowSelected = $( this ).data('row');
+            if(val == '18') {
+                $("#row-"+rowSelected+"-reference, #row-"+rowSelected+"-color1, #row-"+rowSelected+"-color2, #row-"+rowSelected+"-color3, #row-"+rowSelected+"-color4").val("default");
+                $("#row-"+rowSelected+"-grams").val("");
+                $("#row-"+rowSelected+"-guiafios").val("9");
+            }
+            else {
+                $("#row-"+rowSelected+"-reference, #row-"+rowSelected+"-color1, #row-"+rowSelected+"-color2, #row-"+rowSelected+"-color3, #row-"+rowSelected+"-color4").val("1");
+                requestWiresToDB({!! @$warehouseFirstWireSpecs[0]->warehouse_product_id ? $warehouseFirstWireSpecs[0]->warehouse_product_id : 0 !!}, rowSelected);
+                $("#row-"+rowSelected+"-grams").val("0");
+                $("#row-"+rowSelected+"-guiafios").val("1");
+            }
+        });
+
         //Preview image before upload
         function readURL(input) {
 
@@ -344,7 +361,6 @@
             readURL(this);
             $("#blah").css('display', 'block');
         });
-
     </script>
 
     @if(@$sampleArticle->reference == null)
