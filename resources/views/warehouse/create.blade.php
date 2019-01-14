@@ -45,7 +45,7 @@
                 </div>
                 @if(@$stock->product->reference)
                 <div class="form-group col-md-1">
-                    <button style="margin-top:31px;" type="button" onclick="window.location = '{{url('/stock/receipt')}}';" class="btn btn-warning"{{@$stock->product->reference ? '' : 'disabled'}}>Ajustar</button>
+                    <button style="margin-top:31px;" type="button" onclick="runAdjust();" class="btn btn-warning"{{@$stock->product->reference ? '' : 'disabled'}}>Ajustar</button>
                 </div>
                 @endif
             </div>
@@ -75,5 +75,15 @@
             </div>
         </form>
     </div>
+
+    <script>
+        function runAdjust() {
+            sessionStorage.SupplierRefToAdjust  = '{{@$stock->description}}';
+            sessionStorage.INDMEIRefToAdjust    = '{{@$stock->product->id}}';
+            sessionStorage.ColorToAdjust        = '{{@$stock->id}}';
+
+            window.location = '{{url('/stock/receipt')}}';
+        }
+    </script>
 
 @endsection

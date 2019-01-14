@@ -95,12 +95,13 @@
                 </table>
             </div>
 
-
+            <hr>
+            <p>* Ao colocar o campo de <b>Guiafios</b> vazio, toda a linha correspondente ficará vazia.</p>
             <table class="table table-striped thead-dark">
                 <thead>
                 <tr>
                     <th>Função</th>
-                    <th>Guiafios</th>
+                    <th>Guiafios*</th>
                     <th>Gramas</th>
                     <th>Referência INDMEI</th>
                     <th>Cor #1</th>
@@ -113,7 +114,7 @@
 
                 @for($i = 1; $i < sizeof($steps); $i++)
                     <tr id="theRow" style="@if(in_array($steps[$i-1]->step, ['G8', 'BR5', 'BR6', 'BR7', 'BR8'])) display: none @endif">
-                        <td data-col1="Guiafios">
+                        <td data-col1="Função">
                             <select size="1" data-row="{{$i}}" id="row-{{$i}}-guiafios" name="row-{{$i}}-guiafios" class="form-control">
                                 @foreach($guiafios as $guia)
                                     <option value="{{$guia->id}}" {{@$sampleArticle && $guia->id == $sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->guiafios_id ? 'selected' : ''}}>
@@ -122,12 +123,12 @@
                                 @endforeach
                             </select>
                         </td>
-                        <td data-col2="Step">
+                        <td data-col2="Guiafios">
                             <select size="1" class="stepEmpty form-control" data-row="{{$i}}" id="row-{{$i}}-step" name="row-{{$i}}-step">
                                 @foreach($steps as $step)
                                 {{--Primeiro if acontece ao criar para listar todos os steps direitinhos--}}
                                 {{--Segundo if é para no edit aparecer tudo o que está na BD guardado--}}
-                                <option value="{{$step->id}}" {{$step->id == $i ? 'selected' : @$sampleArticle && $step->id == $sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->step_id ?
+                                <option value="{{$step->id}}" {{$step->id == $id ? 'selected' : @$sampleArticle && $step->id == $sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->step_id ?
                                  'selected' : ''}}>
                                     {{$step->step}}
                                 </option>
@@ -135,7 +136,7 @@
                             </select>
                         </td>
                         <td data-col3="Gramas">
-                            <input type="number" id="row-{{$i}}-grams"  class="form-control" name="row-{{$i}}-grams"
+                            <input type="number" id="row-{{$i}}-grams"  class="form-control" name="row-{{$i}}-grams"  style="max-width: 100px;"
                                    value="{{@$sampleArticle && $sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->grams
                             && $sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->step_id !== '18' ?
                             $sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->grams : '0'}}">
@@ -325,23 +326,6 @@
             requestWiresToDB(wireSelectedId, rowSelected);
         });
 
-        //Whenever user choses empty step, empties every field of the row
-        $(" .stepEmpty ").change( function () {
-            let val = ($(this).val());
-            let rowSelected = $( this ).data('row');
-            if(val == '18') {
-                $("#row-"+rowSelected+"-reference, #row-"+rowSelected+"-color1, #row-"+rowSelected+"-color2, #row-"+rowSelected+"-color3, #row-"+rowSelected+"-color4").val("default");
-                $("#row-"+rowSelected+"-grams").val("");
-                $("#row-"+rowSelected+"-guiafios").val("9");
-            }
-            else {
-                $("#row-"+rowSelected+"-reference, #row-"+rowSelected+"-color1, #row-"+rowSelected+"-color2, #row-"+rowSelected+"-color3, #row-"+rowSelected+"-color4").val("1");
-                requestWiresToDB({!! @$warehouseFirstWireSpecs[0]->warehouse_product_id ? $warehouseFirstWireSpecs[0]->warehouse_product_id : 0 !!}, rowSelected);
-                $("#row-"+rowSelected+"-grams").val("0");
-                $("#row-"+rowSelected+"-guiafios").val("1");
-            }
-        });
-
         //Preview image before upload
         function readURL(input) {
 
@@ -360,6 +344,7 @@
             readURL(this);
             $("#blah").css('display', 'block');
         });
+
     </script>
 
     @if(@$sampleArticle->reference == null)

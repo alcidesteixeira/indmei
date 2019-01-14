@@ -36,7 +36,7 @@ class sendSimpleEmail extends Mailable
      */
     public function build()
     {
-        return $this->from(Auth::user()->email, Auth::user()->name)
+        return $this->from('indsocks@gmail.com', Auth::user()->name)
             ->bcc(Auth::user()->email)
             ->replyTo(Auth::user()->email, Auth::user()->name)
             ->subject($this->subject)

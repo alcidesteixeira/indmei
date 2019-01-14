@@ -148,7 +148,6 @@ class WarehouseProductController extends Controller
         $spec->threshold = $request->threshold;
         $spec->save();
 
-
         //Store on WarehouseProduct Class
         $warehouseProduct = WarehouseProduct::find($spec->product->id);
         $warehouseProduct->reference = $request->reference;
@@ -201,7 +200,7 @@ class WarehouseProductController extends Controller
         $allProducts = $products->getProducts()->pluck('reference', 'id')->toArray();
 
         $colors = new WarehouseProductSpec();
-        $allColors = $colors->getColors()->where('warehouse_product_id', 1)->pluck('color', 'id')->toArray();
+        $allColors = $colors->getColors()->where('warehouse_product_id', key($allProducts))->pluck('color', 'id')->toArray();
 
         return view('warehouse.receipt', compact('allProducts', 'allColors'));
     }

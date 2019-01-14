@@ -197,6 +197,14 @@
 
     });
 
+    $(document).ready( function () {
+        $("#description").val(sessionStorage.getItem("SupplierRefToAdjust"));
+        $("#reference2").val(sessionStorage.getItem("INDMEIRefToAdjust"));
+        $("#color2").val(sessionStorage.getItem("ColorToAdjust"));
+
+        sessionStorage.clear();
+    });
+
 </script>
 
 @endsection
