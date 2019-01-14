@@ -216,7 +216,7 @@
 
         $("#color2").val(sessionStorage.getItem("ColorToAdjust"));
 
-        // sessionStorage.clear();
+        sessionStorage.clear();
     });
 
 </script>
