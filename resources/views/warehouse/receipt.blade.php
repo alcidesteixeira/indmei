@@ -200,6 +200,20 @@
     $(document).ready( function () {
         $("#description").val(sessionStorage.getItem("SupplierRefToAdjust"));
         $("#reference2").val(sessionStorage.getItem("INDMEIRefToAdjust"));
+
+        let key = $("#reference2").val();
+        $.ajax({
+            url: "/stock/choosecolor/"+key,
+            success: function(result){
+                console.log(result);
+                $( "#color2" ).html('');
+                $.each( result, function( key, value ) {
+                    $( "#color2" ).append ('<option value="'+key+'">'+value+'</option>');
+                });
+            }
+        });
+
+
         $("#color2").val(sessionStorage.getItem("ColorToAdjust"));
 
         // sessionStorage.clear();
