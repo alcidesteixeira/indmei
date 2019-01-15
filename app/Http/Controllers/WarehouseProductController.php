@@ -44,9 +44,11 @@ class WarehouseProductController extends Controller
     {
         $historic = DB::table('warehouse_products_history')
             ->leftJoin('users', 'warehouse_products_history.user_id', 'users.id')
-            ->select('user_id', 'name', 'inout', 'weight', 'cost', 'description', 'receipt', 'warehouse_products_history.created_at')
+            ->select('user_id', 'name', 'inout', 'weight', 'cost', 'description', 'receipt', DB::raw("SUM(weight) as sum_weight"), 'warehouse_products_history.created_at')
+//            ->sum('weight')
             ->where('warehouse_product_spec_id', $id)
             ->orderBy('warehouse_products_history.created_at', 'desc')
+            ->groupBy('description')
             ->get();
 
         return $historic;
@@ -74,11 +76,18 @@ class WarehouseProductController extends Controller
     {
         Auth::user()->authorizeRoles(['1', '5']);
 
-        //Store on WarehouseProduct Class
-        $warehouseProduct= new WarehouseProduct();
-        $warehouseProduct->user_id = Auth::id();
-        $warehouseProduct->reference = $request->reference;
-        $warehouseProduct->save();
+        $hasReference = WarehouseProduct::where('reference', $request->reference)->first();
+
+        if($hasReference) {
+            $warehouseProduct = WarehouseProduct::find($hasReference->id);
+        }
+        else {
+            //Store on WarehouseProduct Class
+            $warehouseProduct = new WarehouseProduct();
+            $warehouseProduct->user_id = Auth::id();
+            $warehouseProduct->reference = $request->reference;
+            $warehouseProduct->save();
+        }
 
         //Store on WarehouseProductSpec Class
         $spec = new WarehouseProductSpec();

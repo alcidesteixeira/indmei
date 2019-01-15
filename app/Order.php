@@ -107,7 +107,7 @@ class Order extends Model
 
 
         $recentDate = OrderProduction::groupBy('created_at')->orderBy('created_at', 'desc')->first();
-        $currentProduction = OrderProduction::where('order_id', $order_id)->where('created_at', $recentDate)->get();
+        $currentProduction = OrderProduction::where('order_id', $order_id)->where('created_at', $recentDate->created_at)->get();
         $paresPorCor = [];
 
         foreach ($currentProduction as $newInsertion) {

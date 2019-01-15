@@ -174,7 +174,7 @@
                 $.each(data, function(k,v) {
                     toAppend = toAppend + '<tr role="row">' +
                         '<td role="columnheader" data-col1="Entrada/Saída">'+v["inout"]+'</td>' +
-                        '<td role="columnheader" data-col2="Quantidade (g)">'+v["weight"]+'</td>' +
+                        '<td role="columnheader" data-col2="Quantidade (g)">'+v["sum_weight"]+'</td>' +
                         '<td role="columnheader" data-col3="Custo (€)">'+v["cost"]+'</td>' +
                         '<td role="columnheader" data-col4="Descrição">'+v["description"]+'</td>' +
                         '<td role="columnheader" data-col5="Atualizado Por">'+v["name"]+'</td>' +
