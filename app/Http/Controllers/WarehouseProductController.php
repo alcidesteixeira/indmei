@@ -262,7 +262,7 @@ class WarehouseProductController extends Controller
             }
             //se não existir cor nem fio
             $warehouseProductSpec = WarehouseProductSpec::where('warehouse_product_id', $warehouseProduct->id)->where('color',$request->$color)->first();
-
+//dd($request->all());
             if(!($warehouseProduct) || !($warehouseProductSpec)) {
                 if($warehouseProduct) {
                     $warehouseProduct= WarehouseProduct::find($warehouseProduct->id);
@@ -273,7 +273,9 @@ class WarehouseProductController extends Controller
                 $warehouseProductSpec->color = $request->$color;
                 $warehouseProductSpec->liquid_weight = intval($request->$qtd) * 1000;
                 $warehouseProductSpec->gross_weight = intval($request->$qtd) * 1000;
-                $warehouseProductSpec->cost = $request->$cost;
+                if($request->$cost !== null){
+                    $warehouseProductSpec->cost = $request->$cost;
+                }
                 $warehouseProductSpec->threshold = $request->$threshold ? $request->$threshold : 1000;
                 $warehouseProductSpec->save();
             }

@@ -208,15 +208,17 @@
                 console.log(result);
                 $( "#color2" ).html('');
                 $.each( result, function( key, value ) {
-                    $( "#color2" ).append ('<option value="'+key+'">'+value+'</option>');
+                    let is_selected = '';
+                    if(key == sessionStorage.getItem("ColorToAdjust")) {
+                        is_selected = "selected";
+                    }
+                    $( "#color2" ).append ('<option value="'+key+'" '+is_selected+'>'+value+'</option>');
                 });
+
+                sessionStorage.clear();
             }
         });
 
-
-        $("#color2").val(sessionStorage.getItem("ColorToAdjust"));
-
-        sessionStorage.clear();
     });
 
 </script>

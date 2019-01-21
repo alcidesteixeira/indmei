@@ -218,7 +218,7 @@ class SampleArticleController extends Controller
      */
     public function update(Request $request, $id)
     {
-
+        //dd($request->all());
         Auth::user()->authorizeRoles(['1', '3']);
 
         $sampleCost = new SampleArticle();

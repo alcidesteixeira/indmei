@@ -158,13 +158,17 @@
                                 @if(@$sampleArticle && $sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->warehouse_product_id !== 'default')
                                     {{--Fios da amostra, ou fios default--}}
                                     @if(@$sampleArticle)
-                                        @foreach(@$sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->warehouseProduct->warehouseProductSpecs()->get() as $wireSpecs)
+                                        @php($wires = @$sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->warehouseProduct->warehouseProductSpecs()->get())
+                                        @foreach($wires as $wireSpecs)
                                             <option value="{{$wireSpecs->id}}"
                                                 {{$wireSpecs->id == $sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->wireColors()->get()->values()->get(0)->warehouse_product_spec_id
                                                 ? 'selected' : ''}}>
                                             {{$wireSpecs->color}}
                                         </option>
                                         @endforeach
+                                        <option value="default"
+                                            {{$sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->wireColors()->get()->values()->get(0)->warehouse_product_spec_id == 'default' ?
+                                            'selected' : ''}}></option>
                                     @else
                                         @foreach(@$warehouseFirstWireSpecs as $firstWireSpecs)
                                             <option value="{{$firstWireSpecs->id}}">
@@ -188,6 +192,9 @@
                                                 {{$wireSpecs->color}}
                                             </option>
                                         @endforeach
+                                        <option value="default"
+                                            {{$sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->wireColors()->get()->values()->get(1)->warehouse_product_spec_id == 'default' ?
+                                            'selected' : ''}}></option>
                                     @else
                                         @foreach(@$warehouseFirstWireSpecs as $firstWireSpecs)
                                             <option value="{{$firstWireSpecs->id}}">
@@ -210,6 +217,9 @@
                                                 {{$wireSpecs->color}}
                                             </option>
                                         @endforeach
+                                        <option value="default"
+                                            {{$sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->wireColors()->get()->values()->get(2)->warehouse_product_spec_id == 'default' ?
+                                            'selected' : ''}}></option>
                                     @else
                                         @foreach(@$warehouseFirstWireSpecs as $firstWireSpecs)
                                             <option value="{{$firstWireSpecs->id}}">
@@ -233,6 +243,9 @@
                                                 {{$wireSpecs->color}}
                                             </option>
                                         @endforeach
+                                        <option value="default"
+                                            {{$sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->wireColors()->get()->values()->get(3)->warehouse_product_spec_id == 'default' ?
+                                            'selected' : ''}}></option>
                                     @else
                                         @foreach(@$warehouseFirstWireSpecs as $firstWireSpecs)
                                             <option value="{{$firstWireSpecs->id}}">
@@ -315,6 +328,8 @@
                         $( "#row-"+rowSelected+"-color1, #row-"+rowSelected+"-color2, #row-"+rowSelected+"-color3, #row-"+rowSelected+"-color4")
                             .append('<option value="'+key+'">'+value+'</option>');
                     });
+                    $( "#row-"+rowSelected+"-color1, #row-"+rowSelected+"-color2, #row-"+rowSelected+"-color3, #row-"+rowSelected+"-color4")
+                        .append('<option value="default"></option>');
                 }
             });
         }
