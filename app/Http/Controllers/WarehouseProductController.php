@@ -153,9 +153,14 @@ class WarehouseProductController extends Controller
         $spec->color = $request->color;
         $spec->liquid_weight = $request->liquid_weight;
         $spec->gross_weight = $request->gross_weight;
-        $spec->cost = $request->cost;
+        //$spec->cost = $request->cost;
         $spec->threshold = $request->threshold;
         $spec->save();
+
+        //Update cost on history to display on stock
+        DB::table('warehouse_products_history')->where('warehouse_product_spec_id', $id)
+            ->orderBy('created_at', 'desc')
+            ->update(['cost' => $request->cost]);
 
         //Store on WarehouseProduct Class
         $warehouseProduct = WarehouseProduct::find($spec->product->id);
@@ -262,7 +267,7 @@ class WarehouseProductController extends Controller
             }
             //se não existir cor nem fio
             $warehouseProductSpec = WarehouseProductSpec::where('warehouse_product_id', $warehouseProduct->id)->where('color',$request->$color)->first();
-//dd($request->all());
+
             if(!($warehouseProduct) || !($warehouseProductSpec)) {
                 if($warehouseProduct) {
                     $warehouseProduct= WarehouseProduct::find($warehouseProduct->id);
@@ -275,6 +280,8 @@ class WarehouseProductController extends Controller
                 $warehouseProductSpec->gross_weight = intval($request->$qtd) * 1000;
                 if($request->$cost !== null){
                     $warehouseProductSpec->cost = $request->$cost;
+                } else {
+                    $warehouseProductSpec->cost = $warehouseProductSpec->cost;
                 }
                 $warehouseProductSpec->threshold = $request->$threshold ? $request->$threshold : 1000;
                 $warehouseProductSpec->save();
