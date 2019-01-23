@@ -46,10 +46,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/stock/edit/{id}', 'WarehouseProductController@edit');
     Route::post('/stock/update/{id}', 'WarehouseProductController@update');
     Route::get('/stock/delete/{id}', 'WarehouseProductController@destroy');
-    //Stock Request
-    Route::get('/stock/request', 'WarehouseProductController@requestStock');
-    Route::post('/stock/request', 'WarehouseProductController@storeRequestedStock');
-    Route::get('/stock/request/history', 'WarehouseProductController@StockRequestedHistory');
+    //Stock Request History
+    Route::get('/stock/request/history', 'StockRequestController@index');
 
 
 //SampleArticles

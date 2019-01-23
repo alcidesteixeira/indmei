@@ -15,8 +15,4 @@ class StockRequest extends Model
         return $this->belongsTo('App\WarehouseProductSpec');
     }
 
-    public function updateStocks ($array) {
-
-        return $array;
-    }
 }

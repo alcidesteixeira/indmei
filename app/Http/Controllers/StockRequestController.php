@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\StockRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class StockRequestController extends Controller
 {
@@ -13,7 +15,9 @@ class StockRequestController extends Controller
      */
     public function index()
     {
-        //
+        $stockRequested = DB::table('stock_request_history')->orderBy('created_at', 'desc')->get();
+
+        return view('warehouse.list_stock_requested', compact('stockRequested'));
     }
 
     /**
