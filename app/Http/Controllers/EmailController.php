@@ -10,6 +10,7 @@ use App\User;
 use App\WarehouseProductSpec;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 
 class EmailController extends Controller
@@ -70,6 +71,12 @@ class EmailController extends Controller
         if(isset($request->amountStockRequested)) {
             StockRequest::updateOrCreate(['warehouse_product_spec_id' => $request->id],
                 ['amount_requested' => $request->amountStockRequested, 'email_sent' => 'enviado para: ' . $receiver . '; email: ' . $request->body2]);
+            DB::table('stock_request_history')->insert([
+                    'warehouse_product_spec_id' => $request->id,
+                    'amount_requested' => $request->amountStockRequested,
+                    'email_sent' => 'enviado para: ' . $receiver . '; email: ' . $request->body2,
+                    'created_at' => date('Y-m-d H:i:s')
+                ]);
         }
 
         Mail::to($receiver)->send(new sendSimpleEmail($request->subject, $request->body2));
