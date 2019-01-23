@@ -47,6 +47,13 @@
                                 <label for="usr">Assunto:</label>
                                 <input type="text" class="form-control" id="subject" name="subject" required>
                             </div>
+                            @if(@$prodSpecArray)
+                            <div class="form-group">
+                                <label for="usr">Quantidade a pedir (Kg):</label>
+                                <input type="number" class="form-control" min="1" name="amountStockRequested" required>
+                                <input type="hidden" name="id" value="{{$stock_id}}">
+                            </div>
+                            @endif
                             <div class="form-group">
                                 <label for="comment">Conteúdo:</label>
                                 @if(@$content)

@@ -22,4 +22,9 @@ class WarehouseProductSpec extends Model
 
         return $products;
     }
+
+    public function stockRequested ()
+    {
+        return $this->hasOne('App\StockRequest');
+    }
 }

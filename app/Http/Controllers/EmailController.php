@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Client;
 use App\Mail\sendSimpleEmail;
+use App\StockRequest;
 use App\Supplier;
 use App\User;
 use App\WarehouseProductSpec;
@@ -52,7 +53,7 @@ class EmailController extends Controller
         $suppliers = Supplier::all();
         $users = User::all();
 
-        return view('emails.create', compact('clients', 'suppliers', 'users', 'prodSpecArray'));
+        return view('emails.create', compact('clients', 'suppliers', 'users', 'prodSpecArray', 'stock_id'));
     }
 
     /**
@@ -65,6 +66,11 @@ class EmailController extends Controller
         Auth::user()->authorizeRoles(['1', '3', '5', '7']);
 
         $receiver = $request->client !== '0' ? $request->client : $request->client ? $request->client : $request->new_address;
+
+        if(isset($request->amountStockRequested)) {
+            StockRequest::updateOrCreate(['warehouse_product_spec_id' => $request->id],
+                ['amount_requested' => $request->amountStockRequested, 'email_sent' => 'enviado para: ' . $receiver . '; email: ' . $request->body2]);
+        }
 
         Mail::to($receiver)->send(new sendSimpleEmail($request->subject, $request->body2));
 

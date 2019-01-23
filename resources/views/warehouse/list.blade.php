@@ -14,6 +14,7 @@
                 <th role="columnheader" title="Stock em armazém subtraíndo o valor produzido diariamente pelos operadores">Stock Bruto (Kg)</th>
                 <th role="columnheader" title="Stock em armazém subtraíndo o valor necessário para as encomendas criadas">Stock Líquido (Kg)</th>
                 <th role="columnheader" title="Valor limite mínimo que o peso bruto de stock irá disparar">Alerta mínimo (Kg)</th>
+                <th role="columnheader">Pedido (Kg)</th>
                 <th role="columnheader">Custo (€/Kg)</th>
                 <th role="columnheader">Atualizado Por</th>
                 <th role="columnheader">Última Atualização</th>
@@ -30,19 +31,20 @@
                     <td role="columnheader" data-col3="Stock Bruto (Kg)">{{$product->gross_weight / 1000}}</td>
                     <td role="columnheader" data-col4="Stock Líquido (Kg)">{{$product->liquid_weight / 1000}}</td>
                     <td role="columnheader" data-col5="Alerta mínimo (Kg)">{{$product->threshold}}</td>
-                    <td role="columnheader" data-col6="Custo (€/Kg)">{{$product->cost}}</td>
-                    <td role="columnheader" data-col7="Atualizado Por">{{$product->product->user->name}}</td>
-                    <td role="columnheader" data-col8="Última Atualização">{{$product->updated_at}}</td>
-                    <td role="columnheader" data-col9="">
+                    <td role="columnheader" data-col6="Pedido (Kg)" title="{{strip_tags($product->stockRequested['email_sent']) ?: 0}}">{{$product->stockRequested['amount_requested'] ?: 0}}</td>
+                    <td role="columnheader" data-col7="Custo (€/Kg)">{{$product->cost}}</td>
+                    <td role="columnheader" data-col8="Atualizado Por">{{$product->product->user->name}}</td>
+                    <td role="columnheader" data-col9="Última Atualização">{{$product->updated_at}}</td>
+                    <td role="columnheader" data-col10="">
                         <form method="get" action="{{url('stock/edit/'.$product->id)}}" class="edit" enctype="multipart/form-data">
                             <button type="submit" class="btn btn-warning">Editar</button>
                         </form>
                     </td>
-                    <td role="columnheader" data-col10="">
+                    <td role="columnheader" data-col11="">
                         <button type="button" data-id="{{$product->id}}" data-role="{{$product->product->reference}}" class="delete apagarform btn btn-danger">Apagar</button>
                     </td>
-                    <td role="columnheader" data-col11="">
-                        @if($product->threshold*100 >= $product->gross_weight)
+                    <td role="columnheader" data-col12="">
+                        @if($product->threshold*1000 >= $product->gross_weight)
                         <form method="get" action="{{url('/email/create/'.$product->id)}}" class="email" enctype="multipart/form-data">
                             <button type="submit" class="btn btn-success">Pedir stock</button>
                         </form>

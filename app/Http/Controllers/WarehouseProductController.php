@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Order;
 use App\SampleArticleColor;
+use App\StockRequest;
 use App\WarehouseProduct;
 use App\WarehouseProductSpec;
 use Carbon\Carbon;
@@ -311,6 +312,12 @@ class WarehouseProductController extends Controller
                     'updated_at' => Carbon::now()->timezone('Europe/London')
                 ]
             );
+
+            //Update Stock Requested
+            $stockReq = StockRequest::where('warehouse_product_spec_id', $warehouseProductSpec->id)->pluck('amount_requested')[0];
+            $stockReq = (intval($stockReq) - intval($request->$qtd)) > 0 ? (intval($stockReq) - intval($request->$qtd)) : '0';
+            StockRequest::where('warehouse_product_spec_id', $warehouseProductSpec->id)
+                ->update(['amount_requested' => $stockReq]);
 
         }
 
