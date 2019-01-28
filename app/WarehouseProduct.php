@@ -70,29 +70,57 @@ class WarehouseProduct extends Model
         foreach($products as $product) {
             $total_liquid = $total_bruto = 0;
             $cost = 0;
-            //Cálculo de stock liquido: total menos as encomendas criadas
+
             foreach ($history as $key => $val) {
                 if ($val->warehouse_product_spec_id == $product->id) {
                     if($val->inout == 'IN') {
                         $total_liquid += $val->weight;
                         $cost = $val->cost;
+                        $total_bruto += $val->weight;
                     }
-                    elseif ($val->inout == 'OUT_LIQUID') {
-                        $total_liquid -= $val->weight;
+
+                    //Valida se a encomenda já está terminada ou não:
+                    //Se sim: o valor de liquido vai ser obtido através do bruto -> têm de ser iguais no final
+                    //Se não: vai reduzindo no líquido normalmente, pois este tem de ser menor ou igual ao stock bruto
+                    preg_match('/\d\d\d\d-\d/', $val->description, $m);
+                    $order_id = $m[0] ?? '';
+                    if($order_id !== '') {
+                        $status = Order::where('client_identifier', $order_id)->first()->status_id;
+                        if($status == '7') {
+                            //Cálculo de stock bruto: total menos o que já foi produzido, ou seja, o que existe efectivamente no armazém
+                            if ($val->inout == 'OUT_GROSS') {
+                                $total_bruto -= $val->weight;
+                                $total_liquid -= $val->weight;
+                            }
+                        }
+                        else {
+                            //Cálculo de stock liquido: total menos as encomendas criadas
+                            if ($val->inout == 'OUT_LIQUID') {
+                                $total_liquid -= $val->weight;
+                            }
+
+                            //Cálculo de stock bruto: total menos o que já foi produzido, ou seja, o que existe efectivamente no armazém
+                            if ($val->inout == 'OUT_GROSS') {
+                                $total_bruto -= $val->weight;
+                            }
+                        }
                     }
+
+
                 }
             }
             //Cálculo de stock bruto: total menos o que já foi produzido, ou seja, o que existe efectivamente no armazém
-            foreach ($history as $key => $val) {
-                if ($val->warehouse_product_spec_id == $product->id) {
-                    if($val->inout == 'IN') {
-                        $total_bruto += $val->weight;
-                    }
-                    elseif ($val->inout == 'OUT_GROSS') {
-                        $total_bruto -= $val->weight;
-                    }
-                }
-            }
+//            foreach ($history as $key => $val) {
+//                if ($val->warehouse_product_spec_id == $product->id) {
+//                    if($val->inout == 'IN') {
+//                        $total_bruto += $val->weight;
+//                    }
+//
+//                    if ($val->inout == 'OUT_GROSS') {
+//                        $total_bruto -= $val->weight;
+//                    }
+//                }
+//            }
             //Apenas atualiza os valores de stock que sofreram alterações
             $currentValsStored = WarehouseProductSpec::where('id', $product->id)->first();
             if(strcmp($currentValsStored->liquid_weight, $total_liquid) ||

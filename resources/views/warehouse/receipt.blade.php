@@ -42,7 +42,7 @@
             <div class="form-group col-md-6">
                 <label for="Reference">Referência:</label>
                 <input style="display:none;" type="text" class="form-control typeOfRef" id="reference">
-                <select type="text" class="form-control typeOfRef" id="reference2" required>
+                <select type="text" class="form-control typeOfRef" id="reference2">
                     @foreach($allProducts as $key => $prod)
                         <option value="{{$key}}">{{$prod}}</option>
                     @endforeach
@@ -55,7 +55,7 @@
             <div class="form-group col-md-6">
                 <label for="color">Cor:</label>
                 <input style="display:none;" type="text" class="form-control typeOfCol" id="color">
-                <select type="text" class="form-control typeOfCol" id="color2" required>
+                <select type="text" class="form-control typeOfCol" id="color2">
                     @foreach($allColors as $key => $color)
                         <option value="{{$key}}">{{$color}}</option>
                     @endforeach

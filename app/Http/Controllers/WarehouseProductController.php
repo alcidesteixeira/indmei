@@ -49,6 +49,7 @@ class WarehouseProductController extends Controller
 //            ->sum('weight')
             ->where('warehouse_product_spec_id', $id)
             ->orderBy('warehouse_products_history.created_at', 'desc')
+            ->groupBy('inout')
             ->groupBy('description')
             ->get();
 
@@ -314,10 +315,14 @@ class WarehouseProductController extends Controller
             );
 
             //Update Stock Requested
-            $stockReq = StockRequest::where('warehouse_product_spec_id', $warehouseProductSpec->id)->pluck('amount_requested')[0];
-            $stockReq = (intval($stockReq) - intval($request->$qtd)) > 0 ? (intval($stockReq) - intval($request->$qtd)) : '0';
-            StockRequest::where('warehouse_product_spec_id', $warehouseProductSpec->id)
-                ->update(['amount_requested' => $stockReq]);
+            $stockReq = StockRequest::where('warehouse_product_spec_id', $warehouseProductSpec->id)->first(); //dd($stockReq);
+            if($stockReq) {
+                $stockReq = $stockReq->amount_requested;
+                $stockReq = (intval($stockReq) - intval($request->$qtd)) > 0 ? (intval($stockReq) - intval($request->$qtd)) : '0';
+                StockRequest::where('warehouse_product_spec_id', $warehouseProductSpec->id)
+                    ->update(['amount_requested' => $stockReq]);
+            }
+
 
         }
 
