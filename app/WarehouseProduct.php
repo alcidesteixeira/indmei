@@ -82,7 +82,7 @@ class WarehouseProduct extends Model
                     //Valida se a encomenda já está terminada ou não:
                     //Se sim: o valor de liquido vai ser obtido através do bruto -> têm de ser iguais no final
                     //Se não: vai reduzindo no líquido normalmente, pois este tem de ser menor ou igual ao stock bruto
-                    preg_match('/\d\d\d\d-\d/', $val->description, $m);
+                    preg_match('/\d\d\d\d-(?:\b|-)([1-9]{1,5}[0]?|100000)/', $val->description, $m);
                     $order_id = $m[0] ?? '';
                     if($order_id !== '') {
                         $status = Order::where('client_identifier', $order_id)->first();
