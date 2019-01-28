@@ -85,8 +85,8 @@ class WarehouseProduct extends Model
                     preg_match('/\d\d\d\d-\d/', $val->description, $m);
                     $order_id = $m[0] ?? '';
                     if($order_id !== '') {
-                        $status = Order::where('client_identifier', $order_id)->first()->status_id;
-                        if($status == '7') {
+                        $status = Order::where('client_identifier', $order_id)->first();
+                        if(isset($status) && $status->status_id == '7') {
                             //Cálculo de stock bruto: total menos o que já foi produzido, ou seja, o que existe efectivamente no armazém
                             if ($val->inout == 'OUT_GROSS') {
                                 $total_bruto -= $val->weight;
