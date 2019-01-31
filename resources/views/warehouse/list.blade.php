@@ -25,7 +25,7 @@
             </thead>
             <tbody role="rowgroup">
             @foreach($stock as $product)
-                <tr style="background-color: {{$product->threshold*1000 >= $product->gross_weight ? '#f9a9a9' : ''}}" data-specid="{{$product->id}}" role="row">
+                <tr style="background-color: {{$product->threshold*1000 >= $product->liquid_weight ? '#f9a9a9' : ''}}" data-specid="{{$product->id}}" role="row">
                     <td role="columnheader" data-col1="Referência">{{$product->product->reference}}</td>
                     <td role="columnheader" data-col2="Cor">{{$product->color}}</td>
                     <td role="columnheader" data-col3="Stock Bruto (Kg)">{{$product->gross_weight / 1000}}</td>
@@ -44,7 +44,7 @@
                         <button type="button" data-id="{{$product->id}}" data-role="{{$product->product->reference}}" class="delete apagarform btn btn-danger">Apagar</button>
                     </td>
                     <td role="columnheader" data-col12="">
-                        @if($product->threshold*1000 >= $product->gross_weight)
+                        @if($product->threshold*1000 >= $product->liquid_weight)
                         <form method="get" action="{{url('/email/create/'.$product->id)}}" class="email" enctype="multipart/form-data">
                             <button type="submit" class="btn btn-success">Pedir stock</button>
                         </form>

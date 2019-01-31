@@ -271,6 +271,7 @@ class WarehouseProductController extends Controller
             $warehouseProductSpec = WarehouseProductSpec::where('warehouse_product_id', $warehouseProduct->id)->where('color',$request->$color)->first();
 
             if(!($warehouseProduct) || !($warehouseProductSpec)) {
+
                 if($warehouseProduct) {
                     $warehouseProduct= WarehouseProduct::find($warehouseProduct->id);
                 }
@@ -300,23 +301,32 @@ class WarehouseProductController extends Controller
                 $filename = 'receipts/white.png';
             }
 
-            DB::table('warehouse_products_history')->insert(
-                [
-                    'warehouse_product_spec_id' => $warehouseProductSpec->id,
-                    'user_id' => Auth::id(),
-                    'inout' => $request->$inout,
-                    'weight' => intval($request->$qtd) * 1000,
-                    'cost' => @$request->$cost ? @$request->$cost : $warehouseProductSpec->cost,
-                    'description' => $request->$description,
-                    'receipt' => $filename,
-                    'created_at' => Carbon::now()->timezone('Europe/London'),
-                    'updated_at' => Carbon::now()->timezone('Europe/London')
-                ]
-            );
+            //Tratar da saída de stock corretamente:
+            if($request->$inout == 'OUT') {
+                $arrayInout = ['OUT_GROSS', 'OUT_LIQUID'];
+            }
+            else {
+                $arrayInout = ['IN'];
+            }
+            foreach ($arrayInout as $position) {
+                DB::table('warehouse_products_history')->insert(
+                    [
+                        'warehouse_product_spec_id' => $warehouseProductSpec->id,
+                        'user_id' => Auth::id(),
+                        'inout' => $position,
+                        'weight' => intval($request->$qtd) * 1000,
+                        'cost' => @$request->$cost ? @$request->$cost : $warehouseProductSpec->cost,
+                        'description' => $request->$description,
+                        'receipt' => $filename,
+                        'created_at' => Carbon::now()->timezone('Europe/London'),
+                        'updated_at' => Carbon::now()->timezone('Europe/London')
+                    ]
+                );
+            }
 
             //Update Stock Requested
             $stockReq = StockRequest::where('warehouse_product_spec_id', $warehouseProductSpec->id)->first(); //dd($stockReq);
-            if($stockReq) {
+            if($stockReq && $request->$inout == 'IN') {
                 $stockReq = $stockReq->amount_requested;
                 $stockReq = (intval($stockReq) - intval($request->$qtd)) > 0 ? (intval($stockReq) - intval($request->$qtd)) : '0';
                 StockRequest::where('warehouse_product_spec_id', $warehouseProductSpec->id)
