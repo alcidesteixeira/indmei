@@ -89,7 +89,7 @@ class WarehouseProduct extends Model
                     if($order_id !== '') {
                         $status = Order::where('client_identifier', $order_id)->first();
                     }
-                    if(isset($status) && $status->status_id == '7') {
+                    if(isset($status) && ($status->status_id == '7' || $status->status_id == '1')) {
                         //Cálculo de stock bruto: total menos o que já foi produzido, ou seja, o que existe efectivamente no armazém
                         if ($val->inout == 'OUT_GROSS') {
                             $total_bruto -= $val->weight;
