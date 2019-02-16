@@ -205,8 +205,14 @@ class SampleArticleController extends Controller
         foreach($warehousetWireSpecs as $spec) {
             $warehousetWireSpecsArray [$spec->id] = $spec->color;
         }
+        asort($warehousetWireSpecsArray);
+        $i = 0;
+        foreach($warehousetWireSpecsArray as $key => $value){
+            $array[$i] = ['id' => $key, 'name' => $value];
+            $i++;
+        }
 
-        return ($warehousetWireSpecsArray);
+        return ($array);
     }
 
     /**

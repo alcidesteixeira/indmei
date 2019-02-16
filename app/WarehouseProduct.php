@@ -49,10 +49,11 @@ class WarehouseProduct extends Model
         $descriptions = [];
         $historyDescriptions = DB::table('warehouse_products_history')
             ->select('description')
-            ->where('description', 'like', 'Encomenda para o')
+            ->where('description', 'like', 'Encomenda para o%')
             ->where('inout', '<>', 'IN')
             ->groupBy('description')
             ->get();
+
         foreach($historyDescriptions as $desc) {
             array_push($descriptions, $desc->description);
 

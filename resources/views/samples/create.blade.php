@@ -324,12 +324,12 @@
                 success: function(result){
                     console.log(result);
                     $( "#row-"+rowSelected+"-color1, #row-"+rowSelected+"-color2, #row-"+rowSelected+"-color3, #row-"+rowSelected+"-color4").empty();
-                    $.each(result, function (key, value) {
-                        $( "#row-"+rowSelected+"-color1, #row-"+rowSelected+"-color2, #row-"+rowSelected+"-color3, #row-"+rowSelected+"-color4")
-                            .append('<option value="'+key+'">'+value+'</option>');
-                    });
                     $( "#row-"+rowSelected+"-color1, #row-"+rowSelected+"-color2, #row-"+rowSelected+"-color3, #row-"+rowSelected+"-color4")
                         .append('<option value="default"></option>');
+                    $.each(result, function (key, value) {
+                        $( "#row-"+rowSelected+"-color1, #row-"+rowSelected+"-color2, #row-"+rowSelected+"-color3, #row-"+rowSelected+"-color4")
+                            .append('<option value="'+value['id']+'">'+value['name']+'</option>');
+                    });
                 }
             });
         }

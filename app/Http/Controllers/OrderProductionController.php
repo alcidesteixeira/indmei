@@ -194,7 +194,7 @@ class OrderProductionController extends Controller
             //ATUALIZA HISTÓRICO DO PRODUTO DEPOIS DE INSERIR OS PARES PRODUZIDOS DO DIA
             $order = Order::where('id', $id)->first();
             $wireSpent = new Order();
-            $wireSpent = $wireSpent->addRowToStockHistory($order, $id);
+            $wireSpent = $wireSpent->addRowToStockHistorystock($order, $id);
 
         }
 

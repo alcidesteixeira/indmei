@@ -18,7 +18,7 @@ class WarehouseProductSpec extends Model
 
     public function getColors () {
 
-        $products = WarehouseProductSpec::groupBy('color')->get();
+        $products = WarehouseProductSpec::all();
 
         return $products;
     }

@@ -226,7 +226,6 @@ class WarehouseProductController extends Controller
      */
     public function allColors ($id)
     {
-
         $colors = new WarehouseProductSpec();
         $allColors = $colors->getColors()->where('warehouse_product_id', $id)->pluck('color', 'id')->toArray();
 
