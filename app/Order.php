@@ -172,6 +172,7 @@ class Order extends Model
                         'cost' => 'N/A',
                         'receipt' => $orderImage,
                         'description' => 'Encomenda para o cliente: ' . $clientName . ', com o identificador: ' . $request->client_identifier,
+                        'order_id' => $id,
                         'created_at' => Carbon::now(),
                         'updated_at' => Carbon::now(),
                     ]);
@@ -185,6 +186,7 @@ class Order extends Model
                         'cost' => 'N/A',
                         'receipt' => $orderImage,
                         'description' => 'Encomenda para o cliente: ' . $clientName . ', com o identificador: ' . $request->client_identifier,
+                        'order_id' => $id,
                         'created_at' => Carbon::now(),
                         'updated_at' => Carbon::now(),
                     ]);

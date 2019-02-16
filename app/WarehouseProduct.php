@@ -40,27 +40,30 @@ class WarehouseProduct extends Model
         $products = WarehouseProductSpec::all();
 
         $orders = Order::all();
-        $orderDescs = [];
+        //IDS da encomenda
+        $order_ids = [];
         foreach ($orders as $order) {
-            $clientName = Client::where('id', $order->client_id)->first()->client;
-            array_push($orderDescs, 'Encomenda para o cliente: ' . $clientName . ', com o identificador: ' . $order->client_identifier);
+            array_push($order_ids, $order->id);
         }
 
-        $descriptions = [];
-        $historyDescriptions = DB::table('warehouse_products_history')
-            ->select('description')
-            ->where('description', 'like', 'Encomenda para o%')
-            ->where('inout', '<>', 'IN')
-            ->groupBy('description')
-            ->get();
+        //IDS do histórico
+        $ids_t_c = [];
+        $ids_to_compare = DB::table('warehouse_products_history')
+            ->select('order_id')
+            ->where('order_id', '<>', 0)
+            ->groupBy('order_id')
+            ->get()->toArray();
+        foreach($ids_to_compare as $id) {
+            array_push($ids_t_c, $id->order_id);
+        }
 
-        foreach($historyDescriptions as $desc) {
-            array_push($descriptions, $desc->description);
+        foreach($ids_t_c as $id) {
 
             //Se não existir esta descrição, apaga histórico porque significa que a encomenda foi apagada
-            if(!in_array($desc->description, $orderDescs)) {
+            if(!in_array($id, $order_ids)) {
+                echo "entra";
                 DB::table('warehouse_products_history')
-                ->where('description', $desc->description)
+                ->where('order_id', $id)
                 ->delete();
             }
         }
@@ -84,10 +87,8 @@ class WarehouseProduct extends Model
                     //Valida se a encomenda já está terminada ou não:
                     //Se sim: o valor de liquido vai ser obtido através do bruto -> têm de ser iguais no final
                     //Se não: vai reduzindo no líquido normalmente, pois este tem de ser menor ou igual ao stock bruto
-                    preg_match('/\d\d\d\d-(?:\b|-)([1-9]{1,5}[0]?|100000)/', $val->description, $m);
-                    $order_id = $m[0] ?? '';
-                    if($order_id !== '') {
-                        $status = Order::where('client_identifier', $order_id)->first();
+                    if($val->order_id !== 0) {
+                        $status = Order::where('id', $val->order_id)->first();
                     }
                     if(isset($status) && ($status->status_id == '7' || $status->status_id == '1')) {
                         //Cálculo de stock bruto: total menos o que já foi produzido, ou seja, o que existe efectivamente no armazém
