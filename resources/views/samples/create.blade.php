@@ -136,7 +136,7 @@
                             </select>
                         </td>
                         <td data-col3="Gramas">
-                            <input type="number" id="row-{{$i}}-grams"  class="form-control" name="row-{{$i}}-grams" style="max-width:100px"
+                            <input type="number" id="row-{{$i}}-grams"  class="form-control sum_grams" name="row-{{$i}}-grams" style="max-width:100px"
                                    value="{{@$sampleArticle && $sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->grams
                             && $sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->step_id !== '18' ?
                             $sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->grams : '0'}}">
@@ -263,6 +263,15 @@
                 </tbody>
             </table>
 
+            <div class="row">
+                <div class="col-md-2"></div>
+                <div class=" form-group col-md-1">
+                    <label>Total de Gramas:</label>
+                </div>
+                <div class=" form-group col-md-2">
+                    <input type="text" class="form-control total_gramas" value="0" readonly>
+                </div>
+            </div>
 
             <div class="row">
                 <div class="col-md-3"></div>
@@ -284,6 +293,26 @@
     @endif
 
     <script>
+
+        //Contar total de gramas da amostra
+        console.log("a");
+
+        calcTotalGrams();
+        $(".sum_grams").keyup(function () {
+            calcTotalGrams();
+        });
+        $(".sum_grams").change(function () {
+            calcTotalGrams();
+        });
+
+        function calcTotalGrams() {
+            let sumGrams = 0;
+            $(".sum_grams").each( function (){
+                sumGrams += parseInt($(this).val());
+            });
+            $(".total_gramas").val(sumGrams);
+        }
+
 
         //Duplicar oferta:
         $("#sampleArticleBase").change(function () {

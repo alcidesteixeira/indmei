@@ -234,10 +234,11 @@
             $.ajax({
                 url: "/orders/getSampleArticleId/"+id,
                 success: function(result){
-                    $("#tamanho1").text(result['tamanho1']);
-                    $("#tamanho2").text(result['tamanho2']);
-                    $("#tamanho3").text(result['tamanho3']);
-                    $("#tamanho4").text(result['tamanho4']);
+                    console.log(result);
+                    $("#tamanho1").val(result['tamanho1']);
+                    $("#tamanho2").val(result['tamanho2']);
+                    $("#tamanho3").val(result['tamanho3']);
+                    $("#tamanho4").val(result['tamanho4']);
                 }
             });
 
