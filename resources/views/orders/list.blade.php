@@ -77,6 +77,21 @@
                 </tr>
             @endforeach
             </tbody>
+            <tfoot>
+            <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th>Status</th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+            </tfoot>
         </table>
     </div>
 
@@ -107,8 +122,8 @@
 
         $( document ).ready( function () {
             //Filter and order table
-            $('table').DataTable({
-                columnDefs: [ { orderable: false, targets: [-1, -2] } ],
+            let table = $('table').DataTable({
+                columnDefs: [ { orderable: false, targets: [3, -1, -2, -3] } ],
                 "pageLength": 25,
                 "language": {
                     "lengthMenu": "Apresentar _MENU_ resultados por página",
@@ -125,8 +140,38 @@
                     "loadingRecords": "A pesquisar...",
                     "processing":     "A processar...",
                     "search":         "Pesquisar:",
+                },
+                initComplete: function () {
+                    this.api().columns().every( function () {
+                        let column = this;
+                        console.log(column[0][0]);
+                        if(column[0][0] === 7) {
+                            let select = $('<select style="max-width:50%;"><option value=""></option></select>')
+                                .appendTo( $(column.footer()).empty() )
+                                .on( 'change', function () {
+                                    var val = $.fn.dataTable.util.escapeRegex(
+                                        $(this).val()
+                                    );
+
+                                    column
+                                        .search( val ? '^'+val+'$' : '', true, false )
+                                        .draw();
+                                } );
+
+                            column.data().unique().sort().each( function ( d, j ) {
+                                select.append( '<option value="'+d+'">'+d+'</option>' )
+                            } );
+                        }
+                    } );
                 }
             });
+
+            let filteredData = table
+                .column( 7 )
+                .data()
+                .filter( function ( value, index ) {
+                    return value == 'Produzido' ? true : false;
+                } );
 
 
             $('.apagarform').click(function() {
