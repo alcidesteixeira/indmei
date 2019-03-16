@@ -36,7 +36,7 @@
             @foreach($orders as $order)
                 <tr role="row">
                     <td role="columnheader" data-col1="Cliente">{{$order->client->client}}</td>
-                    <td role="columnheader" data-col2="Nº de Encomenda">{{$order->client_identifier}}</td>
+                    <td role="columnheader" data-col2="Nº de Encomenda">{{$order->client_identifier_public !== '' ? $order->client_identifier_public : $order->client_identifier}}</td>
                     <td role="columnheader" data-col3="Id da Amostra">{{@$order->sampleArticle->reference}}</td>
                     <td role="columnheader" data-col4="Foto">@if(@$order->sampleArticle->image_url)<img width="60" src="../../storage/{{@$order->sampleArticle->image_url}}">@endif</td>
                     <td role="columnheader" data-col5="Criado Em">{{substr($order->created_at, 0, 10)}}</td>
@@ -87,9 +87,13 @@
                 <th></th>
                 <th></th>
                 <th>Status</th>
+                @if (Auth::user()->hasAnyRole(['1', '3', '4', '7']) && $view == 'orders')
                 <th></th>
                 <th></th>
+                @endif
+                @if (Auth::user()->hasAnyRole(['1', '3', '4', '7']) && in_array($view, ['production', 'orders']))
                 <th></th>
+                @endif
             </tr>
             </tfoot>
         </table>

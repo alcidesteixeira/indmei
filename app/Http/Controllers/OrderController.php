@@ -95,8 +95,8 @@ class OrderController extends Controller
         $order->status_id = $request->status_id;
         $order->sample_article_id =  $request->sample_article_id;
         $order->client_id =  $request->client_id;
-        //$order->client_identifier = $request->client_identifier;
         $order->client_identifier = date('Y').'-'.$highestID;
+        $order->client_identifier_public = $request->client_identifier_public;
         $order->delivery_date = $request->delivery_date;
         $order->description = $request->description;
         $order->cor1 = $request->cor1;
@@ -264,7 +264,7 @@ class OrderController extends Controller
         $order->status_id = $request->status_id;
         $order->sample_article_id =  $request->sample_article_id;
         $order->client_id =  $request->client_id;
-//        $order->client_identifier = $request->client_identifier;
+        $order->client_identifier_public = $request->client_identifier_public;
         $order->delivery_date = $request->delivery_date;
         $order->description = $request->description;
         $order->cor1 = $request->cor1;

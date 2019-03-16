@@ -53,6 +53,12 @@
                 <div class="form-group col-md-6">
                     <label for="Description">Amostra INDMEI:</label>
                     <span style="font-weight: bold;">{{$order->sampleArticle->reference}}</span>
+                    <label for="Description"> | Cliente:</label>
+                    <span style="font-weight: bold;">{{$order->client->client}}</span><br>
+                    <label for="Description">Ref Cliente:</label>
+                    <span style="font-weight: bold;">{{$order->client_identifier_public !== '' ? $order->client_identifier_public : $order->client_identifier}}</span>
+                    <label for="Description"> | Data de Entrega:</label>
+                    <span style="font-weight: bold;">{{$order->delivery_date}}</span>
                 </div>
             </div>
 
@@ -153,7 +159,8 @@
 
                 @for($i = 1; $i < sizeof($steps); $i++)
                     {{--Esconder linhas com gramas iguais a zero--}}
-                    @if($order->sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->grams !== '0')
+                    @php( $steps_not_allowed = [8, 14, 15, 16, 17, 18])
+                    @if($order->sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->warehouse_product_id !== 'default' && !in_array($i, $steps_not_allowed))
                     <tr>
                         <td data-col1="Função">
                                 @foreach($guiafios as $guia)
