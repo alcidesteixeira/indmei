@@ -121,7 +121,9 @@
             </div>
             <hr>
             <div class="row">
-                <div class="col-md-3" id="image_sample">
+                <div class="col-md-3">
+                    <div id="image_sample" style="float:left; margin-right:10px"></div>
+                    <div id="image_sample_desc"></div>
                 </div>
                 <div class="form-group col-md-6">
                     <label for="Description">Amostra INDMEI:</label>
@@ -134,6 +136,13 @@
                     {{--<input type="text" class="form-control" name="sample_article_id" value="{{@$order->sample_article_id}}">--}}
                 </div>
             </div>
+
+            <div class="row" id="sampleArticleDetails">
+                @if(@$order->client_identifier)
+                @include('orders.production.sampleArticleInUseTable')
+                @endif
+            </div>
+
             <h3>Quantidades a produzir:</h3>
             <table class="table table-striped thead-dark">
                 <thead>
@@ -226,7 +235,12 @@
             $( this ).parent().css('display', 'none');
         });
 
-        $("#sampleArticleChange").change( updateSizes );
+        $("#sampleArticleChange").change( function() {
+            updateSizes();
+            $("#sampleArticleDetails").html('<div class="col-md-3"></div><div class="col-md-6">\n' +
+                '                    <label>A Amostra foi alterada. Por favor clique na imagem da amostra para consultar os detalhes caso necessário.</label>\n' +
+                '                </div>');
+        } );
 
         $(".sizes").keyup( updateAmounts );
 
@@ -245,9 +259,13 @@
 
             //Display image
             let src_img = $("#sampleArticleChange").find(':selected').data('src');
+            let sampleArticleId = $("#sampleArticleChange").val();
             $("#image_sample").html('');
+            $("#image_sample_desc").html('');
             if(src_img !== undefined){
-                $("#image_sample").append('<img style="width:100px" src="../../storage/'+src_img+'">');
+                $("#image_sample").append('<img style="width:100px;cursor:pointer;border: 2px solid #797979;" src="../../storage/'+src_img+'" ' +
+                    'onclick="window.open(\'../../samples/edit/'+sampleArticleId+'\',\'windowName\',\'height=600,width=800\');">');
+                $("#image_sample_desc").append('Por favor clique na imagem da amostra para ver os detalhes.');
             }
         }
 

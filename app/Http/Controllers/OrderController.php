@@ -9,7 +9,10 @@ use App\OrderFile;
 use App\Role;
 use App\SampleArticle;
 use App\OrderStatus;
+use App\SampleArticleGuiafio;
+use App\SampleArticleStep;
 use App\SampleArticlesWire;
+use App\WarehouseProduct;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -233,8 +236,14 @@ class OrderController extends Controller
         $statuses = OrderStatus::all();
 
         $orderFiles = OrderFile::where('order_id', $id)->get();
+
+        $steps = SampleArticleStep::all();
+
+        $warehouseProducts = WarehouseProduct::all();
+
+        $guiafios = SampleArticleGuiafio::all();
 //dd($orderFiles);
-        return view('orders.create', compact('sampleArticles', 'clients', 'order', 'orderFiles', 'statuses'));
+        return view('orders.create', compact('sampleArticles', 'clients', 'order', 'orderFiles', 'statuses', 'steps', 'warehouseProducts', 'guiafios'));
     }
 
     /**
