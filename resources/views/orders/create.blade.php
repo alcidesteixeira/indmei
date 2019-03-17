@@ -67,6 +67,16 @@
                     </div>
                 </div>
             </div>
+            @if(@$order->status_id == 7)
+            <div class="row">
+                <div class="col-md-3"></div>
+                <div class="form-group col-md-6">
+                    <label for="client_id">Ver definições finais da encomenda produzida:</label>
+                    <a href="{{'/images/finishedOrders/finalorder'.@$order->id.'.png'}}" target="_blank">Ver Aqui</a>
+                    {{--<input type="text" class="form-control" name="client" value="{{@$order->client_id}}" required>--}}
+                </div>
+            </div>
+            @endif
             <div class="row">
                 <div class="col-md-3"></div>
                 <div class="form-group col-md-6">

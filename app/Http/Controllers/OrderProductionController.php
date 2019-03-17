@@ -149,7 +149,6 @@ class OrderProductionController extends Controller
      */
     public function update(Request $request, $id)
     {
-
         if($request->rowsInserted) {
             $rows = explode(',', $request->rowsInserted);
             //Se máquinas inseridas forem repetidas, não grava e apresenta erro
@@ -194,7 +193,7 @@ class OrderProductionController extends Controller
             //ATUALIZA HISTÓRICO DO PRODUTO DEPOIS DE INSERIR OS PARES PRODUZIDOS DO DIA
             $order = Order::where('id', $id)->first();
             $wireSpent = new Order();
-            $wireSpent = $wireSpent->addRowToStockHistorystock($order, $id);
+            $wireSpent->addRowToStockHistory($order, $id);
 
         }
 
@@ -222,6 +221,7 @@ class OrderProductionController extends Controller
     }
 
     public function orderEnded($id) {
+
         $order = Order::where('id', $id)->first();
 
         //Enviar email para criadores de encomendas indicando que uma amostra acabou de ser criada
@@ -245,5 +245,15 @@ class OrderProductionController extends Controller
         $order->save();
 
         return ("email sent");
+    }
+
+    public function saveImageFinishedOrder(Request $request) {
+        $imagedata = base64_decode($request->imgdata);
+        $filename = md5(uniqid(rand(), true));
+        //path where you want to upload image
+        $file = public_path('/images/finishedOrders/finalorder'.$request->orderid.'.png');
+        $imageurl  = $filename.'.png';
+        file_put_contents($file,$imagedata);
+        return $imageurl;
     }
 }

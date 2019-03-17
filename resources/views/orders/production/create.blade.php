@@ -43,7 +43,7 @@
         }
     </style>
 
-    <div class="container">
+    <div class="container" id="theResult">
         @include('flash::message')
 
         <h2>Folha de Produção</h2><br/>
@@ -292,7 +292,27 @@
         </form>
     </div>
 
+    <script src="{{ asset('js/html2canvas.min.js') }}"></script>
     <script>
+        // html2canvas([document.getElementById('theResult')], {
+        //     onrendered: function (canvas) {
+        //         let imagedata = canvas.toDataURL('image/png');
+        //         let imgdata = imagedata.replace(/^data:image\/(png|jpg);base64,/, "");
+        //         //ajax call to save image inside folder
+        //         $.ajax({
+        //             url: '/order/ended/save/image',
+        //             data: {
+        //                 imgdata: imgdata
+        //             },
+        //             type: 'post',
+        //             success: function (response) {
+        //                 console.log(response);
+        //                 $('#image_id img').attr('src', response);
+        //             }
+        //         });
+        //     }
+        // });
+
 
         //Inserir valores nas posições corretas da tabela:
         let valuesForProductionTable = {!! $arrayProdByMachine !!};
@@ -530,9 +550,28 @@
                $.ajax({
                    url: "/order/ended/"+{!! $order->id !!},
                    success: function(result){
+                       //imprimir resultado
+                       html2canvas(document.querySelector("body")).then(canvas => {
+                           let imagedata = canvas.toDataURL('image/png');
+                           let imgdata = imagedata.replace(/^data:image\/(png|jpg);base64,/, "");
+                           //ajax call to save image inside folder
+                           $.ajax({
+                               url: '/order/ended/save/image',
+                               data: {
+                                   imgdata: imgdata,
+                                   orderid: {!! $order->id !!},
+                                   _token: '{{csrf_token()}}'
+                               },
+                               type: 'post',
+                               success: function (response) {
+                                   console.log(response);
+                                   $("#submitToday").unbind('submit').submit();
+                                   $(".loader").css('display', 'none');
+                               }
+                           });
+                       });
 
-                       $("#submitToday").unbind('submit').submit();
-                       $(".loader").css('display', 'none');
+
                    }
                });
            }
