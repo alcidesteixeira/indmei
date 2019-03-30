@@ -10,179 +10,143 @@
             color: #fff;
             text-decoration: none;
         }
+        .table td, .table th {
+            padding: 0.3em;
+        }
+        td .form-control {
+            height: 25px;
+        }
+        td .btn-info {
+             height: 25px;
+            padding: 0 5px;
+         }
     </style>
-
 
     <div class="container">
         <h2>{{@$quotation->id ? 'Atualizar Orçamento' : 'Criar Orçamento'}}</h2><br/>
         <form method="post" action="{{@$quotation->id ? url('quotation/update/'.$quotation->id) : url('quotation/create')}}" enctype="multipart/form-data">
             @csrf
             <div class="row">
-                <div class="form-group col-md-3">
-                    <label for="Status">Status:</label>
-                    <select class="form-control" name="status_id" readonly disabled>
-                        @foreach($statuses as $status)
-                            <option value="{{$status->id}}" {{$status->id == @$order->status_id ? 'selected' : ''}}>{{$status->status}}</option>
+                <div class="form-group col-md-4">
+                    <label for="reference">Referência:</label>
+                    <input type="text" class="form-control" name="reference" value="{{@$quotation->reference ?: $quotationId}}" required readonly>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="client">Cliente:</label>
+                    <select class="form-control" name="client">
+                        @foreach($clients as $client)
+                            <option value="{{$client->id}}" {{@$quotation->client == $client->id ? 'selected' : ''}}>{{$client->client}}</option>
                         @endforeach
                     </select>
                 </div>
-            </div>
-            <div class="row">
-                <div class="form-group col-md-6">
-                    <label for="client_id">Nome do Cliente:</label>
-                    <input type="text" class="form-control" value="{{@$order->client->client}}" required readonly>
-                </div>
-                <div class="form-group col-md-6">
-                    <label for="client_identifier">Identificador do Cliente:</label>
-                    <input type="text" class="form-control" value="{{@$order->client_identifier}}" required readonly>
+                <div class="form-group col-md-4">
+                    <label for="date">Data:</label>
+                    <input type="date" class="form-control" name="date" value="{{@$quotation->date}}" required>
                 </div>
             </div>
             <div class="row">
                 <div class="form-group col-md-6">
-                    <label for="Description">Descrição:</label>
-                    <input type="text" class="form-control" value="{{@$order->description}}" required readonly>
+                    <label for="tot_weight">Peso total da meia:</label>
+                    <input type="text" class="form-control" name="tot_weight" value="{{@$total_weight}}" required readonly>
                 </div>
                 <div class="form-group col-md-6">
-                    <label for="delivery_date">Data de entrega:</label>
-                    <input type="date" class="form-control" value="{{@$order->delivery_date}}" required readonly>
+                    <label for="defect">Defeito:</label>
+                    <input type="text" class="form-control" name="defect" value="{{@$quotation->defect_percentage ?: 7}}" required>
                 </div>
             </div>
-            <hr>
             <div class="row">
-                <div class="col-md-3"></div>
+                <div class="col-md-10">
+                    <table class="table table-striped thead-dark" role="table">
+                        <thead role="rowgroup">
+                        <tr role="row">
+                            <th role="columnheader">Origem</th>
+                            <th role="columnheader" style="width: 8%;">Kgs</th>
+                            <th role="columnheader" style="width: 8%;">Kgs + Defeito</th>
+                            <th role="columnheader" style="width: 8%;">%</th>
+                            <th role="columnheader">Matéria-Prima</th>
+                            <th role="columnheader" style="width: 8%;">%</th>
+                            <th role="columnheader" style="width: 15%;">Preço</th>
+                            <th role="columnheader" style="width: 15%;">Total</th>
+                        </tr>
+                        </thead>
+                        <tbody role="rowgroup">
+                        @for($i=0;$i<12;$i++)
+                            <tr role="row">
+                                <td role="columnheader" data-col1="Orgigem">
+                                    <input type="button" id="{{$i}}" class="change_origin btn btn-info" value="+">
+                                </td>
+                                <td role="columnheader" data-col1="Kgs">
+                                    <input type="text" id="kgs-{{$i}}" name="kgs-{{$i}}" class="form-control mats dropdown-toggle" value="">
+                                </td>
+                                <td role="columnheader" data-col2="Kgs + Defeito">
+
+                                </td>
+                                <td role="columnheader" data-col3="%">
+                                    <input type="text" id="" class="form-control mats dropdown-toggle" value="">
+                                </td>
+                                <td role="columnheader" data-col4="Matéria-Prima">
+                                    <input type="text" id="" class="tog1-{{$i}} form-control mats dropdown-toggle" value="">
+                                    <select style="display:none; height: 25px; padding: 0 5px;" class="form-control tog2-{{$i}}" id="" name="client">
+                                        @foreach($warehouseProductSpecs as $spec)
+                                            <option value="{{$spec->product->reference . ' - ' . $spec->color}}">{{$spec->product->reference . ' - ' . $spec->color}}</option>
+                                        @endforeach
+                                    </select>
+                                </td>
+                                <td role="columnheader" data-col5="%"><input type="text" id="" class="form-control mats dropdown-toggle" value=""></td>
+                                <td role="columnheader" data-col5="Preço">
+                                    <input type="text" id="" class="tog1-{{$i}} form-control mats dropdown-toggle" value="">
+                                </td>
+                                <td role="columnheader" data-col5="Total">
+                                    <input type="text" id="" class="form-control mats dropdown-toggle" value="">
+                                </td>
+                            </tr>
+                        @endfor
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label for="company_cost">Foto:</label>
+                        <input type="file" name="photo" value="">
+                        <img src="" alt="" style="width:100%;">
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="form-group col-md-4">
+                    <label for="company_cost">Custo para a Empresa:</label>
+                    <input type="number" class="form-control" name="company_cost" value="" required>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="comission">Comissão:</label>
+                    <input type="number" class="form-control" name="comission" value="" required>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="transportation">Transporte:</label>
+                    <input type="number" class="form-control" name="transportation" value="" required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-4">
+                    <label for="extra1">Extra 1:</label>
+                    <input type="number" class="form-control" name="extra1" value="" required>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="extra2">Extra 2:</label>
+                    <input type="number" class="form-control" name="extra2" value="" required>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="total">Total:</label>
+                    <input type="number" class="form-control" name="total" value="" required readonly>
+                </div>
+            </div>
+            <div class="row">
                 <div class="form-group col-md-6">
-                    <label style="padding-right: 20px;">Identificador INDMEI:</label>
-                    <button type="button" class="btn btn-info"><a href="{{url('/samples/edit/'.@$order->sample_article_id)}}" target="_blank">Ver Amostra de Artigo</a></button>
+                    <label for="client_price">Preço para Cliente:</label>
+                    <input type="number" class="form-control" name="client_price" value="" required>
                 </div>
             </div>
-            <hr>
-            <div class="form-group row">
-                <div class="col-md-2"></div>
-                <label class="col-md-3 col-form-label" for="orderCost">Amostra de Cor "{{@$order->cor1 ? @$order->cor1 : '1'}}":</label>
-                <div class="input-group col-md-2">
-                    <input type="number" step="0.01" class="form-control" id="order_cost1" name="order_cost1" value="{{@$quotation->order_sample_cost_1 ? $quotation->order_sample_cost_1 : @$order->sampleArticle->cost1}}" required>
-                    <div class="input-group-prepend">
-                        <div class="input-group-text">€</div>
-                    </div>
-                </div>
-                <label class="col-md-2 col-form-label" for="orderCost">Total Pares:</label>
-                <div class="input-group col-md-1">
-                    <input type="number" step="0.01" class="form-control" id="color1" name="color1" value="{{@$order->tamanho11 + @$order->tamanh12 + @$order->tamanho13 + @$order->tamanho14}}" required readonly>
-                </div>
-            </div>
-            <div class="form-group row">
-                <div class="col-md-2"></div>
-                <label class="col-md-3 col-form-label" for="orderCost">Amostra de Cor "{{@$order->cor2 ? @$order->cor2 : '2'}}":</label>
-                <div class="input-group col-md-2">
-                    <input type="number" step="0.01" class="form-control" id="order_cost2" name="order_cost2" value="{{@$quotation->order_sample_cost_2 ? $quotation->order_sample_cost_2 : @$order->sampleArticle->cost2}}" required>
-                    <div class="input-group-prepend">
-                        <div class="input-group-text">€</div>
-                    </div>
-                </div>
-                <label class="col-md-2 col-form-label" for="orderCost">Total Pares:</label>
-                <div class="input-group col-md-1">
-                    <input type="number" step="0.01" class="form-control" id="color2" name="color2" value="{{@$order->tamanho21 + @$order->tamanho22 + @$order->tamanho23 + @$order->tamanho24}}" required readonly>
-                </div>
-            </div>
-            <div class="form-group row">
-                <div class="col-md-2"></div>
-                <label class="col-md-3 col-form-label" for="orderCost">Amostra de Cor "{{@$order->cor3 ? @$order->cor3 : '3'}}":</label>
-                <div class="input-group col-md-2">
-                    <input type="number" step="0.01" class="form-control" id="order_cost3" name="order_cost3" value="{{@$quotation->order_sample_cost_3 ? $quotation->order_sample_cost_3 : @$order->sampleArticle->cost3}}" required>
-                    <div class="input-group-prepend">
-                        <div class="input-group-text">€</div>
-                    </div>
-                </div>
-                <label class="col-md-2 col-form-label" for="orderCost">Total Pares:</label>
-                <div class="input-group col-md-1">
-                    <input type="number" step="0.01" class="form-control" id="color3" name="color3" value="{{@$order->tamanho31 + @$order->tamanho32 + @$order->tamanho33 + @$order->tamanho34}}" required readonly>
-                </div>
-            </div>
-            <div class="form-group row">
-                <div class="col-md-2"></div>
-                <label class="col-md-3 col-form-label" for="orderCost">Amostra de Cor "{{@$order->cor4 ? @$order->cor4 : '4'}}":</label>
-                <div class="input-group col-md-2">
-                    <input type="number" step="0.01" class="form-control" id="order_cost4" name="order_cost4" value="{{@$quotation->order_sample_cost_4 ? $quotation->order_sample_cost_4 : @$order->sampleArticle->cost4}}" required>
-                    <div class="input-group-prepend">
-                        <div class="input-group-text">€</div>
-                    </div>
-                </div>
-                <label class="col-md-2 col-form-label" for="orderCost">Total Pares:</label>
-                <div class="input-group col-md-1">
-                    <input type="number" step="0.01" class="form-control" id="color4" name="color4" value="{{@$order->tamanho41 + @$order->tamanho42 + @$order->tamanho43 + @$order->tamanho44}}" required readonly>
-                </div>
-            </div>
-            <div class="form-group row">
-                <div class="col-md-2"></div>
-                <label class="col-md-2 col-form-label" for="tag">Custo das etiquetas:</label>
-                <div class="input-group col-md-6">
-                    <input type="number" step="0.01" class="form-control" id="tag" name="tag" value="{{@$quotation->tags ? $quotation->tags : 0}}" required>
-                    <div class="input-group-prepend">
-                        <div class="input-group-text">€</div>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group row">
-                <div class="col-md-2"></div>
-                <label class="col-md-2 col-form-label" for="boxes">Custo das Caixas:</label>
-                <div class="input-group col-md-6">
-                    <input type="number" step="0.01" class="form-control" id="boxes" name="boxes" value="{{@$quotation->boxes ? $quotation->boxes : 0}}" required>
-                    <div class="input-group-prepend">
-                        <div class="input-group-text">€</div>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group row">
-                <div class="col-md-2"></div>
-                <label class="col-md-2 col-form-label" for="defect">Peças com defeito:</label>
-                <div class="input-group col-md-6">
-                    <input type="number" step="0.01" class="form-control" id="defect" min="0" max="100" name="defect" value="{{@$quotation->defect ? $quotation->defect : 0}}" required>
-                    <div class="input-group-prepend">
-                        <div class="input-group-text">%</div>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group row">
-                <div class="col-md-2"></div>
-                <label class="col-md-2 col-form-label" for="manpower">Mão-de-Obra:</label>
-                <div class="input-group col-md-6">
-                    <input type="number" step="0.01" class="form-control" id="manpower" name="manpower" value="{{@$quotation->manpower ? $quotation->manpower : 0}}" required>
-                    <div class="input-group-prepend">
-                        <div class="input-group-text">€</div>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group row">
-                <div class="col-md-2"></div>
-                <label class="col-md-2 col-form-label" for="otherCosts">Outros Custos:</label>
-                <div class="input-group col-md-6">
-                    <input type="number" step="0.01" class="form-control" id="other_costs" name="other_costs" value="{{@$quotation->other_costs ? $quotation->other_costs : 0}}" required>
-                    <div class="input-group-prepend">
-                        <div class="input-group-text">€</div>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group row">
-                <div class="col-md-2"></div>
-                <label class="col-md-2 col-form-label" for="total">Total:</label>
-                <div class="input-group col-md-6">
-                    <input type="number" step="0.01" class="form-control" id="totalVal" value="0" required readonly>
-                    <div class="input-group-prepend">
-                        <div class="input-group-text">€</div>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group row">
-                <div class="col-md-2"></div>
-                <label class="col-md-2 col-form-label" for="totalSent">Total a Enviar:</label>
-                <div class="input-group col-md-6">
-                    <input type="number" step="0.01" class="form-control" name="total_sent" value="{{@$quotation->value_sent ? $quotation->value_sent : 0}}" required>
-                    <div class="input-group-prepend">
-                        <div class="input-group-text">€</div>
-                    </div>
-                </div>
-            </div>
-            <input type="hidden" class="form-control" name="order_id" value="{{@$order->id}}" required>
             <div class="row">
                 <div class="col-md-3"></div>
                 <div class="form-group col-md-6" style="margin-top:60px;margin-bottom:40px;">
@@ -196,6 +160,12 @@
     <script>
         $( document ).ready( function () {
 
+        });
+
+        $(".change_origin").click( function () {
+            let id = this.id;
+            $(".tog1-"+id).toggle();
+            $(".tog2-"+id).toggle();
         });
     </script>
 @endsection

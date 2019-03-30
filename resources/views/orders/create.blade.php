@@ -18,7 +18,7 @@
                     <label for="status_id">Status:</label>
                     <select class="form-control" id="viaSelect">
                         @foreach($statuses as $status)
-                            @if(in_array($status->id, [1, 5, 7]))
+                            @if(in_array($status->id, [1, 5, 6, 7]))
                             <option value="{{$status->id}}" {{$status->id == @$order->status_id ? 'selected' : ''}}>{{$status->status}}</option>
                             @endif
                         @endforeach
@@ -51,14 +51,15 @@
                                 <i class="fab fa-product-hunt"></i></a>
                             <p>Em Produção</p>
                         </div>
-                        <div class="steps-step-2" style="display:none">
-                            <a href="#" id="step-6" data-id="6" type="button" class="btn btn-blue-grey {{@$order->status_id < 6 ? 'btn-circle-2' : 'btn-highlighted' }} waves-effect mr-0" data-toggle="tooltip" data-placement="top" title="À Espera de Matéria-Prima">
-                                <i class="fas fa-warehouse"></i></a>
+                        <div class="steps-step-2">
+                            <a href="#" id="step-6" data-id="6" type="button" class="btn btn-blue-grey {{@$order->status_id < 6 ? 'btn-circle-2' : 'btn-highlighted' }} waves-effect mr-0" data-toggle="tooltip" data-placement="top" title="Bloqueada">
+                                <i class="fas fa-ban"></i></a>
+                            <p>Bloqueada</p>
                         </div>
                         <div class="steps-step-2">
                             <a href="#" id="step-7" data-id="7" type="button" class="btn btn-blue-grey {{@$order->status_id < 7 ? 'btn-circle-2' : 'btn-highlighted' }} waves-effect mr-0" data-toggle="tooltip" data-placement="top" title="Produzido">
                                 <i class="fas fa-check" aria-hidden="true"></i></a>
-                            <p>Produzido</p>
+                            <p>Produzida</p>
                         </div>
                         <div class="steps-step-2" style="display:none">
                             <a href="#" id="step-8" data-id="8" type="button" class="btn btn-blue-grey {{@$order->status_id < 8 ? 'btn-circle-2' : 'btn-highlighted' }} waves-effect mr-0" data-toggle="tooltip" data-placement="top" title="Em Distribuição">

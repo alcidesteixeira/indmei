@@ -61,10 +61,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/samples/getForDuplicate/{id}', 'SampleArticleController@duplicate');
 
 //Quotations
-    Route::get('/quotation/list', 'QuotationController@index');
-    Route::get('/quotation/edit/{id}', 'QuotationController@edit');
-    Route::post('/quotation/create', 'QuotationController@store');
-    Route::post('/quotation/update/{id}', 'QuotationController@update');
+    Route::get('/quotation/list', 'QuotationV2Controller@index');
+    Route::get('/quotation/create/', 'QuotationV2Controller@create');
+    Route::post('/quotation/create', 'QuotationV2Controller@store');
+    Route::get('/quotation/edit/{id}', 'QuotationV2Controller@edit');
+    Route::post('/quotation/update/{id}', 'QuotationV2Controller@update');
+    Route::get('/quotation/delete/{id}', 'QuotationV2Controller@destroy');
 
 //Emails
     Route::get('/email/list', 'EmailController@index');

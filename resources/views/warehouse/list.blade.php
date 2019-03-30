@@ -44,11 +44,11 @@
                         <button type="button" data-id="{{$product->id}}" data-role="{{$product->product->reference}}" class="delete apagarform btn btn-danger">Apagar</button>
                     </td>
                     <td role="columnheader" data-col12="">
-                        @if($product->threshold*1000 >= $product->liquid_weight)
+                        {{--@if($product->threshold*1000 >= $product->liquid_weight)--}}
                         <form method="get" action="{{url('/email/create/'.$product->id)}}" class="email" enctype="multipart/form-data">
                             <button type="submit" class="btn btn-success">Pedir stock</button>
                         </form>
-                        @endif
+                        {{--@endif--}}
                     </td>
                 </tr>
             @endforeach

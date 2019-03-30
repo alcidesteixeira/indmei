@@ -26,6 +26,7 @@ class CreateQuotationV2sTable extends Migration
             $table->string('extra_percentage');
             $table->string('extra_2_percentage');
             $table->string('client_price');
+            $table->string('product_image');
             $table->timestamps();
         });
     }
