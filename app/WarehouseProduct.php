@@ -61,7 +61,7 @@ class WarehouseProduct extends Model
 
             //Se não existir esta descrição, apaga histórico porque significa que a encomenda foi apagada
             if(!in_array($id, $order_ids)) {
-                echo "entra";
+//                echo "entra";
                 DB::table('warehouse_products_history')
                 ->where('order_id', $id)
                 ->delete();
