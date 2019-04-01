@@ -123,6 +123,10 @@ class SampleArticleController extends Controller
         $sampleArticle->cost2 = round($sampleCost['cor2'], 2);
         $sampleArticle->cost3 = round($sampleCost['cor3'], 2);
         $sampleArticle->cost4 = round($sampleCost['cor4'], 2);
+        $sampleArticle->cor1 = $request->cor1;
+        $sampleArticle->cor2 = $request->cor2;
+        $sampleArticle->cor3 = $request->cor3;
+        $sampleArticle->cor4 = $request->cor4;
         $sampleArticle->save();
 
         //Store on SampleArticleWire Class
@@ -274,6 +278,10 @@ class SampleArticleController extends Controller
         $sampleArticle->cost2 = round($sampleCost['cor2'], 2);
         $sampleArticle->cost3 = round($sampleCost['cor3'], 2);
         $sampleArticle->cost4 = round($sampleCost['cor4'], 2);
+        $sampleArticle->cor1 = $request->cor1;
+        $sampleArticle->cor2 = $request->cor2;
+        $sampleArticle->cor3 = $request->cor3;
+        $sampleArticle->cor4 = $request->cor4;
         $sampleArticle->save();
 
         //dd($request->all());

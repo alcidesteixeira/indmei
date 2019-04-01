@@ -104,10 +104,18 @@
                     <th>Guiafios*</th>
                     <th>Gramas</th>
                     <th>Referência INDMEI</th>
-                    <th>Cor #1</th>
-                    <th>Cor #2</th>
-                    <th>Cor #3</th>
-                    <th>Cor #4</th>
+                    <th>
+                        <input type="text" class="form-control" name="cor1" style="max-width:100px" value="{{@$sampleArticle->cor1 ?: 'Cor1'}}">
+                    </th>
+                    <th>
+                        <input type="text" class="form-control" name="cor2" style="max-width:100px" value="{{@$sampleArticle->cor2 ?: 'Cor2'}}">
+                    </th>
+                    <th>
+                        <input type="text" class="form-control" name="cor3" style="max-width:100px" value="{{@$sampleArticle->cor3 ?: 'Cor3'}}">
+                    </th>
+                    <th>
+                        <input type="text" class="form-control" name="cor4" style="max-width:100px" value="{{@$sampleArticle->cor4 ?: 'Cor4'}}">
+                    </th>
                 </tr>
                 </thead>
                 <tbody>

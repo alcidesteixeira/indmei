@@ -159,10 +159,10 @@
                 <thead>
                 <tr>
                     <th></th>
-                    <th><input type="text" class="form-control" name="cor1" placeholder="Cor #1" value="{{@$order->cor1}}"></th>
-                    <th><input type="text" class="form-control" name="cor2" placeholder="Cor #2" value="{{@$order->cor2}}"></th>
-                    <th><input type="text" class="form-control" name="cor3" placeholder="Cor #3" value="{{@$order->cor3}}"></th>
-                    <th><input type="text" class="form-control" name="cor4" placeholder="Cor #4" value="{{@$order->cor4}}"></th>
+                    <th><input type="text" class="form-control" id="cor1" name="cor1" placeholder="Cor #1" value="{{@$order->cor1}}" readonly></th>
+                    <th><input type="text" class="form-control" id="cor2" name="cor2" placeholder="Cor #2" value="{{@$order->cor2}}" readonly></th>
+                    <th><input type="text" class="form-control" id="cor3" name="cor3" placeholder="Cor #3" value="{{@$order->cor3}}" readonly></th>
+                    <th><input type="text" class="form-control" id="cor4" name="cor4" placeholder="Cor #4" value="{{@$order->cor4}}" readonly></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -171,7 +171,7 @@
                     @php $tamanho1 = "tamanho1".$i; $tamanho2 = "tamanho2".$i; $tamanho3 = "tamanho3".$i; $tamanho4 = "tamanho4".$i; $tamanho = "tamanho".$i; @endphp
                     <tr>
                         <td data-col1="Tamanho">
-                            <input class="form-control" type="text" name="tamanho{{$i}}" id="tamanho{{$i}}" value="{{@$order->$tamanho}}" placeholder="T{{$i}}">
+                            <input class="form-control" type="text" name="tamanho{{$i}}" id="tamanho{{$i}}" value="{{@$order->$tamanho}}" placeholder="T{{$i}}" readonly>
                         </td>
                         <td data-col2="Cor1">
 
@@ -265,6 +265,10 @@
                     $("#tamanho2").val(result['tamanho2']);
                     $("#tamanho3").val(result['tamanho3']);
                     $("#tamanho4").val(result['tamanho4']);
+                    $("#cor1").val(result['cor1']);
+                    $("#cor2").val(result['cor2']);
+                    $("#cor3").val(result['cor3']);
+                    $("#cor4").val(result['cor4']);
                 }
             });
 
