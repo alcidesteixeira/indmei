@@ -66,6 +66,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/quotation/create', 'QuotationV2Controller@store');
     Route::get('/quotation/edit/{id}', 'QuotationV2Controller@edit');
     Route::post('/quotation/update/{id}', 'QuotationV2Controller@update');
+    Route::get('/quotation/price/update/{id}', 'QuotationV2Controller@priceUpdate');
     Route::get('/quotation/delete/{id}', 'QuotationV2Controller@destroy');
 
 //Emails

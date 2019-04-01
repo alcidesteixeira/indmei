@@ -56,6 +56,14 @@ class QuotationV2Controller extends Controller
         //
     }
 
+    public function priceUpdate($id)
+    {
+        $price = WarehouseProductSpec::find($id);
+        $price = $price->cost;
+
+        return $price;
+    }
+
     /**
      * Show the form for editing the specified resource.
      *
