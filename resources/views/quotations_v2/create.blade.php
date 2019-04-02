@@ -29,7 +29,7 @@
             <div class="row">
                 <div class="form-group col-md-4">
                     <label for="reference">Referência:</label>
-                    <input type="text" class="form-control" name="reference" value="{{@$quotation->reference ?: $quotationId}}" readonly disabled>
+                    <input type="text" class="form-control" name="reference" value="{{@$quotation->reference ?: $quotationId}}" disabled>
                 </div>
                 <div class="form-group col-md-4">
                     <label for="client">Cliente:</label>
@@ -47,11 +47,11 @@
             <div class="row">
                 <div class="form-group col-md-4">
                     <label for="tot_weight">Peso total da meia:</label>
-                    <input type="number" class="form-control" name="tot_weight" id="tot_weight" value="{{@$total_weight}}" readonly disabled>
+                    <input type="number" class="form-control" name="tot_weight" id="tot_weight" value="{{@$total_weight}}" disabled>
                 </div>
                 <div class="form-group col-md-4">
                     <label for="tot_weight">Peso total da meia + defeito:</label>
-                    <input type="number" class="form-control" id="tot_weight_plus_defect" value="{{@$total_weight}}" readonly disabled>
+                    <input type="number" class="form-control" id="tot_weight_plus_defect" value="{{@$total_weight}}" disabled>
                 </div>
                 <div class="form-group col-md-4">
                     <label for="defect">Defeito (%):</label>
@@ -80,31 +80,32 @@
                                     <input type="button" id="{{$i}}" class="change_origin btn btn-info" value="+">
                                 </td>
                                 <td role="columnheader" data-col1="Kgs">
-                                    <input type="number" id="kgs-{{$i}}" data-index="{{$i}}" name="kgs-{{$i}}" class="form-control mats dropdown-toggle kgs" value="0">
+                                    <input type="number" id="kgs-{{$i}}" data-index="{{$i}}" name="kgs_{{$i}}" class="form-control mats dropdown-toggle kgs" value="0">
                                 </td>
                                 <td role="columnheader" data-col2="Kgs + Defeito">
-                                    <input type="text" id="kgsPlusDefect{{$i}}" class="form-control dropdown-toggle kgs-plus-defect" value="0" disabled>
+                                    <input type="text" id="kgsPlusDefect{{$i}}" name="kgs_plus_def_{{$i}}" class="form-control dropdown-toggle kgs-plus-defect" value="0" disabled>
                                 </td>
                                 <td role="columnheader" data-col3="%">
-                                    <input type="text" id="" class="form-control mats dropdown-toggle" value="0">
+                                    <input type="text" id="" name="percentage_1_{{$i}}" class="form-control mats dropdown-toggle" value="0">
                                 </td>
                                 <td role="columnheader" data-col4="Matéria-Prima">
-                                    <input type="text" id="" class="tog1-{{$i}} form-control mats dropdown-toggle price" value="">
-                                    <select style="display:none; height: 25px; padding: 0 5px;" class="form-control tog2-{{$i}} stock" id="stock{{$i}}" name="client">
+                                    <input type="text" id="" name="sample_article_1_{{$i}}" class="tog1-{{$i}} form-control mats dropdown-toggle price" value="">
+                                    <select style="display:none; height: 25px; padding: 0 5px;" class="form-control tog2-{{$i}} stock" id="stock{{$i}}" name="sample_article_2_{{$i}}">
                                         @foreach($warehouseProductSpecs as $spec)
                                             <option value="{{$spec->id}}" data-index="{{$i}}">{{$spec->product->reference . ' - ' . $spec->color}}</option>
                                         @endforeach
                                     </select>
+                                    <input type="hidden" name="is_custom_{{$i}}" id="is-custom-{{$i}}" value="0">
                                 </td>
                                 <td role="columnheader" data-col5="%">
-                                    <input type="text" id="" class="form-control mats dropdown-toggle" value="0">
+                                    <input type="text" id="" name="percentage_2_{{$i}}" class="form-control mats dropdown-toggle" value="0">
                                 </td>
                                 <td role="columnheader" data-col5="Preço">
-                                    <input type="number" id="price-custom-{{$i}}" class="tog1-{{$i}} form-control mats dropdown-toggle price" name="price-custom-{{$i}}" data-index="{{$i}}" value="0">
-                                    <input type="text" style="display:none" id="price-{{$i}}" class="tog2-{{$i}} form-control price" name="price-list-{{$i}}" disabled>
+                                    <input type="number" id="price-custom-{{$i}}" class="tog1-{{$i}} form-control mats dropdown-toggle price" name="price_custom_{{$i}}" data-index="{{$i}}" value="0">
+                                    <input type="text" style="display:none" id="price-{{$i}}" class="tog2-{{$i}} form-control price" name="price_list_{{$i}}" disabled>
                                 </td>
                                 <td role="columnheader" data-col5="Total">
-                                    <input type="number" id="total{{$i}}" class="form-control mats dropdown-toggle totals" value="0.00" disabled>
+                                    <input type="number" id="total{{$i}}" name="total{{$i}}" class="form-control mats dropdown-toggle totals" value="0.00" disabled>
                                 </td>
                             </tr>
                         @endfor
@@ -145,7 +146,7 @@
                 </div>
                 <div class="form-group col-md-4">
                     <label for="total">Total:</label>
-                    <input type="number" class="form-control" name="total" id="total" value="0" readonly disabled>
+                    <input type="number" class="form-control" name="total" id="total" value="0" disabled>
                 </div>
             </div>
             <div class="row">
@@ -178,6 +179,9 @@
             $(".tog2-"+index).toggle();
             if($(".tog2-"+index).css('display') !== 'none') {
                 custom = 1;
+                $("#is-custom-"+index).val(1);
+            } else {
+                $("#is-custom-"+index).val(0);
             }
             setPrice(id, index, custom);
         });
