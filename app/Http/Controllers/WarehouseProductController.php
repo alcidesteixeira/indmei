@@ -45,9 +45,11 @@ class WarehouseProductController extends Controller
     {
         $historic = DB::table('warehouse_products_history')
             ->leftJoin('users', 'warehouse_products_history.user_id', 'users.id')
-            ->select('user_id', 'name', 'inout', 'weight', 'cost', 'description', 'receipt', DB::raw("SUM(weight) as sum_weight"), 'warehouse_products_history.created_at')
+            ->leftJoin('orders', 'warehouse_products_history.order_id', 'orders.id')
+            ->select('warehouse_products_history.user_id', 'name', 'inout', 'weight', 'cost', 'warehouse_products_history.description', 'receipt', DB::raw("SUM(weight) as sum_weight"), 'warehouse_products_history.created_at')
 //            ->sum('weight')
             ->where('warehouse_product_spec_id', $id)
+            ->where('orders.status_id', '5')
             ->orderBy('warehouse_products_history.created_at', 'desc')
             ->groupBy('inout')
             ->groupBy('description')

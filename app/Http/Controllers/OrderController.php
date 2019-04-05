@@ -32,7 +32,7 @@ class OrderController extends Controller
     {
         Auth::user()->authorizeRoles(['1', '3', '4', '6', '7']);
 
-        $orders = Order::all();
+        $orders = Order::where('status_id', '<>', 8)->get();
 
         $view = 'orders';
 
@@ -409,12 +409,14 @@ class OrderController extends Controller
         Auth::user()->authorizeRoles(['1', '4']);
 
         $order = Order::find($id);
+        $order->status_id = 8;
+        $order->save();
 
-        $order_files = OrderFile::where('order_id', $id);
+//        $order_files = OrderFile::where('order_id', $id);
 
-        $order_files->delete();
+//        $order_files->delete();
 
-        $order->delete();
+//        $order->delete();
 
         flash('A encomenda com o id de cliente '. $order->client_identifier . ' e com a descrição '. $order->description . ' foi eliminada com sucesso!')->success();
 
