@@ -9,11 +9,11 @@
         <table class="table table-striped thead-dark" role="table">
             <thead role="rowgroup">
             <tr role="row">
-                <th role="columnheader">Nome</th>
                 <th role="columnheader">Referência</th>
                 <th role="columnheader">Data</th>
                 <th role="columnheader">Cliente</th>
                 <th role="columnheader">Preço</th>
+                <th role="columnheader">Imagem</th>
                 <th role="columnheader"></th>
                 <th role="columnheader"></th>
             </tr>
@@ -21,17 +21,17 @@
             <tbody role="rowgroup">
             @foreach($quotationV2 as $quotation)
                 <tr role="row">
-                    <td role="columnheader" data-col1="Nome">{{$quotation->name}}</td>
-                    <td role="columnheader" data-col2="Referência">{{$quotation->reference}}</td>
-                    <td role="columnheader" data-col3="Data">{{$quotation->date}}</td>
-                    <td role="columnheader" data-col4="Cliente">{{$quotation->client}}</td>
-                    <td role="columnheader" data-col5="Preço">{{$quotation->client_price}}</td>
-                    <td role="columnheader" data-col9="">
+                    <td role="columnheader" data-col1="Referência">{{$quotation->reference}}</td>
+                    <td role="columnheader" data-col2="Data">{{$quotation->date}}</td>
+                    <td role="columnheader" data-col3="Cliente">{{$clients[$quotation->client]}}</td>
+                    <td role="columnheader" data-col4="Preço">{{$quotation->client_price}}</td>
+                    <td role="columnheader" data-col5="Imagem"><img width="60" src="../../storage/{{@$quotation->product_image}}"></td>
+                    <td role="columnheader" data-col6="">
                         <form method="get" action="{{url('quotation/edit/'.$quotation->id)}}" enctype="multipart/form-data">
                             <button type="submit" class="btn btn-warning">Editar</button>
                         </form>
                     </td>
-                    <td role="columnheader" data-col10="">
+                    <td role="columnheader" data-col7="">
                         <button type="button" data-id="{{$quotation->id}}" data-reference="{{$quotation->reference}}"  class="apagarform btn btn-danger">Apagar</button>
                     </td>
                 </tr>
@@ -68,7 +68,7 @@
         $( document ).ready( function () {
             //Filter and order table
             let table = $('table').DataTable({
-                columnDefs: [ { orderable: false, targets: [3, -1, -2] } ],
+                columnDefs: [ { orderable: false, targets: [-1, -2] } ],
                 "pageLength": 25,
                 "language": {
                     "lengthMenu": "Apresentar _MENU_ resultados por página",

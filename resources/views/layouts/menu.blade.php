@@ -22,9 +22,9 @@
             <li class="nav-item dropdown">
                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                     Orçamentação <span class="caret"></span>
-                </a\>
+                </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="{{ url('quotation/create') }}" style="pointer-events: none; color:#ccc">Criar Orçamento</a>
+                    <a class="dropdown-item" href="{{ url('quotation/create') }}">Criar Orçamento</a>
                     <a class="dropdown-item" href="{{ url('quotation/list') }}">Listar Orçamentos</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="{{ url('email/create') }}">Enviar Email</a>
