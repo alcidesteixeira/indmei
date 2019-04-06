@@ -46,13 +46,15 @@ class WarehouseProductController extends Controller
         $historic = DB::table('warehouse_products_history')
             ->leftJoin('users', 'warehouse_products_history.user_id', 'users.id')
             ->leftJoin('orders', 'warehouse_products_history.order_id', 'orders.id')
-            ->select('warehouse_products_history.user_id', 'name', 'inout', 'weight', 'cost', 'warehouse_products_history.description', 'receipt', DB::raw("SUM(weight) as sum_weight"), 'warehouse_products_history.created_at')
+//            ->select('warehouse_products_history.user_id', 'name', 'inout', 'weight', 'cost', 'warehouse_products_history.description', 'receipt', DB::raw("SUM(weight) as sum_weight"), 'warehouse_products_history.created_at')
 //            ->sum('weight')
+            ->select('order_id', 'orders.client_identifier_public', 'orders.description', DB::raw("SUM(weight) as sum_weight"), 'orders.client_identifier', 'orders.delivery_date', 'receipt')
             ->where('warehouse_product_spec_id', $id)
             ->where('orders.status_id', '5')
             ->orderBy('warehouse_products_history.created_at', 'desc')
-            ->groupBy('inout')
-            ->groupBy('description')
+//            ->groupBy('inout')
+//            ->groupBy('description')
+            ->groupBy('order_id')
             ->get();
 
         return $historic;
@@ -192,8 +194,9 @@ class WarehouseProductController extends Controller
         $ref = $spec->product->reference;
 
         $isUsedSamples = SampleArticleColor::where('warehouse_product_spec_id', $id)->first();
+
         if($isUsedSamples) {
-            flash('O Artigo com a referência: '. $ref . ', e a descrição: '. $spec->description .'Não foi eliminada por está a ser utilizada por alguma amostra!')->error();
+            flash('O Artigo com a referência: '. $ref . ', e a descrição: '. $spec->description .' não foi eliminada por está a ser utilizada por alguma amostra!')->error();
             return redirect()->action('WarehouseProductController@index');
         }
 
@@ -280,8 +283,8 @@ class WarehouseProductController extends Controller
                 $warehouseProductSpec->warehouse_product_id = $warehouseProduct->id;
                 $warehouseProductSpec->description = $request->$description;
                 $warehouseProductSpec->color = $request->$color;
-                $warehouseProductSpec->liquid_weight = intval($request->$qtd) * 1000;
-                $warehouseProductSpec->gross_weight = intval($request->$qtd) * 1000;
+                $warehouseProductSpec->liquid_weight = floatval($request->$qtd) * 1000;
+                $warehouseProductSpec->gross_weight = floatval($request->$qtd) * 1000;
                 if($request->$cost !== null){
                     $warehouseProductSpec->cost = $request->$cost;
                 } else {
@@ -315,7 +318,7 @@ class WarehouseProductController extends Controller
                         'warehouse_product_spec_id' => $warehouseProductSpec->id,
                         'user_id' => Auth::id(),
                         'inout' => $position,
-                        'weight' => intval($request->$qtd) * 1000,
+                        'weight' => floatval($request->$qtd) * 1000,
                         'cost' => @$request->$cost ? @$request->$cost : $warehouseProductSpec->cost,
                         'description' => $request->$description,
                         'receipt' => $filename,

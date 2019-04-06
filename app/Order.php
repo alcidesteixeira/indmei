@@ -149,6 +149,7 @@ class Order extends Model
         $clientName = Client::where('id', $request->client_id)->first()->client;
         $paresPorCorLiquido = $this->pairsPerColorLiquid($request);
         $paresPorCorBruto = $this->pairsPerColorGross($id);
+
         //Delete das entradas antes de atualizar.
         DB::table('warehouse_products_history')
             ->where('description',  'Encomenda para o cliente: ' . $clientName . ', com o identificador: ' . $request->client_identifier)

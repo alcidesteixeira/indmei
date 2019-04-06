@@ -95,7 +95,7 @@
                 <div class="form-group col-md-6">
                     <label for="client_identifier">Nome/Número de Encomenda:</label>
                     <input type="text" class="form-control" name="client_identifier_public" value="{{@$order->client_identifier_public}}" required>
-                    <input type="hidden" class="form-control" name="client_identifier" value="{{@$order->client_identifier}}" required disabled>
+                    <input type="hidden" class="form-control" name="client_identifier" value="{{@$order->client_identifier}}" required>
                 </div>
             </div>
             <div class="row">

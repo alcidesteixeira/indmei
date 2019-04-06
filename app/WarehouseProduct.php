@@ -53,6 +53,7 @@ class WarehouseProduct extends Model
             ->where('order_id', '<>', 0)
             ->groupBy('order_id')
             ->get()->toArray();
+
         foreach($ids_to_compare as $id) {
             array_push($ids_t_c, $id->order_id);
         }
@@ -90,7 +91,7 @@ class WarehouseProduct extends Model
                     if($val->order_id !== 0) {
                         $status = Order::where('id', $val->order_id)->first();
                     }
-                    if(isset($status) && ($status->status_id == '7' || $status->status_id == '1')) {
+                    if(isset($status) && ($status->status_id == '7' || $status->status_id == '1' || $status->status_id == '8')) {
                         //Cálculo de stock bruto: total menos o que já foi produzido, ou seja, o que existe efectivamente no armazém
                         if ($val->inout == 'OUT_GROSS') {
                             $total_bruto -= $val->weight;

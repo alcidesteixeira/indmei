@@ -71,13 +71,11 @@
                             <table class="table table-striped thead-dark table-responsive" role="table">
                                 <thead role="rowgroup">
                                 <tr role="row">
-                                    <th role="columnheader">Entrada/Saída</th>
-                                    <th role="columnheader">Quantidade (g)</th>
-                                    <th role="columnheader">Custo (€)</th>
+                                    <th role="columnheader">Id da Encomenda</th>
                                     <th role="columnheader">Descrição</th>
-                                    <th role="columnheader">Atualizado Por</th>
-                                    <th role="columnheader">Última Atualização</th>
-                                    <th role="columnheader">Fatura</th>
+                                    <th role="columnheader">Peso(Kg)</th>
+                                    <th role="columnheader">Data de Entrega</th>
+                                    <th role="columnheader">Anexo</th>
                                 </tr>
                                 </thead>
                                 <tbody role="rowgroup">
@@ -174,14 +172,18 @@
                 console.log(data);
                 let toAppend = '';
                 $.each(data, function(k,v) {
+                    let ident = '';
+                    if(v["client_identifier_public"]) {
+                        ident = v["client_identifier_public"];
+                    } else {
+                        ident = v["client_identifier"];
+                    }
                     toAppend = toAppend + '<tr role="row">' +
-                        '<td role="columnheader" data-col1="Entrada/Saída">'+v["inout"]+'</td>' +
-                        '<td role="columnheader" data-col2="Quantidade (g)">'+v["sum_weight"]+'</td>' +
-                        '<td role="columnheader" data-col3="Custo (€)">'+v["cost"]+'</td>' +
-                        '<td role="columnheader" data-col4="Descrição">'+v["description"]+'</td>' +
-                        '<td role="columnheader" data-col5="Atualizado Por">'+v["name"]+'</td>' +
-                        '<td role="columnheader" data-col6="Última Atualização">'+v["created_at"]+'</td>' +
-                        '<td role="columnheader" data-col7="Anexo"><a href="../../storage/'+v["receipt"]+'" target="_blank">'+v['receipt'].substr(v['receipt'].length - 3)+'</a></td></tr>';
+                        '<td role="columnheader" data-col1="Id da encomenda">'+ident+'</td>' +
+                        '<td role="columnheader" data-col2="Descrição">'+v['description']+'</td>' +
+                        '<td role="columnheader" data-col3="Peso(Kg)">'+(v["sum_weight"] / 1000).toFixed(2)+'</td>' +
+                        '<td role="columnheader" data-col4="Data de Entrega">'+v["delivery_date"]+'</td>' +
+                        '<td role="columnheader" data-col4="Anexo"><img style="max-width: 50px" src="../../storage/'+v["receipt"]+'" ></td></tr>';
                 });
                 $(".stock-history tbody").empty();
                 $(".stock-history tbody").append(toAppend);
