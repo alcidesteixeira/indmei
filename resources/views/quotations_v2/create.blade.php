@@ -92,7 +92,7 @@
                                 </td>
                                 <td role="columnheader" data-col4="Matéria-Prima">
                                     <input type="text" id="" name="sample_article_1_{{$i}}" class="tog1-{{$i}} form-control mats dropdown-toggle price"
-                                           value="{{@$quotation->specs ? @$quotation->specs->toArray()[$i]['material'] : 0}}">
+                                           value="{{@$quotation->specs ? @$quotation->specs->toArray()[$i]['material'] : ''}}">
                                     <select style="display:none; height: 25px; padding: 0 5px;" class="form-control tog2-{{$i}} stock" id="stock{{$i}}" name="sample_article_2_{{$i}}">
                                         @foreach($warehouseProductSpecs as $spec)
                                             <option value="{{$spec->product->reference . ' - ' . $spec->color}}" data-val="{{$spec->id}}" data-index="{{$i}}">{{$spec->product->reference . ' - ' . $spec->color}}</option>
