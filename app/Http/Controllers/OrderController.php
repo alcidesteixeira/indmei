@@ -144,8 +144,8 @@ class OrderController extends Controller
             }
         }
         //End Store Image
-
         if($request->sample_article_id) {
+            $request->request->add(['client_identifier' => date('Y').'-'.$highestID]);
             $addRow = new Order();
             $addRow = $addRow->addRowToStockHistory($request, $order->id);
         }
