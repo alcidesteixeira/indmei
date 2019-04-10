@@ -178,6 +178,7 @@
             }
             addKgs();
             calcTotal();
+            calcAllPercentage2();
         });
 
         //Mudar origem das matérias primas (sinal de +)
@@ -330,7 +331,7 @@
             $(".percentage1").each( function (k, v) {
                 let kgsWithDefect = $("#kgsPlusDefect"+k).val();
                 let totWithDefect = $("#tot_weight_plus_defect").val();
-                $("#percentage_2_"+k).val(kgsWithDefect * 100 /  totWithDefect);
+                $("#percentage_2_"+k).val((kgsWithDefect * 100 /  totWithDefect).toFixed(2));
             });
         }
 
