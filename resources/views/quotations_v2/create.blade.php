@@ -46,11 +46,11 @@
             </div>
             <div class="row">
                 <div class="form-group col-md-4">
-                    <label for="tot_weight">Peso total da meia:</label>
+                    <label for="tot_weight">Peso total da meia (g):</label>
                     <input type="number" class="form-control" name="tot_weight" id="tot_weight" value="" readonly>
                 </div>
                 <div class="form-group col-md-4">
-                    <label for="tot_weight">Peso total da meia + defeito:</label>
+                    <label for="tot_weight">Peso total da meia (g) + defeito:</label>
                     <input type="number" class="form-control" id="tot_weight_plus_defect" value="" readonly>
                 </div>
                 <div class="form-group col-md-4">
@@ -64,8 +64,8 @@
                         <thead role="rowgroup">
                         <tr role="row">
                             <th role="columnheader">Origem</th>
-                            <th role="columnheader" style="width: 12%;">Kgs</th>
-                            <th role="columnheader" style="width: 9%;">Kgs + Defeito</th>
+                            <th role="columnheader" style="width: 12%;">Gramas</th>
+                            <th role="columnheader" style="width: 9%;">Gramas + Defeito</th>
                             <th role="columnheader" style="width: 10%;">%</th>
                             <th role="columnheader">Matéria-Prima</th>
                             <th role="columnheader" style="width: 8%;">%</th>
@@ -297,7 +297,7 @@
 
         function calcTotalPerRow(index, total) {
             let kgsPlusDefect = $("#kgsPlusDefect"+index).val();
-            let rowTotal = Number(total) * Number(kgsPlusDefect);
+            let rowTotal = Number(total) * Number(kgsPlusDefect) / 1000;
             $("#total"+index).val(rowTotal.toFixed(2));
         }
 
@@ -311,7 +311,18 @@
             $(".totals").each( function () {
                 total += Number($(this).val());
             });
-            total = total + total * (companyCost + comission + transportation + extra1 + extra2) / 100;
+
+            //Valores sem percentage
+            let totalOutrosValoresSemPercentage = 0;
+            $(".kgs").each( function (k,v) {
+                console.log(k);
+                let price = $("#price-custom-" + k).val();
+                let totalPrice = $("#total" + k).val();
+                if (price !== '0' && totalPrice === '0.00') {
+                    totalOutrosValoresSemPercentage += parseInt(price);
+                }
+            });
+            total = total + total * (companyCost + comission + transportation + extra1 + extra2) / 100 + parseInt(totalOutrosValoresSemPercentage);
             $("#total").val(total.toFixed(2));
         }
 
@@ -322,6 +333,7 @@
                 $("#percentage_2_"+k).val(kgsWithDefect * 100 /  totWithDefect);
             });
         }
+
 
         //Preview image before upload
         function readURL(input) {
