@@ -178,7 +178,16 @@
                 } );
 
 
-            $('.apagarform').click(function() {
+            // $('.apagarform').click(function() {
+            //     let id = $( this ).data('id');
+            //     let name = $( this ).data('role');
+            //     $(".modal-body").text('');
+            //     $(".modal-body").append('<p>Encomenda com Id do Cliente: ' + name + '</p>');
+            //     $('#apagar').attr('action', 'delete/'+id);
+            //     $("#modalApagar").modal('show');
+            // });
+
+            $('.table tbody').on('click', '.apagarform', function () {
                 let id = $( this ).data('id');
                 let name = $( this ).data('role');
                 $(".modal-body").text('');

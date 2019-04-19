@@ -102,10 +102,10 @@
             });
 
 
-            $('.apagarform').click(function() {
+            $('.table tbody').on('click', '.apagarform', function () {
                 let id = $( this ).data('id');
                 let name = $( this ).data('role');
-                $(".modal-body").append('');
+                $(".modal-body").html('');
                 $(".modal-body").append('<p>Amostra de Artigo: ' + name + '</p>');
                 $('#apagar').attr('action', 'delete/'+id);
                 $("#modalApagar").modal('show');

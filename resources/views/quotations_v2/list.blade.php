@@ -88,7 +88,7 @@
                 }
             });
 
-            $('.apagarform').click(function() {
+            $('.table tbody .apagarform').on('click', function () {
                 let id = $( this ).data('id');
                 let name = $( this ).data('reference');
                 $(".modal-body").text('');

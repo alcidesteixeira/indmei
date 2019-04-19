@@ -41,6 +41,10 @@
             font-weight: bold;
 
         }
+        .colorName {
+            font-size: 10px;
+            font-weight: normal;
+        }
     </style>
 
     <div class="container" id="theResult">
@@ -209,10 +213,10 @@
                         </tr>
                         <tr>
                             @if($i == 1)<th></th>@endif
-                            <th>{{$order->cor1}}</th>
-                            <th>{{$order->cor2}}</th>
-                            <th>{{$order->cor3}}</th>
-                            <th>{{$order->cor4}}</th>
+                            <th class="colorName">{{$order->cor1}}</th>
+                            <th class="colorName">{{$order->cor2}}</th>
+                            <th class="colorName">{{$order->cor3}}</th>
+                            <th class="colorName">{{$order->cor4}}</th>
                         </tr>
                     </thead>
                     <tbody id="bodyToSubtract{{$i}}">

@@ -211,7 +211,7 @@
         });
 
         //Mudar valor de Kgs
-        $(".kgs").on('change click', function () {
+        $(".kgs").on('change click keyup', function () {
             addKgs();
             let index = $(this).data('index');
             let value = $(this).val();
@@ -228,7 +228,7 @@
             calcAllPercentage2();
         });
 
-        $("#defect").on ('change click', function () {
+        $("#defect").on ('change click keyup', function () {
             for (let i = 0; i < 12; i++) {
                 let index = i;
                 let value = $("#kgs-"+i).val();
@@ -246,18 +246,18 @@
             }
         });
 
-        $(".price").on('change click', function () {
+        $(".price").on('change click keyup', function () {
             let index = $(this).data('index');
             let total = $(this).val();
             calcTotalPerRow(index, total);
             calcTotal();
         });
 
-        $(".percentage1, .kgs").on('change click', function () {
+        $(".percentage1, .kgs").on('change click keyup', function () {
             calcAllPercentage2();
         });
 
-        $("#company_cost, #comission, #transportation, #extra1, #extra2").on("change click", function () {
+        $("#company_cost, #comission, #transportation, #extra1, #extra2").on("change click keyup", function () {
             calcTotal();
         });
 
@@ -320,10 +320,10 @@
                 let price = $("#price-custom-" + k).val();
                 let totalPrice = $("#total" + k).val();
                 if (price !== '0' && totalPrice === '0.00') {
-                    totalOutrosValoresSemPercentage += parseInt(price);
+                    totalOutrosValoresSemPercentage += parseFloat(price);
                 }
             });
-            total = total + total * (companyCost + comission + transportation + extra1 + extra2) / 100 + parseInt(totalOutrosValoresSemPercentage);
+            total = total + total * (companyCost + comission + transportation + extra1 + extra2) / 100 + parseFloat(totalOutrosValoresSemPercentage);
             $("#total").val(total.toFixed(2));
         }
 

@@ -120,7 +120,7 @@
 
         $( document ).ready( function () {
             //Filter and order table
-            $('#stock').DataTable({
+            let table = $('#stock').DataTable({
                 columnDefs: [ { orderable: false, targets: [-1, -2,-3] } ],
                 "pageLength": 10,
                 dom: 'lBfrtip',
@@ -150,7 +150,16 @@
 
         });
 
-        $('.apagarform').click(function() {
+        // $('.apagarform').click(function() {
+        //     let id = $( this ).data('id');
+        //     let name = $( this ).data('role');
+        //     $(".modal-body").html('');
+        //     $(".modal-body").append('<p>Matéria-prima: ' + name + '</p>');
+        //     $('#apagar').attr('action', 'delete/'+id);
+        //     $("#modalApagar").modal('show');
+        // });
+
+        $('#stock tbody .apagarform').on('click', function () {
             let id = $( this ).data('id');
             let name = $( this ).data('role');
             $(".modal-body").html('');
