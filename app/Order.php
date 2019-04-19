@@ -150,10 +150,44 @@ class Order extends Model
         $paresPorCorLiquido = $this->pairsPerColorLiquid($request);
         $paresPorCorBruto = $this->pairsPerColorGross($id);
 
-        //Delete das entradas antes de atualizar.
-        DB::table('warehouse_products_history')
+
+        $deletedRows = DB::table('warehouse_products_history')
             ->where('description',  'Encomenda para o cliente: ' . $clientName . ', com o identificador: ' . $request->client_identifier)
-            ->delete();
+            ->groupBy('sample_article_id')
+            ->get();
+        //dd($deletedRows);
+
+        //Se for diferente de vazio E FOR DIFERENTE DO VALOR ATUAL QUE VEM => apaga os resultados liquid e mantém os gross com updated de gross para GROSS_EXPIRED
+        //vai fazer com que depois, se conte tal como os IN mas negativos
+        foreach($deletedRows as $row) {
+            if($row->sample_article_id !== $request->sample_article_id && $row->sample_article_id !== '') {
+                //apagar liquidos
+                DB::table('warehouse_products_history')
+                    ->where('description',  'Encomenda para o cliente: ' . $clientName . ', com o identificador: ' . $request->client_identifier)
+                    ->where('sample_article_id', $row->sample_article_id)
+                    ->where('inout', 'OUT_LIQUID')
+                    ->delete();
+                //update gross expired
+                DB::table('warehouse_products_history')
+                    ->where('description',  'Encomenda para o cliente: ' . $clientName . ', com o identificador: ' . $request->client_identifier)
+                    ->where('sample_article_id', $row->sample_article_id)
+                    ->where('inout', 'OUT_GROSS')
+                    ->update(['inout' => 'OUT_EXPIRED', 'description' => 'Amostra alterada.']);
+            }
+            if($row->sample_article_id == '') {
+                DB::table('warehouse_products_history')
+                    ->where('description',  'Encomenda para o cliente: ' . $clientName . ', com o identificador: ' . $request->client_identifier)
+                    ->where('sample_article_id', '')
+                    ->delete();
+            }
+            if($row->sample_article_id == $request->sample_article_id) {
+                DB::table('warehouse_products_history')
+                    ->where('description',  'Encomenda para o cliente: ' . $clientName . ', com o identificador: ' . $request->client_identifier)
+                    ->where('sample_article_id', $request->sample_article_id)
+                    ->delete();
+            }
+        }
+
 
         //Obter imagem do produto
         $orderImage = SampleArticle::where('id', $request->sample_article_id)->first()->image_url;
@@ -174,6 +208,7 @@ class Order extends Model
                         'receipt' => $orderImage,
                         'description' => 'Encomenda para o cliente: ' . $clientName . ', com o identificador: ' . $request->client_identifier,
                         'order_id' => $id,
+                        'sample_article_id' => $request->sample_article_id,
                         'created_at' => Carbon::now(),
                         'updated_at' => Carbon::now(),
                     ]);
@@ -188,6 +223,7 @@ class Order extends Model
                         'receipt' => $orderImage,
                         'description' => 'Encomenda para o cliente: ' . $clientName . ', com o identificador: ' . $request->client_identifier,
                         'order_id' => $id,
+                        'sample_article_id' => $request->sample_article_id,
                         'created_at' => Carbon::now(),
                         'updated_at' => Carbon::now(),
                     ]);

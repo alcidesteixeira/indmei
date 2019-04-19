@@ -51,6 +51,7 @@ class WarehouseProductController extends Controller
             ->select('order_id', 'orders.client_identifier_public', 'orders.description', DB::raw("SUM(weight) as sum_weight"), 'orders.client_identifier', 'orders.delivery_date', 'receipt')
             ->where('warehouse_product_spec_id', $id)
             ->where('orders.status_id', '5')
+            ->where('inout', '<>', 'OUT_EXPIRED')
             ->orderBy('warehouse_products_history.created_at', 'desc')
 //            ->groupBy('inout')
 //            ->groupBy('description')

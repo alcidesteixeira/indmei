@@ -84,6 +84,10 @@ class WarehouseProduct extends Model
                         $cost = $val->cost;
                         $total_bruto += $val->weight;
                     }
+                    if($val->inout == 'OUT_EXPIRED') {
+                        $total_liquid -= $val->weight;
+                        $total_bruto -= $val->weight;
+                    }
 
                     //Valida se a encomenda já está terminada ou não:
                     //Se sim: o valor de liquido vai ser obtido através do bruto -> têm de ser iguais no final

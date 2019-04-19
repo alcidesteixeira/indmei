@@ -70,7 +70,21 @@ class OrderProductionController extends Controller
         }
 
 //        MUDAR AQUI - FAZER O WHERE CREATED AT IGUAL A LASTDATEWITHDATA.
-        $production = OrderProduction::where('order_id', $id)->where('created_at', @$lastDateWithDataHMS)->groupBy('created_at')->groupBy('machine_id')->get();
+        $production = OrderProduction::where('order_id', $id)
+            ->where('sample_article_id', $order->sample_article_id)
+            ->where('created_at', @$lastDateWithDataHMS)
+            ->groupBy('created_at')
+            ->groupBy('machine_id')
+            ->get();
+
+        if(count($production) == 0) {
+            $production = OrderProduction::where('order_id', $id)
+                ->where('created_at', @$lastDateWithDataHMS)
+                ->where('sample_article_id', '')
+                ->groupBy('created_at')
+                ->groupBy('machine_id')
+                ->get();
+        }
 
         //Criar array com valores para inserir em cada linha
         $productionTotal = OrderProduction::where('order_id', $id)->get();
@@ -162,10 +176,14 @@ class OrderProductionController extends Controller
                 array_push($arrayValidatedRepeated, $request->$machine);
             }
 
+            $order = Order::find($id);
+
             OrderProduction::where('created_at', '>', Carbon::today())
                 ->where('created_at', '<', Carbon::tomorrow())
-                ->where('user_id', Auth::id())
+                ->where('sample_article_id', $order->sample_article_id)
+                ->where('order_id', $id)
                 ->delete();
+
 
             //reset = primeiro valor de array; end = ultimo valor do array
             for ($k = reset($rows); $k <= end($rows); $k++) {
@@ -173,7 +191,7 @@ class OrderProductionController extends Controller
                     for ($j = 1; $j <= 4; $j++) {
                         $cor = 'cor' . $k . $i . $j;
                         $machine = 'machineRow' . $k;
-                        if ($request->$cor !== '0') {
+//                        if ($request->$cor !== '0') {
                             $orderProd = new OrderProduction;
                             $orderProd->user_id = Auth::id();
                             $orderProd->machine_id = $request->$machine;
@@ -183,8 +201,9 @@ class OrderProductionController extends Controller
                             $orderProd->value = $request->$cor;
                             $orderProd->created_at = Carbon::now('Europe/Lisbon');
                             $orderProd->updated_at = Carbon::now('Europe/Lisbon');
+                            $orderProd->sample_article_id = $order->sample_article_id;
                             $orderProd->save();
-                        }
+//                        }
                     }
                 }
             }
