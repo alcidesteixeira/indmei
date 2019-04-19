@@ -11,7 +11,7 @@
         }
         .form-control {
             padding: 1px .75rem;
-            line-height: 1;
+            line-height: 2;
         }
         .value-added {
             text-align: right;
@@ -41,9 +41,12 @@
             font-weight: bold;
 
         }
-        .colorName {
+        #prodTable1, #prodTable2, #prodTable3, #prodTable4 {
             font-size: 10px;
             font-weight: normal;
+        }
+        .toSubtract{
+            height: 28px;
         }
     </style>
 
@@ -69,17 +72,17 @@
             <div class="row">
                 <div class="col-md-3">
                     <label for="Description">Imagem Amostra:</label>
-                    <img src="{{asset('storage/'.$order->sampleArticle->image_url)}}" style="max-width: 200px;">
+                    <img src="{{asset('storage/'.$order->sampleArticle->image_url)}}" style="max-width: 150px; max-height:100%">
                 </div>
                 <div class="form-group col-md-9">
                     <table class="table table-striped thead-dark">
                         <thead>
                         <tr>
                             <th></th>
-                            <th><input type="text" class="form-control" value="{{$order->cor1}}" readonly></th>
-                            <th><input type="text" class="form-control" value="{{$order->cor2}}" readonly></th>
-                            <th><input type="text" class="form-control" value="{{$order->cor3}}" readonly></th>
-                            <th><input type="text" class="form-control" value="{{$order->cor4}}" readonly></th>
+                            <th><input type="text" class="form-control" value="{{$order->sampleArticle->cor1}}" readonly></th>
+                            <th><input type="text" class="form-control" value="{{$order->sampleArticle->cor2}}" readonly></th>
+                            <th><input type="text" class="form-control" value="{{$order->sampleArticle->cor3}}" readonly></th>
+                            <th><input type="text" class="form-control" value="{{$order->sampleArticle->cor4}}" readonly></th>
                         </tr>
                         </thead>
                         <tbody>
