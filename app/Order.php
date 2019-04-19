@@ -102,12 +102,12 @@ class Order extends Model
      * Função que retorna o total de pares para cada cor
      * Usada para o cálculo do STOCK BRUTO: TOTAL MENOS OS TOTAIS DE ENCOMENDAS JÁ EXECUTADOS PELOS OPERADORES
      */
-    public function pairsPerColorGross ($order_id) {
+    public function pairsPerColorGross ($order_id, $sample_article_id) {
         //Selecionar as quantidades de pares de meias, POR COR, já executados
 
 
         $recentDate = OrderProduction::groupBy('created_at')->orderBy('created_at', 'desc')->first();
-        $currentProduction = OrderProduction::where('order_id', $order_id)->where('created_at', $recentDate->created_at)->get();
+        $currentProduction = OrderProduction::where('order_id', $order_id)->where('sample_article_id', $sample_article_id)->where('created_at', $recentDate->created_at)->get();
         $paresPorCor = [];
 
         foreach ($currentProduction as $newInsertion) {
@@ -148,7 +148,7 @@ class Order extends Model
         $wires = $this->checkWireSpentInOnePair($request);
         $clientName = Client::where('id', $request->client_id)->first()->client;
         $paresPorCorLiquido = $this->pairsPerColorLiquid($request);
-        $paresPorCorBruto = $this->pairsPerColorGross($id);
+        $paresPorCorBruto = $this->pairsPerColorGross($id, $request->sample_articl_id);
 
 
         $deletedRows = DB::table('warehouse_products_history')
