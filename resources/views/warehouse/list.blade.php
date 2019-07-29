@@ -25,13 +25,35 @@
             </thead>
             <tbody role="rowgroup">
             @foreach($stock as $product)
+                {{--Order request History--}}
+                @php($email_content = '')
+                @php($count=0)
+                @foreach($stock_request_history as $stock_request)
+                    @if($product->id == $stock_request->warehouse_product_spec_id && $count <= 3)
+                        @php ($email_content .= 'Pedido: '.$stock_request->amount_requested.'Kg; '.
+                            'Data: '.substr($stock_request->created_at, 0, 10).'| ' ?: 0)
+                        @php($count++)
+                    @endif
+                @endforeach
+
+                {{--Stock IN History--}}
+                @php($stock_in_latest = '')
+                @php($count=0)
+                @foreach($stock_history as $stock_in)
+                    @if($product->id == $stock_in->warehouse_product_spec_id && $count <= 3)
+                        @php($weight = $stock_in->weight / 1000)
+                        @php ($stock_in_latest .= 'Entrada: '.$weight.'Kg; '.
+                            'Data: '.substr($stock_in->created_at, 0, 10).'| ' ?: 0)
+                        @php($count++)
+                    @endif
+                @endforeach
                 <tr style="background-color: {{$product->threshold*1000 >= $product->liquid_weight ? '#f9a9a9' : ''}}" data-specid="{{$product->id}}" role="row">
                     <td role="columnheader" data-col1="Referência">{{$product->product->reference}}</td>
                     <td role="columnheader" data-col2="Cor">{{$product->color}}</td>
-                    <td role="columnheader" data-col3="Stock Bruto (Kg)">{{$product->gross_weight / 1000}}</td>
+                    <td role="columnheader" data-col3="Stock Bruto (Kg)" title="{{$stock_in_latest}}">{{$product->gross_weight / 1000}}</td>
                     <td role="columnheader" data-col4="Stock Líquido (Kg)">{{$product->liquid_weight / 1000}}</td>
                     <td role="columnheader" data-col5="Alerta mínimo (Kg)">{{$product->threshold}}</td>
-                    <td role="columnheader" data-col6="Pedido (Kg)" title="{{strip_tags($product->stockRequested['email_sent']) ?: 0}}">{{$product->stockRequested['amount_requested'] ?: 0}}</td>
+                    <td role="columnheader" data-col6="Pedido (Kg)" title="{{$email_content}}">{{$product->stockRequested['amount_requested'] ?: 0}}</td>
                     <td role="columnheader" data-col7="Custo (€/Kg)">{{$product->cost}}</td>
                     <td role="columnheader" data-col8="Atualizado Por">{{$product->product->user->name}}</td>
                     <td role="columnheader" data-col9="Última Atualização">{{$product->updated_at}}</td>

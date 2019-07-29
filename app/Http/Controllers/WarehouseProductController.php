@@ -38,7 +38,16 @@ class WarehouseProductController extends Controller
 
         $stock = WarehouseProductSpec::all();
 
-        return view('warehouse.list', compact('stock'));
+        $stock_request_history = DB::table('stock_request_history')
+            ->orderBy('id', 'desc')
+            ->get();
+
+
+        $stock_history = DB::table('warehouse_products_history')
+            ->orderBy('id', 'desc')
+            ->get();
+
+        return view('warehouse.list', compact('stock', 'stock_request_history', 'stock_history'));
     }
 
     public function returnHistoric($id)
