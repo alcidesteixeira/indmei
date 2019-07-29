@@ -139,7 +139,14 @@ class WarehouseProductController extends Controller
 
         $stock = WarehouseProductSpec::find($id);
 
-        return view('warehouse.create', compact('stock'));
+
+        $products = new WarehouseProduct();
+        $allProducts = $products->getProducts()->pluck('reference', 'id')->toArray();
+
+        $colors = new WarehouseProductSpec();
+        $allColors = $colors->getColors()->where('warehouse_product_id', key($allProducts))->pluck('color', 'id')->toArray();
+
+        return view('warehouse.create', compact('stock', 'allProducts', 'allColors'));
     }
 
     /**
@@ -225,6 +232,19 @@ class WarehouseProductController extends Controller
         $allColors = $colors->getColors()->where('warehouse_product_id', key($allProducts))->pluck('color', 'id')->toArray();
 
         return view('warehouse.receipt', compact('allProducts', 'allColors'));
+    }
+
+    public function simpleReceipt()
+    {
+        Auth::user()->authorizeRoles(['1', '5']);
+
+        $products = new WarehouseProduct();
+        $allProducts = $products->getProducts()->pluck('reference', 'id')->toArray();
+
+        $colors = new WarehouseProductSpec();
+        $allColors = $colors->getColors()->where('warehouse_product_id', key($allProducts))->pluck('color', 'id')->toArray();
+
+        return view('warehouse.receipt_simple_include', compact('allProducts', 'allColors'));
     }
 
     /**

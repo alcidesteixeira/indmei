@@ -48,6 +48,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/stock/delete/{id}', 'WarehouseProductController@destroy');
     //Stock Request History
     Route::get('/stock/request/history', 'StockRequestController@index');
+    //Simple Receipt Include Screen
+    Route::get('/stock/simple/receipt', 'WarehouseProductController@simpleReceipt');
 
 
 //SampleArticles
