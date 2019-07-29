@@ -40,11 +40,13 @@ class WarehouseProductController extends Controller
 
         $stock_request_history = DB::table('stock_request_history')
             ->orderBy('id', 'desc')
+            ->limit(50)
             ->get();
 
 
         $stock_history = DB::table('warehouse_products_history')
             ->orderBy('id', 'desc')
+            ->limit(50)
             ->get();
 
         return view('warehouse.list', compact('stock', 'stock_request_history', 'stock_history'));
