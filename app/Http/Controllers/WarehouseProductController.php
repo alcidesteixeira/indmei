@@ -40,7 +40,7 @@ class WarehouseProductController extends Controller
 
         $stock_request_history = DB::table('stock_request_history')
             ->orderBy('id', 'desc')
-            ->limit(50)
+            ->limit(200)
             ->get();
 
 
