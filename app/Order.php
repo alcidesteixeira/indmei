@@ -107,14 +107,16 @@ class Order extends Model
 
 
         $recentDate = OrderProduction::groupBy('created_at')->orderBy('created_at', 'desc')->first();
-        $currentProduction = OrderProduction::where('order_id', $order_id)->where('sample_article_id', $sample_article_id)->where('created_at', $recentDate->created_at)->get();
         $paresPorCor = [];
+        if($recentDate) {
+            $currentProduction = OrderProduction::where('order_id', $order_id)->where('sample_article_id', $sample_article_id)->where('created_at', $recentDate->created_at)->get();
 
-        foreach ($currentProduction as $newInsertion) {
-            if(array_key_exists('cor'.$newInsertion->cor, $paresPorCor)) {
-                $paresPorCor['cor' . $newInsertion->cor] = intval($paresPorCor['cor' . $newInsertion->cor]) + intval($newInsertion->value);
-            } else {
-                $paresPorCor['cor' . $newInsertion->cor] = intval($newInsertion->value);
+            foreach ($currentProduction as $newInsertion) {
+                if(array_key_exists('cor'.$newInsertion->cor, $paresPorCor)) {
+                    $paresPorCor['cor' . $newInsertion->cor] = intval($paresPorCor['cor' . $newInsertion->cor]) + intval($newInsertion->value);
+                } else {
+                    $paresPorCor['cor' . $newInsertion->cor] = intval($newInsertion->value);
+                }
             }
         }
 

@@ -74,7 +74,7 @@ class WarehouseProduct extends Model
         //Stock Líquido -> valor em stock menos o q foi associado para cada encomenda.
         //Stock Bruto -> valor em stock no momento -> corresponde ao stock menos o valor utilizado pelos operadores todos os dias.
         foreach($products as $product) {
-            $total_liquid = $total_bruto = 0;
+            $total_liquid = $total_bruto = $total_to_do = 0;
             $cost = 0;
 //dd($history);
             foreach ($history as $key => $val) {
@@ -100,6 +100,9 @@ class WarehouseProduct extends Model
                         if ($val->inout == 'OUT_GROSS') {
                             $total_bruto -= $val->weight;
                             $total_liquid -= $val->weight;
+                        }
+                        if ($status->status_id == '1') {
+                            $total_to_do += $val->weight;
                         }
                     }
                     else {
@@ -133,12 +136,14 @@ class WarehouseProduct extends Model
             $currentValsStored = WarehouseProductSpec::where('id', $product->id)->first();
             if(strcmp($currentValsStored->liquid_weight, $total_liquid) ||
                 strcmp($currentValsStored->gross_weight, $total_bruto) ||
-                strcmp($currentValsStored->cost, $cost)) {
+                strcmp($currentValsStored->cost, $cost) ||
+                strcmp($currentValsStored->to_do_weight, $total_to_do)) {
 
                 WarehouseProductSpec::where('id', $product->id)
                     ->update([
                         'liquid_weight' => $total_liquid,
                         'gross_weight' => $total_bruto,
+                        'to_do_weight' => $total_to_do,
                         'cost' => $cost
                     ]);
             }

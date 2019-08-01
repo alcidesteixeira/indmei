@@ -13,6 +13,7 @@
                 <th role="columnheader">Cor</th>
                 <th role="columnheader" title="Stock em armazém subtraíndo o valor produzido diariamente pelos operadores">Stock Bruto (Kg)</th>
                 <th role="columnheader" title="Stock em armazém subtraíndo o valor necessário para as encomendas criadas">Stock Líquido (Kg)</th>
+                <th role="columnheader" title="Stock necessário para as encomendas em estado Por Produzir">Stock Por Produzir (Kg)</th>
                 <th role="columnheader" title="Valor limite mínimo que o peso bruto de stock irá disparar">Alerta mínimo (Kg)</th>
                 <th role="columnheader">Pedido (Kg)</th>
                 <th role="columnheader">Custo (€/Kg)</th>
@@ -52,20 +53,21 @@
                     <td role="columnheader" data-col2="Cor">{{$product->color}}</td>
                     <td role="columnheader" data-col3="Stock Bruto (Kg)" title="{{$stock_in_latest}}">{{$product->gross_weight / 1000}}</td>
                     <td role="columnheader" data-col4="Stock Líquido (Kg)">{{$product->liquid_weight / 1000}}</td>
-                    <td role="columnheader" data-col5="Alerta mínimo (Kg)">{{$product->threshold}}</td>
-                    <td role="columnheader" data-col6="Pedido (Kg)" title="{{$email_content}}">{{$product->stockRequested['amount_requested'] ?: 0}}</td>
-                    <td role="columnheader" data-col7="Custo (€/Kg)">{{$product->cost}}</td>
-                    <td role="columnheader" data-col8="Atualizado Por">{{$product->product->user->name}}</td>
-                    <td role="columnheader" data-col9="Última Atualização">{{$product->updated_at}}</td>
-                    <td role="columnheader" data-col10="">
+                    <td role="columnheader" data-col5="Stock Por Porduzir (Kg)">{{$product->to_do_weight / 1000}}</td>
+                    <td role="columnheader" data-col6="Alerta mínimo (Kg)">{{$product->threshold}}</td>
+                    <td role="columnheader" data-col7="Pedido (Kg)" title="{{$email_content}}">{{$product->stockRequested['amount_requested'] ?: 0}}</td>
+                    <td role="columnheader" data-col8="Custo (€/Kg)">{{$product->cost}}</td>
+                    <td role="columnheader" data-col9="Atualizado Por">{{$product->product->user->name}}</td>
+                    <td role="columnheader" data-col10="Última Atualização">{{$product->updated_at}}</td>
+                    <td role="columnheader" data-col11="">
                         <form method="get" action="{{url('stock/edit/'.$product->id)}}" class="edit" enctype="multipart/form-data">
                             <button type="submit" class="btn btn-warning">Editar</button>
                         </form>
                     </td>
-                    <td role="columnheader" data-col11="">
+                    <td role="columnheader" data-col12="">
                         <button type="button" data-id="{{$product->id}}" data-role="{{$product->product->reference}}" class="delete apagarform btn btn-danger">Apagar</button>
                     </td>
-                    <td role="columnheader" data-col12="">
+                    <td role="columnheader" data-col13="">
                         {{--@if($product->threshold*1000 >= $product->liquid_weight)--}}
                         <form method="get" action="{{url('/email/create/'.$product->id)}}" class="email" enctype="multipart/form-data">
                             <button type="submit" class="btn btn-success">Pedir stock</button>
