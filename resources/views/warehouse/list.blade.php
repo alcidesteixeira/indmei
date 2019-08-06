@@ -31,7 +31,7 @@
                 @php($count=0)
                 @php($total_stock_requested = 0)
                 @foreach($stock_request_history as $stock_request)
-                    @if($product->id == $stock_request->warehouse_product_spec_id && $count <= 3)
+                    @if($product->id == $stock_request->warehouse_product_spec_id)
                         @php ($email_content .= 'Pedido: '.$stock_request->amount_requested.'Kg; '.
                             'Data: '.substr($stock_request->created_at, 0, 10).'| ' ?: 0)
                         @php($count++)
@@ -43,7 +43,7 @@
                 @php($count=0)
                 @php($total_stock_in = 0)
                 @foreach($stock_history as $stock_in)
-                    @if($product->id == $stock_in->warehouse_product_spec_id && $count <= 3)
+                    @if($product->id == $stock_in->warehouse_product_spec_id)
                         @php($weight = $stock_in->weight / 1000)
                         @php ($stock_in_latest .= 'Entrada: '.$weight.'Kg; '.
                             'Data: '.substr($stock_in->created_at, 0, 10).'| ' ?: 0)
