@@ -89,11 +89,13 @@ class OrderProductionController extends Controller
         //Criar array com valores para inserir em cada linha
         $productionTotal = OrderProduction::where('order_id', $id)->get();
         $arrayProdByMachine = [];
+//        var_dump($production);
+//        var_dump($productionTotal); die;
         foreach($production as $key =>$prod){
             $array = [];
             foreach ($productionTotal as $k => $v) {
                 //Se data e maquina igual, entao trata-se da mesma linha
-                if($prod->created_at == $v->created_at && $prod->machine_id == $v->machine_id) {
+                if(substr($prod->created_at, 0, 13) == substr($v->created_at, 0, 13) && $prod->machine_id == $v->machine_id) {
                     $array[$v->tamanho . $v->cor] = $v->value;
                 }
             }

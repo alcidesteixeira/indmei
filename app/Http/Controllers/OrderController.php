@@ -236,14 +236,14 @@ class OrderController extends Controller
         $statuses = OrderStatus::all();
 
         $orderFiles = OrderFile::where('order_id', $id)->get();
-
-        $steps = SampleArticleStep::all();
-
-        $warehouseProducts = WarehouseProduct::all();
-
-        $guiafios = SampleArticleGuiafio::all();
+//
+//        $steps = SampleArticleStep::all();
+//
+//        $warehouseProducts = WarehouseProduct::all();
+//
+//        $guiafios = SampleArticleGuiafio::all();
 //dd($orderFiles);
-        return view('orders.create', compact('sampleArticles', 'clients', 'order', 'orderFiles', 'statuses', 'steps', 'warehouseProducts', 'guiafios'));
+        return view('orders.create', compact('sampleArticles', 'clients', 'order', 'orderFiles', 'statuses'));
     }
 
     /**

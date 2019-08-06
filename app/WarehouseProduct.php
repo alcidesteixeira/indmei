@@ -101,7 +101,8 @@ class WarehouseProduct extends Model
                             $total_bruto -= $val->weight;
                             $total_liquid -= $val->weight;
                         }
-                        if ($status->status_id == '1') {
+                        //Contar o stock das encomendas por produzir
+                        if ($status->status_id == '1' && $val->inout !== 'IN') {
                             $total_to_do += $val->weight;
                         }
                     }

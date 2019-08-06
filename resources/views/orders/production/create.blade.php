@@ -323,6 +323,7 @@
 
         //Inserir valores nas posições corretas da tabela:
         let valuesForProductionTable = {!! $arrayProdByMachine !!};
+        console.log('valuesForProductionTable');
         console.log(valuesForProductionTable);
         $.each(valuesForProductionTable, function(key, value) {
             $.each(value, function(k, v) {
@@ -529,6 +530,7 @@
                 $.each(duplicateMachines, function (k,v) {
                     console.log(v);
                     $(".machines").each( function (key,value) {
+                        console.log('getduplicatedmachines');
                         console.log($(this).val());
                         if ($(this).val() == v) {
                             $(this).addClass('warn');
@@ -571,6 +573,7 @@
                                },
                                type: 'post',
                                success: function (response) {
+                                   console.log('submittoday');
                                    console.log(response);
                                    $("#submitToday").unbind('submit').submit();
                                    $(".loader").css('display', 'none');

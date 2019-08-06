@@ -26,28 +26,33 @@
             </thead>
             <tbody role="rowgroup">
             @foreach($stock as $product)
-                {{--Order request History--}}
+                {{--Requested Stock History--}}
                 @php($email_content = '')
                 @php($count=0)
+                @php($total_stock_requested = 0)
                 @foreach($stock_request_history as $stock_request)
                     @if($product->id == $stock_request->warehouse_product_spec_id && $count <= 3)
                         @php ($email_content .= 'Pedido: '.$stock_request->amount_requested.'Kg; '.
                             'Data: '.substr($stock_request->created_at, 0, 10).'| ' ?: 0)
                         @php($count++)
+                        @php($total_stock_requested += $stock_request->amount_requested)
                     @endif
                 @endforeach
-
                 {{--Stock IN History--}}
                 @php($stock_in_latest = '')
                 @php($count=0)
+                @php($total_stock_in = 0)
                 @foreach($stock_history as $stock_in)
                     @if($product->id == $stock_in->warehouse_product_spec_id && $count <= 3)
                         @php($weight = $stock_in->weight / 1000)
                         @php ($stock_in_latest .= 'Entrada: '.$weight.'Kg; '.
                             'Data: '.substr($stock_in->created_at, 0, 10).'| ' ?: 0)
+                        @php($total_stock_in += $weight)
                         @php($count++)
                     @endif
                 @endforeach
+                {{--Difference between requested stock and stock that has entered--}}
+                @php($stock_requested_differential = $total_stock_requested-$total_stock_in)
                 <tr style="background-color: {{$product->threshold*1000 >= $product->liquid_weight ? '#f9a9a9' : ''}}" data-specid="{{$product->id}}" role="row">
                     <td role="columnheader" data-col1="Referência">{{$product->product->reference}}</td>
                     <td role="columnheader" data-col2="Cor">{{$product->color}}</td>
@@ -55,7 +60,7 @@
                     <td role="columnheader" data-col4="Stock Líquido (Kg)">{{$product->liquid_weight / 1000}}</td>
                     <td role="columnheader" data-col5="Stock Por Porduzir (Kg)">{{$product->to_do_weight / 1000}}</td>
                     <td role="columnheader" data-col6="Alerta mínimo (Kg)">{{$product->threshold}}</td>
-                    <td role="columnheader" data-col7="Pedido (Kg)" title="{{$email_content}}">{{$product->stockRequested['amount_requested'] ?: 0}}</td>
+                    <td role="columnheader" data-col7="Pedido (Kg)" title="{{$email_content}}">{{$product->stockRequested['amount_requested'] && $stock_requested_differential > 0 ? $stock_requested_differential: 0}}</td>
                     <td role="columnheader" data-col8="Custo (€/Kg)">{{$product->cost}}</td>
                     <td role="columnheader" data-col9="Atualizado Por">{{$product->product->user->name}}</td>
                     <td role="columnheader" data-col10="Última Atualização">{{$product->updated_at}}</td>

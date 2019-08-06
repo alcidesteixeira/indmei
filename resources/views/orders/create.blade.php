@@ -148,12 +148,6 @@
                 </div>
             </div>
 
-            <div class="row" id="sampleArticleDetails">
-                @if(@$order->client_identifier)
-                @include('orders.production.sampleArticleInUseTable')
-                @endif
-            </div>
-
             <h3>Quantidades a produzir:</h3>
             <table class="table table-striped thead-dark">
                 <thead>

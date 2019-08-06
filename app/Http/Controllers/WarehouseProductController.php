@@ -30,11 +30,7 @@ class WarehouseProductController extends Controller
         //Calculate using historic;
         //Only updates the stock that has changed
         $update = new WarehouseProduct();
-        $update = $update->updateStocks();
-
-
-
-        //dd($update);
+        $update->updateStocks();
 
         $stock = WarehouseProductSpec::all();
 
@@ -45,8 +41,8 @@ class WarehouseProductController extends Controller
 
 
         $stock_history = DB::table('warehouse_products_history')
+            ->where('inout', 'IN')
             ->orderBy('id', 'desc')
-            ->limit(50)
             ->get();
 
         return view('warehouse.list', compact('stock', 'stock_request_history', 'stock_history'));
@@ -81,7 +77,13 @@ class WarehouseProductController extends Controller
     {
         Auth::user()->authorizeRoles(['1', '5']);
 
-        return view('warehouse.create');
+        $products = new WarehouseProduct();
+        $allProducts = $products->getProducts()->pluck('reference', 'id')->toArray();
+
+        $colors = new WarehouseProductSpec();
+        $allColors = $colors->getColors()->where('warehouse_product_id', key($allProducts))->pluck('color', 'id')->toArray();
+
+        return view('warehouse.create', compact('stock', 'allProducts', 'allColors'));
     }
 
     /**
