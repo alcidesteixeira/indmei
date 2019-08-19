@@ -82,7 +82,7 @@
         <div class="row new-material hide">
             <div class="col-md-3"></div>
             <div class="form-group col-md-6">
-                <label for="threshold">Valor de aviso mínimo (Kg):</label>
+                <label for="threshold">Tempo de entrega estimado (dias):</label>
                 <input type="number" step="0.01" class="form-control" id="threshold">
             </div>
         </div>

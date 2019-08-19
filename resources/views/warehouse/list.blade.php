@@ -14,7 +14,7 @@
                 <th role="columnheader" title="Stock em armazém subtraíndo o valor produzido diariamente pelos operadores">Stock Bruto (Kg)</th>
                 <th role="columnheader" title="Stock em armazém subtraíndo o valor necessário para as encomendas criadas">Stock Líquido (Kg)</th>
                 <th role="columnheader" title="Stock necessário para as encomendas em estado Por Produzir">Stock Por Produzir (Kg)</th>
-                <th role="columnheader" title="Valor limite mínimo que o peso bruto de stock irá disparar">Alerta mínimo (Kg)</th>
+                <th role="columnheader" title="Tempo de entrega estimado">Tempo de Entrega (dias)</th>
                 <th role="columnheader">Pedido (Kg)</th>
                 <th role="columnheader">Custo (€/Kg)</th>
                 <th role="columnheader">Atualizado Por</th>
@@ -53,13 +53,13 @@
                 @endforeach
                 {{--Difference between requested stock and stock that has entered--}}
                 @php($stock_requested_differential = $total_stock_requested-$total_stock_in)
-                <tr style="background-color: {{$product->threshold*1000 >= $product->liquid_weight ? '#f9a9a9' : ''}}" data-specid="{{$product->id}}" role="row">
+                <tr style="background-color: {{@$stock_requested_differential < $product->liquid_weight ? '#f9a9a9' : ''}}" data-specid="{{$product->id}}" role="row">
                     <td role="columnheader" data-col1="Referência">{{$product->product->reference}}</td>
                     <td role="columnheader" data-col2="Cor">{{$product->color}}</td>
                     <td role="columnheader" data-col3="Stock Bruto (Kg)" title="{{$stock_in_latest}}">{{$product->gross_weight / 1000}}</td>
                     <td role="columnheader" data-col4="Stock Líquido (Kg)">{{$product->liquid_weight / 1000}}</td>
                     <td role="columnheader" data-col5="Stock Por Porduzir (Kg)">{{$product->to_do_weight / 1000}}</td>
-                    <td role="columnheader" data-col6="Alerta mínimo (Kg)">{{$product->threshold}}</td>
+                    <td role="columnheader" data-col6="Tempo de Entrega (dias)">{{$product->threshold}}</td>
                     <td role="columnheader" data-col7="Pedido (Kg)" title="{{$email_content}}">{{$product->stockRequested['amount_requested'] && $stock_requested_differential > 0 ? $stock_requested_differential: 0}}</td>
                     <td role="columnheader" data-col8="Custo (€/Kg)">{{$product->cost}}</td>
                     <td role="columnheader" data-col9="Atualizado Por">{{$product->product->user->name}}</td>

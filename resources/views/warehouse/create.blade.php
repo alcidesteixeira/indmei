@@ -52,7 +52,7 @@
                     <div class="row">
                         <div class="col-md-2"></div>
                         <div class="form-group col-md-8">
-                            <label for="threshold">Valor de aviso mínimo (Kg):</label>
+                            <label for="threshold">Tempo de entrega estimado (dias):</label>
                             <input type="number" step="0.01" class="form-control" name="threshold" value="{{@$stock->threshold}}" required>
                         </div>
                     </div>
