@@ -273,7 +273,6 @@ class WarehouseProductController extends Controller
 
     public function enterReceipt(Request $request)
     {
-
         Auth::user()->authorizeRoles(['1', '5']);
 
         if($request->file('receipt') && !str_contains($request->file('receipt')->getClientOriginalName(), ['pdf', 'jpg', 'png', 'gif', 'JPG', 'PNG', 'GIF'])) {
@@ -342,7 +341,9 @@ class WarehouseProductController extends Controller
             if($request->$inout == 'OUT') {
                 $arrayInout = ['OUT_GROSS', 'OUT_LIQUID'];
             }
-            else {
+            else if ($request->$inout == 'ADJUST') {
+                $arrayInout = ['ADJUST'];
+            } else {
                 $arrayInout = ['IN'];
             }
             foreach ($arrayInout as $position) {

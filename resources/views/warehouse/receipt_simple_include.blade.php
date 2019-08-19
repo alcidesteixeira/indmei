@@ -1,13 +1,17 @@
 
     <div class="container">
-        <h2>Dar Entrada de Stock</h2><br/>
+        <h2>Dar Entrada / Ajustar Stock</h2><br/>
         <form id="addRow" method="" action="" enctype="multipart/form-data">
             @csrf
 
-            <div class="row new-material hide">
+            <div class="row">
                 <div class="col-md-3"></div>
                 <div class="form-group col-md-6">
-                    <h2 style="display:none;" class="new2">Criar matéria-prima:</h2>
+                    <label for="Inout">Escolher uma:</label>
+                    <select type="text" class="form-control typeOfRef" id="inout">
+                            <option value="ADJUST">Ajustar</option>
+                            <option value="IN">Dar Entrada</option>
+                    </select>
                 </div>
             </div>
 

@@ -79,7 +79,7 @@ class WarehouseProduct extends Model
 //dd($history);
             foreach ($history as $key => $val) {
                 if ($val->warehouse_product_spec_id == $product->id) {
-                    if($val->inout == 'IN') {
+                    if($val->inout == 'IN' || $val->inout == 'ADJUST') {
                         $total_liquid += $val->weight;
                         $cost = $val->cost;
                         $total_bruto += $val->weight;
@@ -102,7 +102,7 @@ class WarehouseProduct extends Model
                             $total_liquid -= $val->weight;
                         }
                         //Contar o stock das encomendas por produzir
-                        if ($status->status_id == '1' && $val->inout !== 'IN') {
+                        if ($status->status_id == '1' && $val->inout !== 'IN' && $val->inout !== 'ADJUST') {
                             $total_to_do += $val->weight;
                         }
                     }
