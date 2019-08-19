@@ -6,8 +6,11 @@ use App\Mail\sendSimpleEmail;
 use App\Order;
 use App\OrderProduction;
 use App\Role;
+use App\SampleArticle;
+use App\SampleArticleColor;
 use App\SampleArticleGuiafio;
 use App\SampleArticleStep;
+use App\SampleArticlesWire;
 use App\WarehouseProduct;
 use App\WarehouseProductSpec;
 use Carbon\Carbon;
@@ -89,8 +92,6 @@ class OrderProductionController extends Controller
         //Criar array com valores para inserir em cada linha
         $productionTotal = OrderProduction::where('order_id', $id)->get();
         $arrayProdByMachine = [];
-//        var_dump($production);
-//        var_dump($productionTotal); die;
         foreach($production as $key =>$prod){
             $array = [];
             foreach ($productionTotal as $k => $v) {
@@ -103,56 +104,29 @@ class OrderProductionController extends Controller
         }
         $arrayProdByMachine = json_encode($arrayProdByMachine);
 
-        //create array of values to subtract stored
-        /*$start = $order->created_at;
-        $start=substr($start, 0, 10);
-        $end = $order->delivery_date;
-        $period = [];
-        $current = strtotime($start);
-        $today = strtotime(date("Y-m-d"));
-        $last = strtotime($end);
-        $i = $j = 0;
-        if ($today >= $last) {
-            while ($current <= $last) {
-                $i++;
-                $period[] = date('Y-m-d', $current);
-                $current = strtotime('+1 day', $current);
-            }
-        }
-        else {
-            while ($current <= $today) {
-                $j++;
-                $period[] = date('Y-m-d', $current);
-                $current = strtotime('+1 day', $current);
-            }
-        }
-        //dd($period);
-        $prod_days = [];
-        // Iterate over the period
-        foreach ($period as $date) {
-            $prod_array = [];
-            foreach($production as $prod) {
-                //dump($date); dump(substr($prod->created_at, 0, 10));
-                if($date == substr($prod->created_at, 0, 10)) {
-                    $prod_array['val' . $prod->tamanho . $prod->cor] = $prod->value;
+        $sample_id = Order::find($id)->first()->sample_article_id;
+        $sample = SampleArticlesWire::where('sample_article_id', $sample_id)->get();
+        $sample_colors = [];
+
+        foreach($sample as $key => $sample_steps) {
+            foreach(SampleArticleColor::find($sample_steps->id)->get() as $k =>$color) {
+                if($sample_steps->step_id == $color->sample_articles_wire_id) {
+                    $sample_colors[$sample_steps->step_id][$k%4+1] =
+                        $color->warehouse_product_spec_id;
                 }
             }
-            $prod_days[$date] = $prod_array;
-        }*/
+        }
 
-        //dd($prod_days);
-        //dd(@$order->sampleArticle->sampleArticleWires()->get()->values()->get(13)->warehouseProduct);
-
-        /*
-         * 1º levar todas as produções daquela encomenda e ordenar por data mais antiga primeiro
-         * 2º adicionar uma linha em branco
-         */
-        //dd($production);
-
+        $ww_colors = WarehouseProductSpec::all();
+        $color_name_and_key_array = [];
+        foreach($ww_colors as $color) {
+            $color_name_and_key_array[$color->id] = $color->color;
+        }
 
         return view(
-            'orders.production.create', compact('order', 'guiafios', 'steps', 'warehouseProducts',
-            'warehouseProductSpecs', 'production', 'lastDateWithData', 'arrayProdByMachine'
+            'orders.production.create', compact('order', 'guiafios', 'steps',
+                'warehouseProducts', 'warehouseProductSpecs', 'production',
+                'lastDateWithData', 'arrayProdByMachine', 'sample', 'sample_colors', 'color_name_and_key_array'
             ));
     }
 
