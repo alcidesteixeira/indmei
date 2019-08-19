@@ -104,16 +104,15 @@ class OrderProductionController extends Controller
         }
         $arrayProdByMachine = json_encode($arrayProdByMachine);
 
-        $sample_id = Order::find($id)->first()->sample_article_id;
-        $sample = SampleArticlesWire::where('sample_article_id', $sample_id)->get();
+        $sample_id = Order::where('id', $id)->first()->sample_article_id;
+        $sample = SampleArticlesWire::where('sample_article_id', $sample_id)
+            ->get();
         $sample_colors = [];
 
         foreach($sample as $key => $sample_steps) {
-            foreach(SampleArticleColor::find($sample_steps->id)->get() as $k =>$color) {
-                if($sample_steps->step_id == $color->sample_articles_wire_id) {
-                    $sample_colors[$sample_steps->step_id][$k%4+1] =
-                        $color->warehouse_product_spec_id;
-                }
+            foreach (SampleArticleColor::where('sample_articles_wire_id', $sample_steps->id)->get() as $k => $color) {
+                $sample_colors[$sample_steps->step_id][$k % 4 + 1] =
+                    $color->warehouse_product_spec_id;
             }
         }
 
@@ -122,6 +121,7 @@ class OrderProductionController extends Controller
         foreach($ww_colors as $color) {
             $color_name_and_key_array[$color->id] = $color->color;
         }
+//        dd($sample_colors);
 
         return view(
             'orders.production.create', compact('order', 'guiafios', 'steps',
