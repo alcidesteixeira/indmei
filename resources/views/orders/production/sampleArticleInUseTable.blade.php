@@ -20,7 +20,7 @@
     @foreach($sample as $k => $s) <!-- $i = 1; $i < sizeof($steps); $i++) -->
         {{--Esconder linhas com gramas iguais a zero--}}
         @php( $steps_not_allowed = [8, 14, 15, 16, 17, 18])
-        @if(@$sample_colors[$k+1] && !in_array($k+1, $steps_not_allowed))
+        @if($s->step_id !== '18' && !in_array($k+1, $steps_not_allowed))
             <tr>
                 <td data-col1="Função">
                     @foreach($guiafios as $guia)
@@ -48,7 +48,7 @@
                 </td>
                 <td data-col5="Cor #1">
                     @foreach($color_name_and_key_array as $key => $color)
-                        @if($key == $sample_colors[$k+1][1])
+                        @if($key == $sample_colors[$k][1])
                             <span>{{$color}}</span>
                         @endif
                     @endforeach
@@ -56,7 +56,7 @@
                 <td data-col6="Kg #1"></td>
                 <td data-col7="Cor #2">
                     @foreach($color_name_and_key_array as $key => $color)
-                        @if($key == $sample_colors[$k+1][2])
+                        @if($key == $sample_colors[$k][2])
                             <span>{{$color}}</span>
                         @endif
                     @endforeach
@@ -64,7 +64,7 @@
                 <td data-col8="Kg #2"></td>
                 <td data-col9="Cor #3">
                     @foreach($color_name_and_key_array as $key => $color)
-                        @if($key == $sample_colors[$k+1][3])
+                        @if($key == $sample_colors[$k][3])
                             <span>{{$color}}</span>
                         @endif
                     @endforeach
@@ -72,7 +72,7 @@
                 <td data-col10="Kg #3"></td>
                 <td data-col11="Cor #4">
                     @foreach($color_name_and_key_array as $key => $color)
-                        @if($key == $sample_colors[$k+1][4])
+                        @if($key == $sample_colors[$k][4])
                             <span>{{$color}}</span>
                         @endif
                     @endforeach

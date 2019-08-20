@@ -111,7 +111,7 @@ class OrderProductionController extends Controller
 
         foreach($sample as $key => $sample_steps) {
             foreach (SampleArticleColor::where('sample_articles_wire_id', $sample_steps->id)->get() as $k => $color) {
-                $sample_colors[$sample_steps->step_id][$k % 4 + 1] =
+                $sample_colors[$key][$k % 4 + 1] =
                     $color->warehouse_product_spec_id;
             }
         }
@@ -121,7 +121,8 @@ class OrderProductionController extends Controller
         foreach($ww_colors as $color) {
             $color_name_and_key_array[$color->id] = $color->color;
         }
-//        dd($sample_colors);
+//        dump($sample_colors);
+//        dd($sample);
 
         return view(
             'orders.production.create', compact('order', 'guiafios', 'steps',
