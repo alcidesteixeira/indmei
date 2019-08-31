@@ -35,6 +35,7 @@ class WarehouseProductController extends Controller
         $stock = WarehouseProductSpec::all();
 
         $stock_request_history = DB::table('stock_request_history')
+            ->where('email_sent', '<>', 'adjust_entrada_stock_extra')
             ->orderBy('id', 'desc')
             ->get();
 
@@ -363,12 +364,34 @@ class WarehouseProductController extends Controller
             }
 
             //Update Stock Requested
-            $stockReq = StockRequest::where('warehouse_product_spec_id', $warehouseProductSpec->id)->first(); //dd($stockReq);
-            if($stockReq && $request->$inout == 'IN') {
-                $stockReq = $stockReq->amount_requested;
-                $stockReq = (intval($stockReq) - intval($request->$qtd)) > 0 ? (intval($stockReq) - intval($request->$qtd)) : '0';
-                StockRequest::where('warehouse_product_spec_id', $warehouseProductSpec->id)
-                    ->update(['amount_requested' => $stockReq]);
+            if($request->$inout == 'IN') {
+                $total_requested = DB::table('stock_request_history')
+                    ->where('warehouse_product_spec_id', $warehouseProductSpec->id)
+                    ->where('email_sent', '<>', 'adjust_entrada_stock_extra')
+                    ->get();
+                $total_req = 0;
+                foreach($total_requested as $total) {
+                    $total_req += intval($total->amount_requested);
+                }
+                $warehouse_in_history = DB::table('warehouse_products_history')
+                    ->where('warehouse_product_spec_id', $warehouseProductSpec->id)
+                    ->where('inout', 'IN')
+                    ->get();
+                $total_in = 0;
+                foreach($warehouse_in_history as $in_history) {
+                    $total_in += intval($in_history->weight) / 1000;
+                }
+
+                $result_request = $total_req - $total_in;
+
+                if($result_request < 0) {
+                    DB::table('stock_request_history')
+                        ->insert([
+                            'warehouse_product_spec_id' => $warehouseProductSpec->id,
+                            'amount_requested' => abs($result_request),
+                            'email_sent' => 'adjust_entrada_stock_extra',
+                            ]);
+                }
             }
 
 

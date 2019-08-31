@@ -14,7 +14,7 @@
                 <th role="columnheader" title="Stock em armazém subtraíndo o valor produzido diariamente pelos operadores">Stock Bruto (Kg)</th>
                 <th role="columnheader" title="Stock em armazém subtraíndo o valor necessário para as encomendas criadas">Stock Líquido (Kg)</th>
                 <th role="columnheader" title="Stock necessário para as encomendas em estado Por Produzir">Stock Por Produzir (Kg)</th>
-                <th role="columnheader" title="Tempo de entrega estimado">Tempo de Entrega (dias)</th>
+                <th role="columnheader" title="Tempo de entrega estimado">Entrega (dias)</th>
                 <th role="columnheader">Pedido (Kg)</th>
                 <th role="columnheader">Custo (€/Kg)</th>
                 <th role="columnheader">Atualizado Por</th>
@@ -59,7 +59,7 @@
                     <td role="columnheader" data-col3="Stock Bruto (Kg)" title="{{$stock_in_latest}}">{{$product->gross_weight / 1000}}</td>
                     <td role="columnheader" data-col4="Stock Líquido (Kg)">{{$product->liquid_weight / 1000}}</td>
                     <td role="columnheader" data-col5="Stock Por Porduzir (Kg)">{{$product->to_do_weight / 1000}}</td>
-                    <td role="columnheader" data-col6="Tempo de Entrega (dias)">{{$product->threshold}}</td>
+                    <td role="columnheader" data-col6="Entrega (dias)">{{$product->threshold}}</td>
                     <td role="columnheader" data-col7="Pedido (Kg)" title="{{$email_content}}">{{$product->stockRequested['amount_requested'] && $stock_requested_differential > 0 ? $stock_requested_differential: 0}}</td>
                     <td role="columnheader" data-col8="Custo (€/Kg)">{{$product->cost}}</td>
                     <td role="columnheader" data-col9="Atualizado Por">{{$product->product->user->name}}</td>
