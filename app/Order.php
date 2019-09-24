@@ -109,8 +109,7 @@ class Order extends Model
         $recentDate = OrderProduction::groupBy('created_at')->orderBy('created_at', 'desc')->first();
         $paresPorCor = [];
         if($recentDate) {
-            $currentProduction = OrderProduction::where('order_id', $order_id)->where('sample_article_id', $sample_article_id)->where('created_at', $recentDate->created_at)->get();
-
+            $currentProduction = OrderProduction::where('order_id', $order_id)->where('sample_article_id', $sample_article_id)->where('created_at', 'like', substr($recentDate->created_at, 0, 10).'%')->get();
             foreach ($currentProduction as $newInsertion) {
                 if(array_key_exists('cor'.$newInsertion->cor, $paresPorCor)) {
                     $paresPorCor['cor' . $newInsertion->cor] = intval($paresPorCor['cor' . $newInsertion->cor]) + intval($newInsertion->value);
@@ -150,8 +149,7 @@ class Order extends Model
         $wires = $this->checkWireSpentInOnePair($request);
         $clientName = Client::where('id', $request->client_id)->first()->client;
         $paresPorCorLiquido = $this->pairsPerColorLiquid($request);
-        $paresPorCorBruto = $this->pairsPerColorGross($id, $request->sample_articl_id);
-
+        $paresPorCorBruto = $this->pairsPerColorGross($id, $request->sample_article_id);
 
         $deletedRows = DB::table('warehouse_products_history')
             ->where('description',  'Encomenda para o cliente: ' . $clientName . ', com o identificador: ' . $request->client_identifier)
