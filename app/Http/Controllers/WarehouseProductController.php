@@ -35,7 +35,7 @@ class WarehouseProductController extends Controller
         $stock = WarehouseProductSpec::all();
 
         $stock_request_history = DB::table('stock_request_history')
-            ->where('email_sent', '<>', 'adjust_entrada_stock_extra')
+//            ->where('email_sent', '<>', 'adjust_entrada_stock_extra')
             ->orderBy('id', 'desc')
             ->get();
 
@@ -367,7 +367,7 @@ class WarehouseProductController extends Controller
             if($request->$inout == 'IN') {
                 $total_requested = DB::table('stock_request_history')
                     ->where('warehouse_product_spec_id', $warehouseProductSpec->id)
-                    ->where('email_sent', '<>', 'adjust_entrada_stock_extra')
+//                    ->where('email_sent', '<>', 'adjust_entrada_stock_extra')
                     ->get();
                 $total_req = 0;
                 foreach($total_requested as $total) {
@@ -383,6 +383,8 @@ class WarehouseProductController extends Controller
                 }
 
                 $result_request = $total_req - $total_in;
+
+//                dd($result_request, $total_req, $total_in);
 
                 if($result_request < 0) {
                     DB::table('stock_request_history')
@@ -401,21 +403,5 @@ class WarehouseProductController extends Controller
 
         return redirect()->action('WarehouseProductController@index');
     }
-
-    public function requestStock()
-    {
-        return view('warehouse.request_stock');
-    }
-
-    public function storeRequestedStock()
-    {
-        return view('warehouse.list_stock_requested');
-    }
-
-    public function StockRequestedHistory()
-    {
-        return view('warehouse.list_stock_requested');
-    }
-
 
 }
