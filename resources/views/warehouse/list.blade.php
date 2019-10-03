@@ -15,7 +15,7 @@
                 <th role="columnheader" title="Stock em armazém subtraíndo o valor necessário para as encomendas criadas">Stock Líquido (Kg)</th>
                 <th role="columnheader" title="Stock necessário para as encomendas em estado Por Produzir">Stock Por Produzir (Kg)</th>
                 <th role="columnheader" title="Tempo de entrega estimado">Entrega (dias)</th>
-                <th role="columnheader">Pedido (Kg)</th>
+                {{--<th role="columnheader">Pedido (Kg)</th>--}}
                 <th role="columnheader">Custo (€/Kg)</th>
                 <th role="columnheader">Atualizado Por</th>
                 <th role="columnheader">Última Atualização</th>
@@ -24,65 +24,65 @@
                 <th role="columnheader"></th>
             </tr>
             </thead>
-            <tbody role="rowgroup">
-            @foreach($stock as $product)
+            {{--<tbody role="rowgroup">--}}
+            {{--@foreach($stock as $product)--}}
                 {{--Requested Stock History--}}
-                @php($email_content = '')
-                @php($total_stock_requested = 0)
-                @foreach($stock_request_history as $stock_request)
-                    @if($product->id == $stock_request->warehouse_product_spec_id)
-                        @if($stock_request->email_sent !== 'adjust_entrada_stock_extra')
-                            @php ($email_content .= 'Pedido: '.$stock_request->amount_requested.'Kg; '.
-                                'Data: '.substr($stock_request->created_at, 0, 10).'| ' ?: 0)
-                        @endif
-                        @php($total_stock_requested += $stock_request->amount_requested)
-                    @endif
-                @endforeach
-                {{--Stock IN History--}}
-                @php($stock_in_latest = '')
-                @php($total_stock_in = 0)
-                @foreach($stock_history as $stock_in)
-                    @if($product->id == $stock_in->warehouse_product_spec_id)
-                        @php($weight = $stock_in->weight / 1000)
-                        @php ($stock_in_latest .= 'Entrada: '.$weight.'Kg; '.
-                            'Data: '.substr($stock_in->created_at, 0, 10).'| ' ?: 0)
-                        @php($total_stock_in += $weight)
-                    @endif
-                @endforeach
-                {{--Difference between requested stock and stock that has entered--}}
-                @php($stock_requested_differential = $total_stock_requested-$total_stock_in)
-                <tr style="background-color: {{@$stock_requested_differential < abs($product->liquid_weight) && $product->liquid_weight < 0 ? '#f9a9a9' : ''}}" data-specid="{{$product->id}}" role="row">
-                    <td role="columnheader" data-col1="Referência">{{$product->product->reference}}</td>
-                    <td role="columnheader" data-col2="Cor">{{$product->color}}</td>
-                    <td role="columnheader" data-col3="Stock Bruto (Kg)" title="{{$stock_in_latest}}">{{$product->gross_weight / 1000}}</td>
-                    <td role="columnheader" data-col4="Stock Líquido (Kg)">{{$product->liquid_weight / 1000}}</td>
-                    <td role="columnheader" data-col5="Stock Por Porduzir (Kg)">{{$product->to_do_weight / 1000}}</td>
-                    <td role="columnheader" data-col6="Entrega (dias)">{{$product->threshold}}</td>
-                    <td role="columnheader" data-col7="Pedido (Kg)" title="{{$email_content}}">
-                        {{$product->stockRequested['amount_requested'] && $stock_requested_differential > 0 ? $stock_requested_differential : 0}}
-                        <br><span style="font-size:65%"> {{$stock_requested_differential < 0 ? ' Ajustar: ' . $stock_requested_differential : ''}}</span>
-                    </td>
-                    <td role="columnheader" data-col8="Custo (€/Kg)">{{$product->cost}}</td>
-                    <td role="columnheader" data-col9="Atualizado Por">{{$product->product->user->name}}</td>
-                    <td role="columnheader" data-col10="Última Atualização">{{$product->updated_at}}</td>
-                    <td role="columnheader" data-col11="">
-                        <form method="get" action="{{url('stock/edit/'.$product->id)}}" class="edit" enctype="multipart/form-data">
-                            <button type="submit" class="btn btn-warning">Editar</button>
-                        </form>
-                    </td>
-                    <td role="columnheader" data-col12="">
-                        <button type="button" data-id="{{$product->id}}" data-role="{{$product->product->reference}}" class="delete apagarform btn btn-danger">Apagar</button>
-                    </td>
-                    <td role="columnheader" data-col13="">
-                        {{--@if($product->threshold*1000 >= $product->liquid_weight)--}}
-                        <form method="get" action="{{url('/email/create/'.$product->id)}}" class="email" enctype="multipart/form-data">
-                            <button type="submit" class="btn btn-success">Pedir stock</button>
-                        </form>
+                {{--@php($email_content = '')--}}
+                {{--@php($total_stock_requested = 0)--}}
+                {{--@foreach($stock_request_history as $stock_request)--}}
+                    {{--@if($product->id == $stock_request->warehouse_product_spec_id)--}}
+                        {{--@if($stock_request->email_sent !== 'adjust_entrada_stock_extra')--}}
+                            {{--@php ($email_content .= 'Pedido: '.$stock_request->amount_requested.'Kg; '.--}}
+                                {{--'Data: '.substr($stock_request->created_at, 0, 10).'| ' ?: 0)--}}
                         {{--@endif--}}
-                    </td>
-                </tr>
-            @endforeach
-            </tbody>
+                        {{--@php($total_stock_requested += $stock_request->amount_requested)--}}
+                    {{--@endif--}}
+                {{--@endforeach--}}
+                {{--Stock IN History--}}
+                {{--@php($stock_in_latest = '')--}}
+                {{--@php($total_stock_in = 0)--}}
+                {{--@foreach($stock_history as $stock_in)--}}
+                    {{--@if($product->id == $stock_in->warehouse_product_spec_id)--}}
+                        {{--@php($weight = $stock_in->weight / 1000)--}}
+                        {{--@php ($stock_in_latest .= 'Entrada: '.$weight.'Kg; '.--}}
+                            {{--'Data: '.substr($stock_in->created_at, 0, 10).'| ' ?: 0)--}}
+                        {{--@php($total_stock_in += $weight)--}}
+                    {{--@endif--}}
+                {{--@endforeach--}}
+                {{--Difference between requested stock and stock that has entered--}}
+                {{--@php($stock_requested_differential = $total_stock_requested-$total_stock_in)--}}
+                {{--<tr style="background-color: {{@$stock_requested_differential < abs($product->liquid_weight) && $product->liquid_weight < 0 ? '#f9a9a9' : ''}}" data-specid="{{$product->id}}" role="row">--}}
+                    {{--<td role="columnheader" data-col1="Referência">{{$product->product->reference}}</td>--}}
+                    {{--<td role="columnheader" data-col2="Cor">{{$product->color}}</td>--}}
+                    {{--<td role="columnheader" data-col3="Stock Bruto (Kg)" title="{{$stock_in_latest}}">{{$product->gross_weight / 1000}}</td>--}}
+                    {{--<td role="columnheader" data-col4="Stock Líquido (Kg)">{{$product->liquid_weight / 1000}}</td>--}}
+                    {{--<td role="columnheader" data-col5="Stock Por Porduzir (Kg)">{{$product->to_do_weight / 1000}}</td>--}}
+                    {{--<td role="columnheader" data-col6="Entrega (dias)">{{$product->threshold}}</td>--}}
+                    {{--<td role="columnheader" data-col7="Pedido (Kg)" title="{{$email_content}}">--}}
+                        {{--{{$product->stockRequested['amount_requested'] && $stock_requested_differential > 0 ? $stock_requested_differential : 0}}--}}
+                        {{--<br><span style="font-size:65%"> {{$stock_requested_differential < 0 ? ' Ajustar: ' . $stock_requested_differential : ''}}</span>--}}
+                    {{--</td>--}}
+                    {{--<td role="columnheader" data-col8="Custo (€/Kg)">{{$product->cost}}</td>--}}
+                    {{--<td role="columnheader" data-col9="Atualizado Por">{{$product->product->user->name}}</td>--}}
+                    {{--<td role="columnheader" data-col10="Última Atualização">{{$product->updated_at}}</td>--}}
+                    {{--<td role="columnheader" data-col11="">--}}
+                        {{--<form method="get" action="{{url('stock/edit/'.$product->id)}}" class="edit" enctype="multipart/form-data">--}}
+                            {{--<button type="submit" class="btn btn-warning">Editar</button>--}}
+                        {{--</form>--}}
+                    {{--</td>--}}
+                    {{--<td role="columnheader" data-col12="">--}}
+                        {{--<button type="button" data-id="{{$product->id}}" data-role="{{$product->product->reference}}" class="delete apagarform btn btn-danger">Apagar</button>--}}
+                    {{--</td>--}}
+                    {{--<td role="columnheader" data-col13="">--}}
+                        {{--@if($product->threshold*1000 >= $product->liquid_weight)--}}
+                        {{--<form method="get" action="{{url('/email/create/'.$product->id)}}" class="email" enctype="multipart/form-data">--}}
+                            {{--<button type="submit" class="btn btn-success">Pedir stock</button>--}}
+                        {{--</form>--}}
+                        {{--@endif--}}
+                    {{--</td>--}}
+                {{--</tr>--}}
+            {{--@endforeach--}}
+            {{--</tbody>--}}
         </table>
     </div>
 
@@ -151,7 +151,25 @@
         $( document ).ready( function () {
             //Filter and order table
             let table = $('#stock').DataTable({
-                columnDefs: [ { orderable: false, targets: [-1, -2,-3] } ],
+                processing: true,
+                serverSide: true,
+                ajax: '{!! route('stocks') !!}',
+                columns: [
+                    { data: 'reference', name: 'reference' },
+                    { data: 'color', name: 'color' },
+                    { data: 'gross_weight', name: 'gross_weight' },
+                    { data: 'liquid_weight', name: 'liquid_weight' },
+                    { data: 'to_do_weight', name: 'to_do_weight' },
+                    { data: 'threshold', name: 'threshold' },
+                    // { data: '', name: 'Pedido (Kg)' },
+                    { data: 'cost', name: 'cost' },
+                    { data: 'name', name: 'name' },
+                    { data: 'updated_at', name: 'updated_at' },
+                    { data: 'action-edit', name: 'action-edit', orderable: false, searchable: false },
+                    { data: 'action-delete', name: 'action-delete', orderable: false, searchable: false },
+                    { data: 'action-stock', name: 'action-stock', orderable: false, searchable: false }
+                ],
+                // columnDefs: [ { orderable: false, targets: [-1, -2,-3] } ],
                 "pageLength": 10,
                 dom: 'lBfrtip',
                 buttons: [
@@ -189,7 +207,7 @@
         //     $("#modalApagar").modal('show');
         // });
 
-        $('#stock tbody .apagarform').on('click', function () {
+        $('#stock').on('click', '.apagarform', function () {
             let id = $( this ).data('id');
             let name = $( this ).data('role');
             $(".modal-body").html('');
@@ -201,9 +219,9 @@
         //Select table row from stock to show details
         //$(".stock-history").css('display', 'none');
 
-        $("#stock tbody tr").click(function(){
+        $('#stock').on('click', 'tr', function () {
             $(this).addClass('selected').siblings().removeClass('selected');
-            let value=$(this).data('specid');
+            let value=$(this).id;
             //alert(value);
             $.ajax({
                 url: "/stock/list/historic/"+value,

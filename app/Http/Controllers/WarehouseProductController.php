@@ -13,6 +13,8 @@ use Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use Yajra\DataTables\DataTables;
+use Yajra\DataTables\Services\DataTable;
 
 class WarehouseProductController extends Controller
 {
@@ -32,7 +34,7 @@ class WarehouseProductController extends Controller
         $update = new WarehouseProduct();
         $update->updateStocks();
 
-        $stock = WarehouseProductSpec::all();
+//        $stock = WarehouseProductSpec::all();
 
         $stock_request_history = DB::table('stock_request_history')
 //            ->where('email_sent', '<>', 'adjust_entrada_stock_extra')
@@ -45,7 +47,37 @@ class WarehouseProductController extends Controller
             ->orderBy('id', 'desc')
             ->get();
 
-        return view('warehouse.list', compact('stock', 'stock_request_history', 'stock_history'));
+        return view('warehouse.list', compact( 'stock_request_history', 'stock_history'));
+    }
+
+    public function getAllStocks()
+    {
+        $query = DB::table('warehouse_product_specs')
+            ->select(DB::raw('warehouse_product_specs.id, warehouse_products.reference, color, 
+                gross_weight / 1000 as gross_weight, liquid_weight/1000 as liquid_weight, to_do_weight/1000 as to_do_weight,
+                threshold, cost, users.name, warehouse_product_specs.updated_at'))
+            ->leftJoin('warehouse_products', 'warehouse_products.id', '=', 'warehouse_product_specs.warehouse_product_id')
+            ->leftJoin('users', 'users.id', '=', 'warehouse_products.user_id')
+            ->get();
+
+        return Datatables::of($query)
+            ->addColumn('action-edit', function ($product) {
+                return '<form method="get" action="stock/edit/'.$product->id.'" class="edit" enctype="multipart/form-data">
+                            <button type="submit" class="btn btn-warning">Editar</button>
+                        </form>';
+            })
+            ->addColumn('action-delete', function ($product) {
+                return '<button type="button" data-id="'.$product->id.'" data-role="'.$product->reference.'" class="delete apagarform btn btn-danger">Apagar</button>';
+            })
+            ->addColumn('action-stock', function ($product) {
+                return '<form method="get" action="/email/create/'.$product->id.'" class="email" enctype="multipart/form-data">
+                            <button type="submit" class="btn btn-success">Pedir stock</button>
+                        </form>';
+            })
+            ->setRowId('id')
+            ->rawColumns(['action-edit', 'action-delete', 'action-stock'])
+            ->removeColumn('id')
+            ->make(true);
     }
 
     public function returnHistoric($id)
