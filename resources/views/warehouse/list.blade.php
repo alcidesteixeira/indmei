@@ -215,37 +215,40 @@
             $("#modalApagar").modal('show');
         });
 
-        $('#stock').on('click', 'tr', function () {
-            $(this).addClass('selected').siblings().removeClass('selected');
-            let value=$(this).attr('id');
-            // console.log(value);
-            $.ajax({
-                url: "/stock/list/historic/"+value,
-            }).done(function(data) {
-                console.log(data);
-                let toAppend = '';
-                $.each(data['historico'], function(k,v) {
-                    let ident = '';
-                    if(v["client_identifier_public"]) {
-                        ident = v["client_identifier_public"];
-                    } else {
-                        ident = v["client_identifier"];
-                    }
-                    toAppend = toAppend + '<tr role="row">' +
-                        '<td role="columnheader" data-col1="Id da encomenda">'+ident+'</td>' +
-                        '<td role="columnheader" data-col2="Descrição">'+v['description']+'</td>' +
-                        '<td role="columnheader" data-col3="Peso(Kg)">'+(v["sum_weight"] / 1000).toFixed(2)+'</td>' +
-                        '<td role="columnheader" data-col4="Data de Entrega">'+v["delivery_date"]+'</td>' +
-                        '<td role="columnheader" data-col4="Anexo"><img style="max-width: 50px" src="../../storage/'+v["receipt"]+'" ></td></tr>';
-                });
-                $(".stock-history tbody").empty();
-                $(".stock-history tbody").append(toAppend);
-                $(".stock_info").empty();
-                $(".stock_info").append('<p><b>Pedidos de Stock:</b> '+data['pedido']+'</p>');
-                $(".stock_info").append('<p><b>Entrada de Stock:</b> '+data['entrada']+'</p>');
+        $('#stock').on('click', 'tbody tr', function () {
+            // if(!$(this).) {
+                $(this).addClass('selected').siblings().removeClass('selected');
+                let value=$(this).attr('id');
+                // console.log(value);
+                $.ajax({
+                    url: "/stock/list/historic/"+value,
+                }).done(function(data) {
+                    // console.log(data);
+                    let toAppend = '';
+                    $.each(data['historico'], function(k,v) {
+                        let ident = '';
+                        if(v["client_identifier_public"]) {
+                            ident = v["client_identifier_public"];
+                        } else {
+                            ident = v["client_identifier"];
+                        }
+                        toAppend = toAppend + '<tr role="row">' +
+                            '<td role="columnheader" data-col1="Id da encomenda">'+ident+'</td>' +
+                            '<td role="columnheader" data-col2="Descrição">'+v['description']+'</td>' +
+                            '<td role="columnheader" data-col3="Peso(Kg)">'+(v["sum_weight"] / 1000).toFixed(2)+'</td>' +
+                            '<td role="columnheader" data-col4="Data de Entrega">'+v["delivery_date"]+'</td>' +
+                            '<td role="columnheader" data-col4="Anexo"><img style="max-width: 50px" src="../../storage/'+v["receipt"]+'" ></td></tr>';
+                    });
+                    $(".stock-history tbody").empty();
+                    $(".stock-history tbody").append(toAppend);
+                    $(".stock_info").empty();
+                    $(".stock_info").append('<p><b>Pedidos de Stock:</b> '+data['pedido']+'</p>');
+                    $(".stock_info").append('<p><b>Entrada de Stock:</b> '+data['entrada']+'</p>');
 
-                $("#history").modal('show');
-            });
+                    $("#history").modal('show');
+                });
+            // }
+
         });
 
         $('#stock').on('click', '.edit, .delete, .email', function (event) {

@@ -32,7 +32,7 @@ class WarehouseProductController extends Controller
         //Calculate using historic;
         //Only updates the stock that has changed
         $update = new WarehouseProduct();
-//        $update->updateStocks();
+        $update->updateStocks();
 
 
         return view('warehouse.list');
