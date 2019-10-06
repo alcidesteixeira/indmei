@@ -15,7 +15,7 @@
                 <th role="columnheader" title="Stock em armazém subtraíndo o valor necessário para as encomendas criadas">Stock Líquido (Kg)</th>
                 <th role="columnheader" title="Stock necessário para as encomendas em estado Por Produzir">Stock Por Produzir (Kg)</th>
                 <th role="columnheader" title="Tempo de entrega estimado">Entrega (dias)</th>
-                {{--<th role="columnheader">Pedido (Kg)</th>--}}
+                <th role="columnheader">Pedido (Kg)</th>
                 <th role="columnheader">Custo (€/Kg)</th>
                 <th role="columnheader">Atualizado Por</th>
                 <th role="columnheader">Última Atualização</th>
@@ -150,7 +150,7 @@
 
         $( document ).ready( function () {
             //Filter and order table
-            let table = $('#stock').DataTable({
+            $('#stock').DataTable({
                 processing: true,
                 serverSide: true,
                 ajax: '{!! route('stocks') !!}',
@@ -161,7 +161,7 @@
                     { data: 'liquid_weight', name: 'liquid_weight' },
                     { data: 'to_do_weight', name: 'to_do_weight' },
                     { data: 'threshold', name: 'threshold' },
-                    // { data: '', name: 'Pedido (Kg)' },
+                    { data: 'requested-stock', name: 'requested-stock' },
                     { data: 'cost', name: 'cost' },
                     { data: 'name', name: 'name' },
                     { data: 'updated_at', name: 'updated_at' },
@@ -169,7 +169,6 @@
                     { data: 'action-delete', name: 'action-delete', orderable: false, searchable: false },
                     { data: 'action-stock', name: 'action-stock', orderable: false, searchable: false }
                 ],
-                // columnDefs: [ { orderable: false, targets: [-1, -2,-3] } ],
                 "pageLength": 10,
                 dom: 'lBfrtip',
                 buttons: [
@@ -193,19 +192,18 @@
                     "loadingRecords": "A pesquisar...",
                     "processing":     "A processar...",
                     "search":         "Pesquisar:",
+                },
+                "initComplete": function(settings, json) {
+                    $.each(json.data, function (k,v) {
+                        console.log(v);
+                        if(v['liquid_weight'] < 0 && v['requested-stock'] < Math.abs(v['liquid_weight'])) {
+                            $('#'+v['DT_RowId']).css('background-color', '#f9a9a9');
+                        }
+                    });
                 }
             });
 
         });
-
-        // $('.apagarform').click(function() {
-        //     let id = $( this ).data('id');
-        //     let name = $( this ).data('role');
-        //     $(".modal-body").html('');
-        //     $(".modal-body").append('<p>Matéria-prima: ' + name + '</p>');
-        //     $('#apagar').attr('action', 'delete/'+id);
-        //     $("#modalApagar").modal('show');
-        // });
 
         $('#stock').on('click', '.apagarform', function () {
             let id = $( this ).data('id');
@@ -215,9 +213,6 @@
             $('#apagar').attr('action', 'delete/'+id);
             $("#modalApagar").modal('show');
         });
-
-        //Select table row from stock to show details
-        //$(".stock-history").css('display', 'none');
 
         $('#stock').on('click', 'tr', function () {
             $(this).addClass('selected').siblings().removeClass('selected');
@@ -249,7 +244,7 @@
             $("#history").modal('show');
         });
 
-        $('.edit, .delete, .email').click(function(event){
+        $('#stock').on('click', '.edit, .delete, .email', function (event) {
             event.stopPropagation();
         });
 
