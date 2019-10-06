@@ -97,6 +97,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
+                        <div class="container stock_info"></div>
                         <div class="container stock-history" style="margin-top: 50px;margin-bottom: 50px">
                             <table class="table table-striped thead-dark table-responsive" role="table">
                                 <thead role="rowgroup">
@@ -216,14 +217,14 @@
 
         $('#stock').on('click', 'tr', function () {
             $(this).addClass('selected').siblings().removeClass('selected');
-            let value=$(this).id;
-            //alert(value);
+            let value=$(this).attr('id');
+            // console.log(value);
             $.ajax({
                 url: "/stock/list/historic/"+value,
             }).done(function(data) {
                 console.log(data);
                 let toAppend = '';
-                $.each(data, function(k,v) {
+                $.each(data['historico'], function(k,v) {
                     let ident = '';
                     if(v["client_identifier_public"]) {
                         ident = v["client_identifier_public"];
@@ -239,9 +240,12 @@
                 });
                 $(".stock-history tbody").empty();
                 $(".stock-history tbody").append(toAppend);
+                $(".stock_info").empty();
+                $(".stock_info").append('<p><b>Pedidos de Stock:</b> '+data['pedido']+'</p>');
+                $(".stock_info").append('<p><b>Entrada de Stock:</b> '+data['entrada']+'</p>');
+
+                $("#history").modal('show');
             });
-            //$(".stock-history").css('display', 'inherit');
-            $("#history").modal('show');
         });
 
         $('#stock').on('click', '.edit, .delete, .email', function (event) {

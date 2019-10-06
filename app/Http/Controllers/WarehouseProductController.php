@@ -51,14 +51,6 @@ class WarehouseProductController extends Controller
 
     public function getAllStocks()
     {
-
-        //-----------//
-
-
-        //cor
-//         {{@$stock_requested_differential < abs($product->liquid_weight) && $product->liquid_weight < 0 ? '#f9a9a9' : ''}}" data-specid="{{$product->id}}
-        //----------//
-
         $query = DB::table('warehouse_product_specs')
             ->select(DB::raw('warehouse_product_specs.id, warehouse_products.reference, color, 
                 gross_weight / 1000 as gross_weight, liquid_weight/1000 as liquid_weight, to_do_weight/1000 as to_do_weight,
@@ -78,24 +70,16 @@ class WarehouseProductController extends Controller
                     ->orderBy('id', 'desc')
                     ->get();
 
-                $email_content = '';
                 $total_stock_requested = 0;
                 foreach($stock_request_history as $stock_request) {
                     if($product->id == $stock_request->warehouse_product_spec_id) {
-                        if($stock_request->email_sent !== 'adjust_entrada_stock_extra') {
-                            $email_content .= 'Pedido: '.$stock_request->amount_requested.'Kg; '.
-                            'Data: '.substr($stock_request->created_at, 0, 10).'| ' ?: 0;
-                        }
                         $total_stock_requested += $stock_request->amount_requested;
                     }
                 }
-                $stock_in_latest = '';
                 $total_stock_in = 0;
                 foreach($stock_history as $stock_in) {
                     if ($product->id == $stock_in->warehouse_product_spec_id) {
                         $weight = $stock_in->weight / 1000;
-                        $stock_in_latest .= 'Entrada: ' . $weight . 'Kg; ' .
-                        'Data: ' . substr($stock_in->created_at, 0, 10) . '| ' ?: 0;
                         $total_stock_in += $weight;
                     }
                 }
@@ -127,19 +111,51 @@ class WarehouseProductController extends Controller
         $historic = DB::table('warehouse_products_history')
             ->leftJoin('users', 'warehouse_products_history.user_id', 'users.id')
             ->leftJoin('orders', 'warehouse_products_history.order_id', 'orders.id')
-//            ->select('warehouse_products_history.user_id', 'name', 'inout', 'weight', 'cost', 'warehouse_products_history.description', 'receipt', DB::raw("SUM(weight) as sum_weight"), 'warehouse_products_history.created_at')
-//            ->sum('weight')
             ->select('order_id', 'orders.client_identifier_public', 'orders.description', DB::raw("SUM(weight) as sum_weight"), 'orders.client_identifier', 'orders.delivery_date', 'receipt')
             ->where('warehouse_product_spec_id', $id)
             ->where('orders.status_id', '5')
             ->where('inout', '<>', 'OUT_EXPIRED')
             ->orderBy('warehouse_products_history.created_at', 'desc')
-//            ->groupBy('inout')
-//            ->groupBy('description')
             ->groupBy('order_id')
             ->get();
 
-        return $historic;
+        //history of stock request and stock spent
+        $stock_request_history = DB::table('stock_request_history')
+            ->orderBy('id', 'desc')
+            ->get();
+
+        $stock_history = DB::table('warehouse_products_history')
+            ->where('inout', 'IN')
+            ->orderBy('id', 'desc')
+            ->get();
+
+        $email_content = '';
+        $total_stock_requested = 0;
+        foreach($stock_request_history as $stock_request) {
+            if($id == $stock_request->warehouse_product_spec_id) {
+                if($stock_request->email_sent !== 'adjust_entrada_stock_extra') {
+                    $email_content .= 'Pedido: '.$stock_request->amount_requested.'Kg; '.
+                    'Data: '.substr($stock_request->created_at, 0, 10).'| ' ?: 0;
+                }
+                $total_stock_requested += $stock_request->amount_requested;
+            }
+        }
+        $stock_in_latest = '';
+        $total_stock_in = 0;
+        foreach($stock_history as $stock_in) {
+            if ($id == $stock_in->warehouse_product_spec_id) {
+                $weight = $stock_in->weight / 1000;
+                $stock_in_latest .= 'Entrada: ' . $weight . 'Kg; ' .
+                'Data: ' . substr($stock_in->created_at, 0, 10) . '| ' ?: 0;
+                $total_stock_in += $weight;
+            }
+        }
+
+        $all_data['historico'] = $historic;
+        $all_data['pedido'] = $email_content;
+        $all_data['entrada'] = $stock_in_latest;
+
+        return $all_data;
     }
 
     /**
