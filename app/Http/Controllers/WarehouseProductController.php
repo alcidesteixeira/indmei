@@ -48,7 +48,7 @@ class WarehouseProductController extends Controller
             ->leftJoin('users', 'users.id', '=', 'warehouse_products.user_id')
             ->get();
 
-        return Datatables::of($query)
+        $datatable = Datatables::of($query)
             ->addColumn('requested-stock', function ($product) {
                 $stock_request_history = DB::table('stock_request_history')
                     ->orderBy('id', 'desc')
@@ -91,7 +91,37 @@ class WarehouseProductController extends Controller
             ->setRowId('id')
             ->rawColumns(['action-edit', 'action-delete', 'action-stock'])
 
-            ->removeColumn('id')
+            ->removeColumn('id');
+
+        return $datatable
+            ->setRowClass(function ($product) {
+                $stock_request_history = DB::table('stock_request_history')
+                    ->orderBy('id', 'desc')
+                    ->get();
+
+                $stock_history = DB::table('warehouse_products_history')
+                    ->where('inout', 'IN')
+                    ->orderBy('id', 'desc')
+                    ->get();
+
+                $total_stock_requested = 0;
+                foreach($stock_request_history as $stock_request) {
+                    if($product->id == $stock_request->warehouse_product_spec_id) {
+                        $total_stock_requested += $stock_request->amount_requested;
+                    }
+                }
+                $total_stock_in = 0;
+                foreach($stock_history as $stock_in) {
+                    if ($product->id == $stock_in->warehouse_product_spec_id) {
+                        $weight = $stock_in->weight / 1000;
+                        $total_stock_in += $weight;
+                    }
+                }
+
+                $stock_requested_differential = $total_stock_requested-$total_stock_in;
+
+                return $product->liquid_weight < 0 && $stock_requested_differential < abs($product->liquid_weight) ? 'danger' : '';
+            })
             ->make(true);
     }
 

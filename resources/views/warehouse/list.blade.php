@@ -5,6 +5,12 @@
     <div class="container">
         @include('flash::message')
 
+        <style>
+            .danger {
+                background-color: #f9a9a9 !important;
+            }
+        </style>
+
         <h2>Stock de Fios</h2>
         <table class="table table-striped thead-dark" id="stock" role="table">
             <thead role="rowgroup">
@@ -151,7 +157,7 @@
 
         $( document ).ready( function () {
             //Filter and order table
-            $('#stock').DataTable({
+            let table = $('#stock').DataTable({
                 processing: true,
                 serverSide: true,
                 ajax: '{!! route('stocks') !!}',
@@ -193,14 +199,6 @@
                     "loadingRecords": "A pesquisar...",
                     "processing":     "A processar...",
                     "search":         "Pesquisar:",
-                },
-                "initComplete": function(settings, json) {
-                    $.each(json.data, function (k,v) {
-                        console.log(v);
-                        if(v['liquid_weight'] < 0 && v['requested-stock'] < Math.abs(v['liquid_weight'])) {
-                            $('#'+v['DT_RowId']).css('background-color', '#f9a9a9');
-                        }
-                    });
                 }
             });
 
