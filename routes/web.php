@@ -50,6 +50,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/stock/request/history', 'StockRequestController@index');
     //Simple Receipt Include Screen
     Route::get('/stock/simple/receipt', 'WarehouseProductController@simpleReceipt');
+    //Yajra datatable for warehouse
+    Route::get('/stocks', 'WarehouseProductController@getAllStocks')->name('stocks');
 
 
 //SampleArticles
