@@ -34,8 +34,20 @@ class WarehouseProductController extends Controller
         $update = new WarehouseProduct();
         $update->updateStocks();
 
+        $stock = WarehouseProductSpec::all();
 
-        return view('warehouse.list');
+        $stock_request_history = DB::table('stock_request_history')
+//            ->where('email_sent', '<>', 'adjust_entrada_stock_extra')
+            ->orderBy('id', 'desc')
+            ->get();
+
+
+        $stock_history = DB::table('warehouse_products_history')
+            ->where('inout', 'IN')
+            ->orderBy('id', 'desc')
+            ->get();
+
+        return view('warehouse.list', compact( 'stock', 'stock_request_history', 'stock_history'));
     }
 
     public function getAllStocks()
