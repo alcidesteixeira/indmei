@@ -51,7 +51,7 @@
                 @endforeach
                 {{--Difference between requested stock and stock that has entered--}}
                 @php($stock_requested_differential = $total_stock_requested-$total_stock_in)
-                <tr style="background-color: {{@$stock_requested_differential < abs($product->liquid_weight) && $product->liquid_weight < 0 ? '#f9a9a9' : ''}}" data-specid="{{$product->id}}" role="row">
+                <tr style="background-color: {{(@$stock_requested_differential < abs($product->liquid_weight) && $product->liquid_weight < 0) ? '#f9a9a9' : ''}}" data-specid="{{$product->id}}" role="row">
                     <td role="columnheader" data-col1="Referência">{{$product->product->reference}}</td>
                     <td role="columnheader" data-col2="Cor">{{$product->color}}</td>
                     <td role="columnheader" data-col3="Stock Bruto (Kg)" title="{{$stock_in_latest}}">{{$product->gross_weight / 1000}}</td>
