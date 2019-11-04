@@ -123,13 +123,9 @@
                 @for($i = 1; $i < sizeof($steps); $i++)
                     <tr id="theRow" style="@if(in_array($steps[$i-1]->step, ['G8', 'BR5', 'BR6', 'BR7', 'BR8'])) display: none @endif">
                         <td data-col1="Função">
-                            <select size="1" data-row="{{$i}}" id="row-{{$i}}-guiafios" name="row-{{$i}}-guiafios" class="form-control">
-                                @foreach($guiafios as $guia)
-                                    <option value="{{$guia->id}}" {{@$sampleArticle && $guia->id == $sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->guiafios_id ? 'selected' : ''}}>
-                                        {{$guia->description}}
-                                    </option>
-                                @endforeach
-                            </select>
+                            <input style="font-size: .9rem;line-height: 1.6;padding: 0 12px;" type="text" data-row="{{$i}}" id="row-{{$i}}-guiafios" name="row-{{$i}}-guiafios" class="form-control"
+                            value="{{@$sampleArticle && @$guiafios[$sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->guiafios_id] ?
+                             $guiafios[$sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->guiafios_id]->description : ''}}">
                         </td>
                         <td data-col2="Guiafios">
                             <select size="1" class="stepEmpty form-control" data-row="{{$i}}" id="row-{{$i}}-step" name="row-{{$i}}-step">
@@ -144,7 +140,7 @@
                             </select>
                         </td>
                         <td data-col3="Gramas">
-                            <input type="number" id="row-{{$i}}-grams"  class="form-control sum_grams" name="row-{{$i}}-grams" style="max-width:100px"
+                            <input style="font-size: .9rem;line-height: 1.6;padding: 0 12px;" type="number" id="row-{{$i}}-grams"  class="form-control sum_grams" name="row-{{$i}}-grams" style="max-width:100px"
                                    value="{{@$sampleArticle && $sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->grams
                             && $sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->step_id !== '18' ?
                             $sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->grams : '0'}}">
