@@ -69,19 +69,52 @@ class EmailController extends Controller
         $receiver = $request->client !== '0' ? $request->client : $request->client ? $request->client : $request->new_address;
 
         if(isset($request->amountStockRequested)) {
-            StockRequest::updateOrCreate(['warehouse_product_spec_id' => $request->id],
-                ['amount_requested' => $request->amountStockRequested, 'email_sent' => 'enviado para: ' . $receiver . '; email: ' . $request->body2]);
+
             DB::table('stock_request_history')->insert([
-                    'warehouse_product_spec_id' => $request->id,
-                    'amount_requested' => $request->amountStockRequested,
-                    'email_sent' => 'enviado para: ' . $receiver . '; email: ' . $request->body2,
-                    'created_at' => date('Y-m-d H:i:s')
-                ]);
+                'warehouse_product_spec_id' => $request->id,
+                'amount_requested' => $request->amountStockRequested,
+                'email_sent' => 'enviado para: ' . $receiver . '; email: ' . $request->body2,
+                'created_at' => date('Y-m-d H:i:s')
+            ]);
+
+            $stock_request_history = DB::table('stock_request_history')
+                ->orderBy('id', 'desc')
+                ->get();
+
+            $stock_history = DB::table('warehouse_products_history')
+                ->where('inout', 'IN')
+                ->orderBy('id', 'desc')
+                ->get();
+
+            $total_stock_requested = 0;
+            foreach($stock_request_history as $stock_request) {
+                if($request->id == $stock_request->warehouse_product_spec_id) {
+                    $total_stock_requested += $stock_request->amount_requested;
+                }
+            }
+            $total_stock_in = 0;
+            foreach($stock_history as $stock_in) {
+                if ($request->id == $stock_in->warehouse_product_spec_id) {
+                    $weight = $stock_in->weight / 1000;
+                    $total_stock_in += $weight;
+                }
+            }
+
+
+            $stock_requested_differential = $total_stock_requested-$total_stock_in;
+
+
+            StockRequest::updateOrCreate(['warehouse_product_spec_id' => $request->id],
+                ['amount_requested' => $stock_requested_differential, 'email_sent' => 'enviado para: ' . $receiver . '; email: ' . $request->body2]);
         }
 
         Mail::to($receiver)->send(new sendSimpleEmail($request->subject, $request->body2));
 
         flash('Email enviado com sucesso!')->success();
+
+        if(isset($request->amountStockRequested)) {
+            return redirect()->action('WarehouseProductController@index');
+        }
 
         return redirect()->action('OrderController@index');
     }

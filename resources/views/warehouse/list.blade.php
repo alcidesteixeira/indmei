@@ -26,42 +26,15 @@
             </thead>
             <tbody role="rowgroup">
             @foreach($stock as $product)
-                {{--Requested Stock History--}}
-                @php($email_content = '')
-                @php($total_stock_requested = 0)
-                @foreach($stock_request_history as $stock_request)
-                    @if($product->id == $stock_request->warehouse_product_spec_id)
-                        @if($stock_request->email_sent !== 'adjust_entrada_stock_extra')
-                            @php ($email_content .= 'Pedido: '.$stock_request->amount_requested.'Kg; '.
-                                'Data: '.substr($stock_request->created_at, 0, 10).'| ' ?: 0)
-                        @endif
-                        @php($total_stock_requested += $stock_request->amount_requested)
-                    @endif
-                @endforeach
-                {{--Stock IN History--}}
-                @php($stock_in_latest = '')
-                @php($total_stock_in = 0)
-                @foreach($stock_history as $stock_in)
-                    @if($product->id == $stock_in->warehouse_product_spec_id)
-                        @php($weight = $stock_in->weight / 1000)
-                        @php ($stock_in_latest .= 'Entrada: '.$weight.'Kg; '.
-                            'Data: '.substr($stock_in->created_at, 0, 10).'| ' ?: 0)
-                        @php($total_stock_in += $weight)
-                    @endif
-                @endforeach
-                {{--Difference between requested stock and stock that has entered--}}
-                @php($stock_requested_differential = $total_stock_requested-$total_stock_in)
-                <tr style="background-color: {{(@$stock_requested_differential < abs($product->liquid_weight) && $product->liquid_weight < 0) ? '#f9a9a9' : ''}}" data-specid="{{$product->id}}" role="row">
+                @php($stock_requested = $product->stockRequested ? $product->stockRequested->amount_requested : 0)
+                <tr style="background-color: {{($product->liquid_weight < 0 && $stock_requested < abs($product->liquid_weight / 1000)) ? '#f9a9a9' : ''}}" data-specid="{{$product->id}}" role="row">
                     <td role="columnheader" data-col1="Referência">{{$product->product->reference}}</td>
                     <td role="columnheader" data-col2="Cor">{{$product->color}}</td>
-                    <td role="columnheader" data-col3="Stock Bruto (Kg)" title="{{$stock_in_latest}}">{{$product->gross_weight / 1000}}</td>
+                    <td role="columnheader" data-col3="Stock Bruto (Kg)">{{$product->gross_weight / 1000}}</td>
                     <td role="columnheader" data-col4="Stock Líquido (Kg)">{{$product->liquid_weight / 1000}}</td>
                     <td role="columnheader" data-col5="Stock Por Porduzir (Kg)">{{$product->to_do_weight / 1000}}</td>
                     <td role="columnheader" data-col6="Entrega (dias)">{{$product->threshold}}</td>
-                    <td role="columnheader" data-col7="Pedido (Kg)" title="{{$email_content}}">
-                        {{$product->stockRequested['amount_requested'] && $stock_requested_differential > 0 ? $stock_requested_differential : 0}}
-                        <br><span style="font-size:65%"> {{$stock_requested_differential < 0 ? ' Ajustar: ' . $stock_requested_differential : ''}}</span>
-                    </td>
+                    <td role="columnheader" data-col7="Pedido (Kg)">{{$stock_requested}}</td>
                     <td role="columnheader" data-col8="Custo (€/Kg)">{{$product->cost}}</td>
                     <td role="columnheader" data-col9="Atualizado Por">{{$product->product->user->name}}</td>
                     <td role="columnheader" data-col10="Última Atualização">{{$product->updated_at}}</td>
@@ -97,6 +70,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
+                        <div class="container stock_info"></div>
                         <div class="container stock-history" style="margin-top: 50px;margin-bottom: 50px">
                             <table class="table table-striped thead-dark table-responsive" role="table">
                                 <thead role="rowgroup">
@@ -180,15 +154,6 @@
 
         });
 
-        // $('.apagarform').click(function() {
-        //     let id = $( this ).data('id');
-        //     let name = $( this ).data('role');
-        //     $(".modal-body").html('');
-        //     $(".modal-body").append('<p>Matéria-prima: ' + name + '</p>');
-        //     $('#apagar').attr('action', 'delete/'+id);
-        //     $("#modalApagar").modal('show');
-        // });
-
         $('#stock tbody .apagarform').on('click', function () {
             let id = $( this ).data('id');
             let name = $( this ).data('role');
@@ -197,9 +162,6 @@
             $('#apagar').attr('action', 'delete/'+id);
             $("#modalApagar").modal('show');
         });
-
-        //Select table row from stock to show details
-        //$(".stock-history").css('display', 'none');
 
         $("#stock tbody tr").click(function(){
             $(this).addClass('selected').siblings().removeClass('selected');
@@ -226,9 +188,12 @@
                 });
                 $(".stock-history tbody").empty();
                 $(".stock-history tbody").append(toAppend);
+                $(".stock_info").empty();
+                $(".stock_info").append('<p><b>Pedidos de Stock:</b> '+data['pedido']+'</p>');
+                $(".stock_info").append('<p><b>Entrada de Stock:</b> '+data['entrada']+'</p>');
+
+                $("#history").modal('show');
             });
-            //$(".stock-history").css('display', 'inherit');
-            $("#history").modal('show');
         });
 
         $('.edit, .delete, .email').click(function(event){

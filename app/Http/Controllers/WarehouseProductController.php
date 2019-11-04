@@ -36,106 +36,95 @@ class WarehouseProductController extends Controller
 
         $stock = WarehouseProductSpec::all();
 
-        $stock_request_history = DB::table('stock_request_history')
-//            ->where('email_sent', '<>', 'adjust_entrada_stock_extra')
-            ->orderBy('id', 'desc')
-            ->get();
-
-
-        $stock_history = DB::table('warehouse_products_history')
-            ->where('inout', 'IN')
-            ->orderBy('id', 'desc')
-            ->get();
-
-        return view('warehouse.list', compact( 'stock', 'stock_request_history', 'stock_history'));
+        return view('warehouse.list', compact( 'stock'));
     }
 
-    public function getAllStocks()
-    {
-        $query = DB::table('warehouse_product_specs')
-            ->select(DB::raw('warehouse_product_specs.id, warehouse_products.reference, color, 
-                gross_weight / 1000 as gross_weight, liquid_weight/1000 as liquid_weight, to_do_weight/1000 as to_do_weight,
-                threshold, cost, users.name, warehouse_product_specs.updated_at'))
-            ->leftJoin('warehouse_products', 'warehouse_products.id', '=', 'warehouse_product_specs.warehouse_product_id')
-            ->leftJoin('users', 'users.id', '=', 'warehouse_products.user_id')
-            ->get();
-
-        $datatable = Datatables::of($query)
-            ->addColumn('requested-stock', function ($product) {
-                $stock_request_history = DB::table('stock_request_history')
-                    ->orderBy('id', 'desc')
-                    ->get();
-
-                $stock_history = DB::table('warehouse_products_history')
-                    ->where('inout', 'IN')
-                    ->orderBy('id', 'desc')
-                    ->get();
-
-                $total_stock_requested = 0;
-                foreach($stock_request_history as $stock_request) {
-                    if($product->id == $stock_request->warehouse_product_spec_id) {
-                        $total_stock_requested += $stock_request->amount_requested;
-                    }
-                }
-                $total_stock_in = 0;
-                foreach($stock_history as $stock_in) {
-                    if ($product->id == $stock_in->warehouse_product_spec_id) {
-                        $weight = $stock_in->weight / 1000;
-                        $total_stock_in += $weight;
-                    }
-                }
-
-                return $stock_requested_differential = $total_stock_requested-$total_stock_in;
-            })
-            ->addColumn('action-edit', function ($product) {
-                return '<form method="get" action="stock/edit/'.$product->id.'" class="edit" enctype="multipart/form-data">
-                            <button type="submit" class="btn btn-warning">Editar</button>
-                        </form>';
-            })
-            ->addColumn('action-delete', function ($product) {
-                return '<button type="button" data-id="'.$product->id.'" data-role="'.$product->reference.'" class="delete apagarform btn btn-danger">Apagar</button>';
-            })
-            ->addColumn('action-stock', function ($product) {
-                return '<form method="get" action="/email/create/'.$product->id.'" class="email" enctype="multipart/form-data">
-                            <button type="submit" class="btn btn-success">Pedir stock</button>
-                        </form>';
-            })
-            ->setRowId('id')
-            ->rawColumns(['action-edit', 'action-delete', 'action-stock'])
-
-            ->removeColumn('id');
-
-        return $datatable
-            ->setRowClass(function ($product) {
-                $stock_request_history = DB::table('stock_request_history')
-                    ->orderBy('id', 'desc')
-                    ->get();
-
-                $stock_history = DB::table('warehouse_products_history')
-                    ->where('inout', 'IN')
-                    ->orderBy('id', 'desc')
-                    ->get();
-
-                $total_stock_requested = 0;
-                foreach($stock_request_history as $stock_request) {
-                    if($product->id == $stock_request->warehouse_product_spec_id) {
-                        $total_stock_requested += $stock_request->amount_requested;
-                    }
-                }
-                $total_stock_in = 0;
-                foreach($stock_history as $stock_in) {
-                    if ($product->id == $stock_in->warehouse_product_spec_id) {
-                        $weight = $stock_in->weight / 1000;
-                        $total_stock_in += $weight;
-                    }
-                }
-
-                $stock_requested_differential = $total_stock_requested-$total_stock_in;
-
-                return $product->liquid_weight < 0 && $stock_requested_differential < abs($product->liquid_weight) ? 'danger' : '';
-            })
-            ->make(true);
-    }
+//    public function getAllStocks()
+//    {
+//        $query = DB::table('warehouse_product_specs')
+//            ->select(DB::raw('warehouse_product_specs.id, warehouse_products.reference, color,
+//                gross_weight / 1000 as gross_weight, liquid_weight/1000 as liquid_weight, to_do_weight/1000 as to_do_weight,
+//                threshold, cost, users.name, warehouse_product_specs.updated_at'))
+//            ->leftJoin('warehouse_products', 'warehouse_products.id', '=', 'warehouse_product_specs.warehouse_product_id')
+//            ->leftJoin('users', 'users.id', '=', 'warehouse_products.user_id')
+//            ->get();
+//
+//        $datatable = Datatables::of($query)
+//            ->addColumn('requested-stock', function ($product) {
+//                $stock_request_history = DB::table('stock_request_history')
+//                    ->orderBy('id', 'desc')
+//                    ->get();
+//
+//                $stock_history = DB::table('warehouse_products_history')
+//                    ->where('inout', 'IN')
+//                    ->orderBy('id', 'desc')
+//                    ->get();
+//
+//                $total_stock_requested = 0;
+//                foreach($stock_request_history as $stock_request) {
+//                    if($product->id == $stock_request->warehouse_product_spec_id) {
+//                        $total_stock_requested += $stock_request->amount_requested;
+//                    }
+//                }
+//                $total_stock_in = 0;
+//                foreach($stock_history as $stock_in) {
+//                    if ($product->id == $stock_in->warehouse_product_spec_id) {
+//                        $weight = $stock_in->weight / 1000;
+//                        $total_stock_in += $weight;
+//                    }
+//                }
+//
+//                return $stock_requested_differential = $total_stock_requested-$total_stock_in;
+//            })
+//            ->addColumn('action-edit', function ($product) {
+//                return '<form method="get" action="stock/edit/'.$product->id.'" class="edit" enctype="multipart/form-data">
+//                            <button type="submit" class="btn btn-warning">Editar</button>
+//                        </form>';
+//            })
+//            ->addColumn('action-delete', function ($product) {
+//                return '<button type="button" data-id="'.$product->id.'" data-role="'.$product->reference.'" class="delete apagarform btn btn-danger">Apagar</button>';
+//            })
+//            ->addColumn('action-stock', function ($product) {
+//                return '<form method="get" action="/email/create/'.$product->id.'" class="email" enctype="multipart/form-data">
+//                            <button type="submit" class="btn btn-success">Pedir stock</button>
+//                        </form>';
+//            })
+//            ->setRowId('id')
+//            ->rawColumns(['action-edit', 'action-delete', 'action-stock'])
+//
+//            ->removeColumn('id');
+//
+//        return $datatable
+//            ->setRowClass(function ($product) {
+//                $stock_request_history = DB::table('stock_request_history')
+//                    ->orderBy('id', 'desc')
+//                    ->get();
+//
+//                $stock_history = DB::table('warehouse_products_history')
+//                    ->where('inout', 'IN')
+//                    ->orderBy('id', 'desc')
+//                    ->get();
+//
+//                $total_stock_requested = 0;
+//                foreach($stock_request_history as $stock_request) {
+//                    if($product->id == $stock_request->warehouse_product_spec_id) {
+//                        $total_stock_requested += $stock_request->amount_requested;
+//                    }
+//                }
+//                $total_stock_in = 0;
+//                foreach($stock_history as $stock_in) {
+//                    if ($product->id == $stock_in->warehouse_product_spec_id) {
+//                        $weight = $stock_in->weight / 1000;
+//                        $total_stock_in += $weight;
+//                    }
+//                }
+//
+//                $stock_requested_differential = $total_stock_requested-$total_stock_in;
+//
+//                return $product->liquid_weight < 0 && $stock_requested_differential < abs($product->liquid_weight) ? 'danger' : '';
+//            })
+//            ->make(true);
+//    }
 
     public function returnHistoric($id)
     {
@@ -165,8 +154,8 @@ class WarehouseProductController extends Controller
         foreach($stock_request_history as $stock_request) {
             if($id == $stock_request->warehouse_product_spec_id) {
                 if($stock_request->email_sent !== 'adjust_entrada_stock_extra') {
-                    $email_content .= 'Pedido: '.$stock_request->amount_requested.'Kg; '.
-                    'Data: '.substr($stock_request->created_at, 0, 10).'| ' ?: 0;
+                    $email_content .= 'Pedido: '.$stock_request->amount_requested.'Kg '.
+                    'em '.substr($stock_request->created_at, 0, 10).' | ' ?: 0;
                 }
                 $total_stock_requested += $stock_request->amount_requested;
             }
@@ -176,8 +165,8 @@ class WarehouseProductController extends Controller
         foreach($stock_history as $stock_in) {
             if ($id == $stock_in->warehouse_product_spec_id) {
                 $weight = $stock_in->weight / 1000;
-                $stock_in_latest .= 'Entrada: ' . $weight . 'Kg; ' .
-                'Data: ' . substr($stock_in->created_at, 0, 10) . '| ' ?: 0;
+                $stock_in_latest .= 'Entrada: ' . $weight . 'Kg ' .
+                'em ' . substr($stock_in->created_at, 0, 10) . '| ' ?: 0;
                 $total_stock_in += $weight;
             }
         }
@@ -520,9 +509,44 @@ class WarehouseProductController extends Controller
 
         }
 
+        self::updateStockPedido($warehouseProductSpec);
+
         flash('Stock corretamente inserido!')->success();
 
         return redirect()->action('WarehouseProductController@index');
+    }
+
+
+    private function updateStockPedido($wh_obj) {
+
+        $stock_request_history = DB::table('stock_request_history')
+            ->orderBy('id', 'desc')
+            ->get();
+
+        $stock_history = DB::table('warehouse_products_history')
+            ->where('inout', 'IN')
+            ->orderBy('id', 'desc')
+            ->get();
+
+        $total_stock_requested = 0;
+        foreach($stock_request_history as $stock_request) {
+            if($wh_obj->id == $stock_request->warehouse_product_spec_id) {
+                $total_stock_requested += $stock_request->amount_requested;
+            }
+        }
+        $total_stock_in = 0;
+        foreach($stock_history as $stock_in) {
+            if ($wh_obj->id == $stock_in->warehouse_product_spec_id) {
+                $weight = $stock_in->weight / 1000;
+                $total_stock_in += $weight;
+            }
+        }
+
+        $stock_requested_differential = $total_stock_requested-$total_stock_in;
+
+        StockRequest::updateOrCreate(['warehouse_product_spec_id' => $wh_obj->id],
+            ['amount_requested' => $stock_requested_differential]);
+
     }
 
 }
