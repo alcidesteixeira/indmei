@@ -31,10 +31,15 @@ class WarehouseProductController extends Controller
 
         //Calculate using historic;
         //Only updates the stock that has changed
-        $update = new WarehouseProduct();
-        $update->updateStocks();
+
+//        dd(isset($_COOKIE["update_warehouse"]));
+
+//        $update = new WarehouseProduct();
+//        $update->updateStocks();
 
         $stock = WarehouseProductSpec::all();
+
+        dd($stock); die;
 
         return view('warehouse.list', compact( 'stock'));
     }

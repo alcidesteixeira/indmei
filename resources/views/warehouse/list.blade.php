@@ -172,7 +172,7 @@
             }).done(function(data) {
                 console.log(data);
                 let toAppend = '';
-                $.each(data, function(k,v) {
+                $.each(data['historico'], function(k,v) {
                     let ident = '';
                     if(v["client_identifier_public"]) {
                         ident = v["client_identifier_public"];
