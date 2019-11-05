@@ -140,7 +140,7 @@ class SampleArticleController extends Controller
             $wire->sample_article_id = $sampleArticle->id;
             $wire->step_id = $request->$step ? $request->$step : '0';
             $wire->warehouse_product_id = $request->$reference;
-            $wire->guiafios_id = $request->$guiafios;
+            $wire->guiafios_id = $request->$guiafios ?: 9;
             $wire->grams = $request->$grams ? $request->$grams : '0';
             $wire->save();
 

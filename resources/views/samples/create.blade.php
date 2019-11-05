@@ -124,8 +124,7 @@
                     <tr id="theRow" style="@if(in_array($steps[$i-1]->step, ['G8', 'BR5', 'BR6', 'BR7', 'BR8'])) display: none @endif">
                         <td data-col1="Função">
                             <input style="font-size: .9rem;line-height: 1.6;padding: 0 12px;" type="text" data-row="{{$i}}" id="row-{{$i}}-guiafios" name="row-{{$i}}-guiafios" class="form-control"
-                            value="{{@$sampleArticle && @$guiafios[$sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->guiafios_id] ?
-                             $guiafios[$sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->guiafios_id]->description : ''}}">
+                                value="@if(@$sampleArticle && @$guiafios[$sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->guiafios_id]){{$guiafios[$sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->guiafios_id]->description}}@elseif(@$sampleArticle && !is_numeric($sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->guiafios_id) ){{$sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->guiafios_id}}@endif">
                         </td>
                         <td data-col2="Guiafios">
                             <select size="1" class="stepEmpty form-control" data-row="{{$i}}" id="row-{{$i}}-step" name="row-{{$i}}-step">
