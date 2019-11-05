@@ -39,7 +39,7 @@ class WarehouseProductController extends Controller
 
         $stock = WarehouseProductSpec::all();
 
-        dd($stock); die;
+//        dd($stock); die;
 
         return view('warehouse.list', compact( 'stock'));
     }
