@@ -32,104 +32,21 @@ class WarehouseProductController extends Controller
         //Calculate using historic;
         //Only updates the stock that has changed
 
-//        dd(isset($_COOKIE["update_warehouse"]));
 
-//        $update = new WarehouseProduct();
-//        $update->updateStocks();
+        session_start();
+
+        if(isset($_SESSION["update_warehouse"])) {
+            $update = new WarehouseProduct();
+            $update->updateStocks();
+            session_unset();
+        }
 
         $stock = WarehouseProductSpec::all();
 
-//        dd($stock); die;
 
         return view('warehouse.list', compact( 'stock'));
     }
 
-//    public function getAllStocks()
-//    {
-//        $query = DB::table('warehouse_product_specs')
-//            ->select(DB::raw('warehouse_product_specs.id, warehouse_products.reference, color,
-//                gross_weight / 1000 as gross_weight, liquid_weight/1000 as liquid_weight, to_do_weight/1000 as to_do_weight,
-//                threshold, cost, users.name, warehouse_product_specs.updated_at'))
-//            ->leftJoin('warehouse_products', 'warehouse_products.id', '=', 'warehouse_product_specs.warehouse_product_id')
-//            ->leftJoin('users', 'users.id', '=', 'warehouse_products.user_id')
-//            ->get();
-//
-//        $datatable = Datatables::of($query)
-//            ->addColumn('requested-stock', function ($product) {
-//                $stock_request_history = DB::table('stock_request_history')
-//                    ->orderBy('id', 'desc')
-//                    ->get();
-//
-//                $stock_history = DB::table('warehouse_products_history')
-//                    ->where('inout', 'IN')
-//                    ->orderBy('id', 'desc')
-//                    ->get();
-//
-//                $total_stock_requested = 0;
-//                foreach($stock_request_history as $stock_request) {
-//                    if($product->id == $stock_request->warehouse_product_spec_id) {
-//                        $total_stock_requested += $stock_request->amount_requested;
-//                    }
-//                }
-//                $total_stock_in = 0;
-//                foreach($stock_history as $stock_in) {
-//                    if ($product->id == $stock_in->warehouse_product_spec_id) {
-//                        $weight = $stock_in->weight / 1000;
-//                        $total_stock_in += $weight;
-//                    }
-//                }
-//
-//                return $stock_requested_differential = $total_stock_requested-$total_stock_in;
-//            })
-//            ->addColumn('action-edit', function ($product) {
-//                return '<form method="get" action="stock/edit/'.$product->id.'" class="edit" enctype="multipart/form-data">
-//                            <button type="submit" class="btn btn-warning">Editar</button>
-//                        </form>';
-//            })
-//            ->addColumn('action-delete', function ($product) {
-//                return '<button type="button" data-id="'.$product->id.'" data-role="'.$product->reference.'" class="delete apagarform btn btn-danger">Apagar</button>';
-//            })
-//            ->addColumn('action-stock', function ($product) {
-//                return '<form method="get" action="/email/create/'.$product->id.'" class="email" enctype="multipart/form-data">
-//                            <button type="submit" class="btn btn-success">Pedir stock</button>
-//                        </form>';
-//            })
-//            ->setRowId('id')
-//            ->rawColumns(['action-edit', 'action-delete', 'action-stock'])
-//
-//            ->removeColumn('id');
-//
-//        return $datatable
-//            ->setRowClass(function ($product) {
-//                $stock_request_history = DB::table('stock_request_history')
-//                    ->orderBy('id', 'desc')
-//                    ->get();
-//
-//                $stock_history = DB::table('warehouse_products_history')
-//                    ->where('inout', 'IN')
-//                    ->orderBy('id', 'desc')
-//                    ->get();
-//
-//                $total_stock_requested = 0;
-//                foreach($stock_request_history as $stock_request) {
-//                    if($product->id == $stock_request->warehouse_product_spec_id) {
-//                        $total_stock_requested += $stock_request->amount_requested;
-//                    }
-//                }
-//                $total_stock_in = 0;
-//                foreach($stock_history as $stock_in) {
-//                    if ($product->id == $stock_in->warehouse_product_spec_id) {
-//                        $weight = $stock_in->weight / 1000;
-//                        $total_stock_in += $weight;
-//                    }
-//                }
-//
-//                $stock_requested_differential = $total_stock_requested-$total_stock_in;
-//
-//                return $product->liquid_weight < 0 && $stock_requested_differential < abs($product->liquid_weight) ? 'danger' : '';
-//            })
-//            ->make(true);
-//    }
 
     public function returnHistoric($id)
     {
@@ -250,6 +167,10 @@ class WarehouseProductController extends Controller
             ]
         );
 
+
+        $update = new WarehouseProduct();
+        $update->updateStocks($spec->id);
+
         flash('Matéria-Prima com a referência: "'. $warehouseProduct->reference . '", e descrição: "'. $spec->description .'" foi criada com sucesso!')->success();
 
         return redirect()->action('WarehouseProductController@index');
@@ -308,6 +229,10 @@ class WarehouseProductController extends Controller
         $warehouseProduct = WarehouseProduct::find($spec->product->id);
         $warehouseProduct->reference = $request->reference;
         $warehouseProduct->save();
+
+
+        $update = new WarehouseProduct();
+        $update->updateStocks($id);
 
         flash('A Matéria-Prima com a referência: '. $warehouseProduct->reference . ', e a descrição: '. $spec->description .' foi atualizada com sucesso!')->success();
 
@@ -511,6 +436,9 @@ class WarehouseProductController extends Controller
                 }
             }
 
+
+            $update = new WarehouseProduct();
+            $update->updateStocks($warehouseProductSpec->id);
 
         }
 

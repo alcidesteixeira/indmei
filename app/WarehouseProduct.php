@@ -32,12 +32,18 @@ class WarehouseProduct extends Model
     /**
      * This function will run every time the user enters the Stock List
      **/
-    public function updateStocks () {
+    public function updateStocks ($id = null) {
 
-        $history = DB::table('warehouse_products_history')
-            ->get()->toArray();
+        $history = DB::table('warehouse_products_history');
+        if($id) {
+            $history = $history->where('warehouse_product_spec_id', $id);
+        }
+        $history = $history->get()->toArray();
 
         $products = WarehouseProductSpec::all();
+        if($id) {
+            $products = WarehouseProductSpec::where('id', $id)->get();
+        }
 
         $orders = Order::all();
         //IDS da encomenda
@@ -50,22 +56,33 @@ class WarehouseProduct extends Model
         $ids_t_c = [];
         $ids_to_compare = DB::table('warehouse_products_history')
             ->select('order_id')
-            ->where('order_id', '<>', 0)
-            ->groupBy('order_id')
-            ->get()->toArray();
+            ->where('order_id', '<>', 0);
 
-        foreach($ids_to_compare as $id) {
-            array_push($ids_t_c, $id->order_id);
+        if($id){
+            $ids_to_compare = $ids_to_compare->where('warehouse_product_spec_id', $id);
         }
 
-        foreach($ids_t_c as $id) {
+        $ids_to_compare = $ids_to_compare->groupBy('order_id')
+            ->get()->toArray();
+
+
+        foreach($ids_to_compare as $id_single) {
+            array_push($ids_t_c, $id_single->order_id);
+        }
+
+        foreach($ids_t_c as $id_single) {
 
             //Se não existir esta descrição, apaga histórico porque significa que a encomenda foi apagada
-            if(!in_array($id, $order_ids)) {
+            if(!in_array($id_single, $order_ids)) {
 //                echo "entra";
-                DB::table('warehouse_products_history')
-                ->where('order_id', $id)
-                ->delete();
+                $to_delete = DB::table('warehouse_products_history')
+                ->where('order_id', $id_single);
+
+                if($id) {
+                    $to_delete = $to_delete->where('warehouse_product_spec_id', $id);
+                }
+
+                $to_delete->delete();
             }
         }
 
@@ -121,18 +138,7 @@ class WarehouseProduct extends Model
 
                 }
             }
-            //Cálculo de stock bruto: total menos o que já foi produzido, ou seja, o que existe efectivamente no armazém
-//            foreach ($history as $key => $val) {
-//                if ($val->warehouse_product_spec_id == $product->id) {
-//                    if($val->inout == 'IN') {
-//                        $total_bruto += $val->weight;
-//                    }
-//
-//                    if ($val->inout == 'OUT_GROSS') {
-//                        $total_bruto -= $val->weight;
-//                    }
-//                }
-//            }
+
             //Apenas atualiza os valores de stock que sofreram alterações
             $currentValsStored = WarehouseProductSpec::where('id', $product->id)->first();
             if(strcmp($currentValsStored->liquid_weight, $total_liquid) ||

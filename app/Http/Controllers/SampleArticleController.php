@@ -340,6 +340,9 @@ class SampleArticleController extends Controller
             Mail::to($user->email)->send(new sendSimpleEmail($subject, $body));
         }
 
+        session_start();
+        $_SESSION["update_warehouse"] = true;
+
         flash('A Amostra de Artigo com a referência: '. $sampleArticle->reference . ', e a descrição: '. $sampleArticle->description .' foi atualizada com sucesso!')->success();
 
         return redirect()->action('SampleArticleController@index');

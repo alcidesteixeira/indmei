@@ -212,6 +212,9 @@ class OrderController extends Controller
         }
         //Fim de envio de emails
 
+        session_start();
+        $_SESSION["update_warehouse"] = true;
+
         flash('Encomenda do Cliente: '. $addRow . ', com o identificador: '. $order->client_identifier . ' foi criado com sucesso!')->success();
 
         return redirect()->action('OrderController@index');
@@ -392,6 +395,9 @@ class OrderController extends Controller
                 break;
         }
         //fim de envio de emails
+
+        session_start();
+        $_SESSION["update_warehouse"] = true;
 
         flash('Encomenda do Cliente '. $addRow . ' com o identificador '. $order->client_identifier . ' foi atualizada com sucesso!')->success();
 

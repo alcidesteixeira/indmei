@@ -193,6 +193,9 @@ class OrderProductionController extends Controller
 
         }
 
+        session_start();
+        $_SESSION["update_warehouse"] = true;
+
         flash('Valores atualizador para o dia: '. Carbon::now(). ' com sucesso!')->success();
 
         return redirect()->action('OrderProductionController@create', ['id' => $id]);
