@@ -278,7 +278,7 @@
 
             <div class="row">
                 <div class="col-md-3"></div>
-                <div class="submit-buttons form-group col-md-6" style="margin-top:60px">
+                <div class="submit-buttons form-group col-md-6" style="margin-top:0; margin-bottom:10px !important;">
                     <button type="submit" onclick="beforeInput();" class="btn btn-success">{{@$sampleArticle->reference && !@$isDuplicate ? 'Atualizar' : (@$isDuplicate ? 'Duplicar' : 'Criar')}}</button>
                     <button type="button" onclick="window.history.back();" class="btn btn-info">Voltar</button>
                 </div>
