@@ -32,7 +32,7 @@ class OrderController extends Controller
     {
         Auth::user()->authorizeRoles(['1', '3', '4', '6', '7']);
 
-        $orders = Order::where('status_id', '<>', 8)->get();
+        $orders = Order::where('status_id', '<>', 8)->andWhere('status_id', '<>', 7)->get();
 
         $view = 'orders';
 

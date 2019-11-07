@@ -25,11 +25,11 @@
                 <div class="col-md-3"></div>
                 <div class="form-group col-md-3">
                     <label for="Reference">Amostra INDMEI:</label>
-                    <input type="text" class="form-control" name="reference" value="{{@$isDuplicate ? '' : @$sampleArticle->reference}}" required>
+                    <input style="font-size: .9rem;line-height: 1.6;" type="text" class="form-control" name="reference" value="{{@$isDuplicate ? '' : @$sampleArticle->reference}}" required>
                 </div>
                 <div class="form-group col-md-3">
                     <label for="Description">Descrição:</label>
-                    <input type="text" class="form-control" name="description" value="{{@$sampleArticle->description}}" required>
+                    <input style="font-size: .9rem;line-height: 1.6;" type="text" class="form-control" name="description" value="{{@$sampleArticle->description}}" required>
                 </div>
             </div>
             <div class="row">
@@ -54,38 +54,38 @@
                             @php($forma = 'forma'.$i)
                             <td style="border: 2px solid darkgray; text-align: center;">
                                 <div class="form-group" style="margin: auto;">
-                                    <label><input type="text" class="form-control" name="tamanho{{$i}}" value="{{@$sampleArticle->$tamanho}}"></label>
+                                    <label><input style="font-size: .9rem;line-height: 1.6;" type="text" class="form-control" name="tamanho{{$i}}" value="{{@$sampleArticle->$tamanho}}"></label>
                                     <div class="row">
                                         <div class="col-md-1"></div>
                                         <div class="form-group col-md-5">
                                             <label for="pe">Pé:</label>
-                                            <input type="text" class="form-control" name="pe{{$i}}" value="{{@$sampleArticle->$pe}}">
+                                            <input style="font-size: .9rem;line-height: 1.6;" type="text" class="form-control" name="pe{{$i}}" value="{{@$sampleArticle->$pe}}">
                                         </div>
                                         <div class="form-group col-md-5">
                                             <label for="Perna">Perna:</label>
-                                            <input type="text" class="form-control" name="perna{{$i}}" value="{{@$sampleArticle->$perna}}">
+                                            <input style="font-size: .9rem;line-height: 1.6;" type="text" class="form-control" name="perna{{$i}}" value="{{@$sampleArticle->$perna}}">
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-1"></div>
                                         <div class="form-group col-md-5">
                                             <label for="Punho">Punho:</label>
-                                            <input type="text" class="form-control" name="punho{{$i}}" value="{{@$sampleArticle->$punho}}">
+                                            <input style="font-size: .9rem;line-height: 1.6;" type="text" class="form-control" name="punho{{$i}}" value="{{@$sampleArticle->$punho}}">
                                         </div>
                                         <div class="form-group col-md-5">
                                             <label for="Malha">Malha:</label>
-                                            <input type="text" class="form-control" name="malha{{$i}}" value="{{@$sampleArticle->$malha}}">
+                                            <input style="font-size: .9rem;line-height: 1.6;" type="text" class="form-control" name="malha{{$i}}" value="{{@$sampleArticle->$malha}}">
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-1"></div>
                                         <div class="form-group col-md-5">
                                             <label for="Maq">Maq:</label>
-                                            <input type="text" class="form-control" name="maq{{$i}}" value="{{@$sampleArticle->$maq}}">
+                                            <input style="font-size: .9rem;line-height: 1.6;" type="text" class="form-control" name="maq{{$i}}" value="{{@$sampleArticle->$maq}}">
                                         </div>
                                         <div class="form-group col-md-5">
                                             <label for="Forma">Forma:</label>
-                                            <input type="text" class="form-control" name="forma{{$i}}" value="{{@$sampleArticle->$forma}}">
+                                            <input style="font-size: .9rem;line-height: 1.6;" type="text" class="form-control" name="forma{{$i}}" value="{{@$sampleArticle->$forma}}">
                                         </div>
                                     </div>
                                 </div>
@@ -105,16 +105,16 @@
                     <th>Gramas</th>
                     <th>Referência INDMEI</th>
                     <th>
-                        <input type="text" class="form-control" name="cor1" style="max-width:100px" value="{{@$sampleArticle->cor1 ?: 'Cor1'}}">
+                        <input type="text" class="form-control" name="cor1" style="font-size: .9rem;line-height: 1.6;max-width:100px" value="{{@$sampleArticle->cor1 ?: 'Cor1'}}">
                     </th>
                     <th>
-                        <input type="text" class="form-control" name="cor2" style="max-width:100px" value="{{@$sampleArticle->cor2 ?: 'Cor2'}}">
+                        <input type="text" class="form-control" name="cor2" style="font-size: .9rem;line-height: 1.6;max-width:100px" value="{{@$sampleArticle->cor2 ?: 'Cor2'}}">
                     </th>
                     <th>
-                        <input type="text" class="form-control" name="cor3" style="max-width:100px" value="{{@$sampleArticle->cor3 ?: 'Cor3'}}">
+                        <input type="text" class="form-control" name="cor3" style="font-size: .9rem;line-height: 1.6;max-width:100px" value="{{@$sampleArticle->cor3 ?: 'Cor3'}}">
                     </th>
                     <th>
-                        <input type="text" class="form-control" name="cor4" style="max-width:100px" value="{{@$sampleArticle->cor4 ?: 'Cor4'}}">
+                        <input type="text" class="form-control" name="cor4" style="font-size: .9rem;line-height: 1.6;max-width:100px" value="{{@$sampleArticle->cor4 ?: 'Cor4'}}">
                     </th>
                 </tr>
                 </thead>
