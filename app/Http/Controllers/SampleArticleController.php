@@ -12,9 +12,11 @@ use App\OrderStatus;
 use App\SampleArticleStep;
 use App\SampleArticlesWire;
 use App\WarehouseProduct;
+use App\WarehouseProductSpec;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
@@ -46,9 +48,9 @@ class SampleArticleController extends Controller
 
         $steps = SampleArticleStep::all();
 
-        $warehouseProducts = WarehouseProduct::all();
+        $warehouseProducts = WarehouseProduct::orderBy('reference', 'asc')->get();
 
-        $warehouseFirstWireSpecs = WarehouseProduct::first();
+        $warehouseFirstWireSpecs = WarehouseProduct::orderBy('reference', 'asc')->first();
         if($warehouseFirstWireSpecs) {
             $warehouseFirstWireSpecs = $warehouseFirstWireSpecs->warehouseProductSpecs()->get();
         }
@@ -188,17 +190,53 @@ class SampleArticleController extends Controller
 
         $sampleArticle = SampleArticle::find($id);
 
+        $sample_wires = $sampleArticle->sampleArticleWires()->get();
+
+        $sample_wire_ids_array =
+        $sample_guiafios_array =
+        $sample_steps_array =
+        $sample_grams_array =
+        $sample_wp_array =
+        $sample_wp_specs_array = [];
+
+        foreach($sample_wires as $key => $wire){
+            $sample_wire_ids_array[] = $wire->id;
+            $sample_guiafios_array[] = $wire->guiafios_id;
+            $sample_steps_array[] = $wire->step_id;
+            $sample_grams_array[] = $wire->grams;
+            $sample_wp_array[] = $wire->warehouse_product_id;
+        }
+
+        $warehouseProductSpecs = WarehouseProductSpec::all();
+        foreach($warehouseProductSpecs as $spec) {
+            $warehouseProductSpecsArray[$spec->warehouse_product_id][$spec->id] = $spec->color;
+        }
+
+        $warehouseProductSpecsColors = DB::table('sample_article_colors')
+            ->get()
+            ->toArray();
+
+        foreach($sample_wire_ids_array as $wire_key => $wire) {
+            foreach($warehouseProductSpecsColors as $color_key => $color) {
+                if($wire == $color->sample_articles_wire_id) {
+                    $sample_wp_specs_array[$wire_key][] = $color->warehouse_product_spec_id;
+                }
+            }
+        }
         $steps = SampleArticleStep::all();
 
-        $warehouseProducts = WarehouseProduct::all();
+        $warehouseProducts = WarehouseProduct::orderBy('reference', 'asc')->get();
 
-        $guiafios = SampleArticleGuiafio::all();
+        $guiafios = SampleArticleGuiafio::pluck('description', 'id')->toArray();
 
 //        dd($sampleArticle->sampleArticleWires()->get()->values()->get(16)->guiafios_id);
 //        dd($sampleArticle->sampleArticleWires()->get()->values()->get(16)->wireColors()->get());
 //        dd($sampleArticle->sampleArticleWires()->get()->values()->get(16)->warehouseProduct->warehouseProductSpecs()->get());
 
-        return view('samples.create', compact('sampleArticle', 'steps', 'warehouseProducts', 'guiafios', 'id'));
+        return view('samples.create',
+            compact('sampleArticle', 'steps', 'sample_steps_array',
+                'warehouseProducts', 'guiafios', 'sample_guiafios_array', 'sample_grams_array',
+                'sample_wp_array', 'warehouseProductSpecsArray', 'sample_wp_specs_array', 'id'));
     }
 
     public function updateWireSpecs($id)

@@ -124,14 +124,17 @@
                     <tr id="theRow" style="@if(in_array($steps[$i-1]->step, ['G8', 'BR5', 'BR6', 'BR7', 'BR8'])) display: none @endif">
                         <td data-col1="Função">
                             <input style="font-size: .9rem;line-height: 1.6;padding:0 12px !important;padding: 0 12px;" type="text" data-row="{{$i}}" id="row-{{$i}}-guiafios" name="row-{{$i}}-guiafios" class="form-control"
-                                value="@if(@$sampleArticle && @$guiafios[$sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->guiafios_id]){{$guiafios[$sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->guiafios_id]->description}}@elseif(@$sampleArticle && !is_numeric($sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->guiafios_id) ){{$sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->guiafios_id}}@endif">
+                                value="@if(@$sampleArticle && is_numeric($sample_guiafios_array[$i-1])){{$guiafios[$sample_guiafios_array[$i-1]]}}@elseif(@$sampleArticle && !is_numeric($sample_guiafios_array[$i-1])){{$sample_guiafios_array[$i-1]}}@endif">
                         </td>
                         <td data-col2="Guiafios">
                             <select size="1" class="stepEmpty form-control" data-row="{{$i}}" id="row-{{$i}}-step" name="row-{{$i}}-step">
                                 @foreach($steps as $step)
                                 {{--Primeiro if acontece ao criar para listar todos os steps direitinhos--}}
                                 {{--Segundo if é para no edit aparecer tudo o que está na BD guardado--}}
-                                <option value="{{$step->id}}" {{$step->id == $i ? 'selected' : @$sampleArticle && $step->id == $sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->step_id ?
+                                <option value="{{$step->id}}"
+                                        {{$step->id == $i ? 'selected' :
+                                        @$sampleArticle &&
+                                        $step->id == $sample_steps_array[$i-1] ?
                                  'selected' : ''}}>
                                     {{$step->step}}
                                 </option>
@@ -140,37 +143,36 @@
                         </td>
                         <td data-col3="Gramas">
                             <input style="font-size: .9rem;line-height: 1.6;padding:0 12px !important;padding: 0 12px;" type="number" id="row-{{$i}}-grams"  class="form-control sum_grams" name="row-{{$i}}-grams" style="max-width:100px"
-                                   value="{{@$sampleArticle && $sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->grams
-                            && $sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->step_id !== '18' ?
-                            $sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->grams : '0'}}">
+                                   value="{{@$sampleArticle && $sample_grams_array[$i-1]
+                            && $sample_steps_array[$i-1] !== '18' ?
+                            $sample_grams_array[$i-1] : '0'}}">
                         </td>
+
                         <td data-col4="Refrência do Fio">
                             <select size="1" class="referenceChanged form-control" data-row="{{$i}}" id="row-{{$i}}-reference" name="row-{{$i}}-reference">
                                 @foreach($warehouseProducts as $product)
-                                <option value="{{@$product->id}}" {{@$sampleArticle && $product->id == $sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->warehouse_product_id ? 'selected' : ''}}>
+                                <option value="{{@$product->id}}" {{@$sampleArticle && $product->id == $sample_wp_array[$i-1] ? 'selected' : ''}}>
                                     {{@$product->reference}}
                                 </option>
                                 @endforeach
-                                <option value="default" {{@$sampleArticle && $step->id == $sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->step_id ? 'selected' : ''}}>
+                                <option value="default" {{@$sampleArticle && $step->id == $sample_steps_array[$i-1] ? 'selected' : ''}}>
                                 </option>
                             </select>
                         </td>
+
                         <td data-col5="Cor #1">
                             <select size="1" id="row-{{$i}}-color1" name="row-{{$i}}-color1" class="form-control">
-                                {{--Caso a cor esteja diferente de vazio--}}
-                                @if(@$sampleArticle && $sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->warehouse_product_id !== 'default')
-                                    {{--Fios da amostra, ou fios default--}}
+                                @if(@$sampleArticle && isset($sample_wp_specs_array[$i-1]) && $sample_wp_array[$i-1] !== 'default'))
                                     @if(@$sampleArticle)
-                                        @php($wires = @$sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->warehouseProduct->warehouseProductSpecs()->get())
-                                        @foreach($wires as $wireSpecs)
-                                            <option value="{{$wireSpecs->id}}"
-                                                {{$wireSpecs->id == $sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->wireColors()->get()->values()->get(0)->warehouse_product_spec_id
+                                        @foreach($warehouseProductSpecsArray[$sample_wp_array[$i-1]] as $key => $color)
+                                            <option value="{{$key}}"
+                                                {{$key == $sample_wp_specs_array[$i-1][0]
                                                 ? 'selected' : ''}}>
-                                            {{$wireSpecs->color}}
-                                        </option>
+                                                {{$color}}
+                                            </option>
                                         @endforeach
                                         <option value="default"
-                                            {{$sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->wireColors()->get()->values()->get(0)->warehouse_product_spec_id == 'default' ?
+                                            {{(!isset($sample_wp_specs_array[$i-1]) || $sample_wp_specs_array[$i-1][0] == 'default') ?
                                             'selected' : ''}}></option>
                                     @else
                                         @foreach(@$warehouseFirstWireSpecs as $firstWireSpecs)
@@ -180,84 +182,88 @@
                                         @endforeach
                                     @endif
                                 @else
-                                    <option value="default" {{@$sampleArticle && $step->id == $sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->step_id ? 'selected' : ''}}></option>
+                                    <option value="default" {{@$sampleArticle && $step->id == $sample_steps_array[$i-1] ? 'selected' : ''}}></option>
                                 @endif
                             </select>
                         </td>
-                        <td data-col6="Cor #2">
+
+                        <td data-col5="Cor #2">
                             <select size="1" id="row-{{$i}}-color2" name="row-{{$i}}-color2" class="form-control">
-                                @if(@$sampleArticle && $sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->warehouse_product_id !== 'default')
-                                    @if(@$sampleArticle)
-                                        @foreach(@$sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->warehouseProduct->warehouseProductSpecs()->get() as $wireSpecs)
-                                            <option value="{{$wireSpecs->id}}"
-                                            {{$wireSpecs->id == $sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->wireColors()->get()->values()->get(1)->warehouse_product_spec_id
-                                            ? 'selected' : ''}}>
-                                                {{$wireSpecs->color}}
-                                            </option>
-                                        @endforeach
-                                        <option value="default"
-                                            {{$sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->wireColors()->get()->values()->get(1)->warehouse_product_spec_id == 'default' ?
+                                @if(@$sampleArticle && isset($sample_wp_specs_array[$i-1]) && $sample_wp_array[$i-1] !== 'default'))
+                                @if(@$sampleArticle)
+                                    @foreach($warehouseProductSpecsArray[$sample_wp_array[$i-1]] as $key => $color)
+                                        <option value="{{$key}}"
+                                                {{$key == $sample_wp_specs_array[$i-1][1]
+                                                ? 'selected' : ''}}>
+                                            {{$color}}
+                                        </option>
+                                    @endforeach
+                                    <option value="default"
+                                            {{(!isset($sample_wp_specs_array[$i-1]) || $sample_wp_specs_array[$i-1][1] == 'default') ?
                                             'selected' : ''}}></option>
-                                    @else
-                                        @foreach(@$warehouseFirstWireSpecs as $firstWireSpecs)
-                                            <option value="{{$firstWireSpecs->id}}">
-                                                {{$firstWireSpecs->color}}
-                                            </option>
-                                        @endforeach
-                                    @endif
                                 @else
-                                    <option value="default" {{@$sampleArticle && $step->id == $sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->step_id ? 'selected' : ''}}></option>
+                                    @foreach(@$warehouseFirstWireSpecs as $firstWireSpecs)
+                                        <option value="{{$firstWireSpecs->id}}">
+                                            {{$firstWireSpecs->color}}
+                                        </option>
+                                    @endforeach
                                 @endif
-                            </select></td>
-                        <td data-col7="Cor #3">
-                            <select size="1" id="row-{{$i}}-color3" name="row-{{$i}}-color3" class="form-control">
-                                @if(@$sampleArticle && $sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->warehouse_product_id !== 'default')
-                                    @if(@$sampleArticle)
-                                        @foreach(@$sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->warehouseProduct->warehouseProductSpecs()->get() as $wireSpecs)
-                                            <option value="{{$wireSpecs->id}}"
-                                            {{$wireSpecs->id == $sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->wireColors()->get()->values()->get(2)->warehouse_product_spec_id
-                                            ? 'selected' : ''}}>
-                                                {{$wireSpecs->color}}
-                                            </option>
-                                        @endforeach
-                                        <option value="default"
-                                            {{$sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->wireColors()->get()->values()->get(2)->warehouse_product_spec_id == 'default' ?
-                                            'selected' : ''}}></option>
-                                    @else
-                                        @foreach(@$warehouseFirstWireSpecs as $firstWireSpecs)
-                                            <option value="{{$firstWireSpecs->id}}">
-                                                {{$firstWireSpecs->color}}
-                                            </option>
-                                        @endforeach
-                                    @endif
                                 @else
-                                    <option value="default" {{@$sampleArticle && $step->id == $sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->step_id ? 'selected' : ''}}></option>
+                                    <option value="default" {{@$sampleArticle && $step->id == $sample_steps_array[$i-1] ? 'selected' : ''}}></option>
                                 @endif
                             </select>
                         </td>
-                        <td data-col8="Cor #4">
-                            <select size="1" id="row-{{$i}}-color4" name="row-{{$i}}-color4" class="form-control">
-                                @if(@$sampleArticle && $sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->warehouse_product_id !== 'default')
-                                    @if(@$sampleArticle)
-                                        @foreach(@$sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->warehouseProduct->warehouseProductSpecs()->get() as $wireSpecs)
-                                            <option value="{{$wireSpecs->id}}"
-                                            {{$wireSpecs->id == $sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->wireColors()->get()->values()->get(3)->warehouse_product_spec_id
-                                            ? 'selected' : ''}}>
-                                                {{$wireSpecs->color}}
-                                            </option>
-                                        @endforeach
-                                        <option value="default"
-                                            {{$sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->wireColors()->get()->values()->get(3)->warehouse_product_spec_id == 'default' ?
+
+                        <td data-col5="Cor #3">
+                            <select size="1" id="row-{{$i}}-color3" name="row-{{$i}}-color3" class="form-control">
+                                @if(@$sampleArticle && isset($sample_wp_specs_array[$i-1]) && $sample_wp_array[$i-1] !== 'default'))
+                                @if(@$sampleArticle)
+                                    @foreach($warehouseProductSpecsArray[$sample_wp_array[$i-1]] as $key => $color)
+                                        <option value="{{$key}}"
+                                                {{$key == $sample_wp_specs_array[$i-1][2]
+                                                ? 'selected' : ''}}>
+                                            {{$color}}
+                                        </option>
+                                    @endforeach
+                                    <option value="default"
+                                            {{(!isset($sample_wp_specs_array[$i-1]) || $sample_wp_specs_array[$i-1][2] == 'default') ?
                                             'selected' : ''}}></option>
-                                    @else
-                                        @foreach(@$warehouseFirstWireSpecs as $firstWireSpecs)
-                                            <option value="{{$firstWireSpecs->id}}">
-                                                {{$firstWireSpecs->color}}
-                                            </option>
-                                        @endforeach
-                                    @endif
                                 @else
-                                    <option value="default" {{@$sampleArticle && $step->id == $sampleArticle->sampleArticleWires()->get()->values()->get($i-1)->step_id ? 'selected' : ''}}></option>
+                                    @foreach(@$warehouseFirstWireSpecs as $firstWireSpecs)
+                                        <option value="{{$firstWireSpecs->id}}">
+                                            {{$firstWireSpecs->color}}
+                                        </option>
+                                    @endforeach
+                                @endif
+                                @else
+                                    <option value="default" {{@$sampleArticle && $step->id == $sample_steps_array[$i-1] ? 'selected' : ''}}></option>
+                                @endif
+                            </select>
+                        </td>
+
+                        <td data-col5="Cor #4">
+                            <select size="1" id="row-{{$i}}-color4" name="row-{{$i}}-color4" class="form-control">
+                                @if(@$sampleArticle && isset($sample_wp_specs_array[$i-1]) && $sample_wp_array[$i-1] !== 'default'))
+                                @if(@$sampleArticle)
+                                    @foreach($warehouseProductSpecsArray[$sample_wp_array[$i-1]] as $key => $color)
+                                        <option value="{{$key}}"
+                                                {{$key == $sample_wp_specs_array[$i-1][3]
+                                                ? 'selected' : ''}}>
+                                            {{$color}}
+                                        </option>
+                                    @endforeach
+                                    <option value="default"
+                                            {{(!isset($sample_wp_specs_array[$i-1]) || $sample_wp_specs_array[$i-1][3] == 'default') ?
+                                            'selected' : ''}}></option>
+                                @else
+                                    @foreach(@$warehouseFirstWireSpecs as $firstWireSpecs)
+                                        <option value="{{$firstWireSpecs->id}}">
+                                            {{$firstWireSpecs->color}}
+                                        </option>
+                                    @endforeach
+                                @endif
+                                @else
+                                    <option value="default" {{@$sampleArticle && $step->id == $sample_steps_array[$i-1] ? 'selected' : ''}}></option>
                                 @endif
                             </select>
                         </td>
