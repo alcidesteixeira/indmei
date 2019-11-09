@@ -16,11 +16,10 @@ class StockRequestController extends Controller
     public function index()
     {
         $stockRequested = DB::table('stock_request_history')
-            ->where('id', '>', 600)
+            ->where('email_sent', '<>', 'adjust_entrada_stock_extra')
             ->orderBy('created_at', 'desc')
             ->get();
 
-        dd($stockRequested);
         return view('warehouse.list_stock_requested', compact('stockRequested'));
     }
 
