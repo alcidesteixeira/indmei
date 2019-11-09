@@ -17,6 +17,7 @@ class StockRequestController extends Controller
     {
         $stockRequested = DB::table('stock_request_history')->orderBy('created_at', 'desc')->get();
 
+        dd($stockRequested);
         return view('warehouse.list_stock_requested', compact('stockRequested'));
     }
 
