@@ -23,11 +23,15 @@
         @if($s->step_id !== '18' && !in_array($k+1, $steps_not_allowed))
             <tr>
                 <td data-col1="Função">
-                    @foreach($guiafios as $guia)
-                        @if($guia->id == $s->guiafios_id)
-                            <span>{{$guia->description}}</span>
-                        @endif
-                    @endforeach
+                    @if(intval($s->guiafios_id) !== 0)
+                        @foreach($guiafios as $guia)
+                            @if($guia->id == $s->guiafios_id)
+                                <span>{{$guia->description}}</span>
+                            @endif
+                        @endforeach
+                    @else
+                        {{$s->guiafios_id}}
+                    @endif
                 </td>
                 <td data-col2="Guiafios">
                     @foreach($steps as $step)

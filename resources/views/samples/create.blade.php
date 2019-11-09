@@ -311,7 +311,11 @@
         function calcTotalGrams() {
             let sumGrams = 0;
             $(".sum_grams").each( function (){
-                sumGrams += parseInt($(this).val());
+                let toSum = parseInt($(this).val());
+                if(isNaN(toSum)){
+                    toSum = 0;
+                }
+                sumGrams += toSum;
             });
             $(".total_gramas").val(sumGrams);
         }
@@ -380,7 +384,7 @@
             if(val == '18') {
                 $("#row-"+rowSelected+"-reference, #row-"+rowSelected+"-color1, #row-"+rowSelected+"-color2, #row-"+rowSelected+"-color3, #row-"+rowSelected+"-color4").val("default");
                 $("#row-"+rowSelected+"-grams").val("");
-                $("#row-"+rowSelected+"-guiafios").val("9");
+                $("#row-"+rowSelected+"-guiafios").val("");
             }
             else {
                 $("#row-"+rowSelected+"-reference, #row-"+rowSelected+"-color1, #row-"+rowSelected+"-color2, #row-"+rowSelected+"-color3, #row-"+rowSelected+"-color4").val("1");
