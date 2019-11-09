@@ -159,18 +159,18 @@ class OrderController extends Controller
         //Enviar email para criadores de amostras para avisar que uma encomenda necessita de amostra - 2
         //Para avisar que uma encomenda necessita de orçamento - 3
         //Para avisar que uma encomenda está pronta para produção - 5
-        switch ($request->status_id) {
+        /*switch ($request->status_id) {
             case 2:
                 //Realizar amostra é necessária
                 $users = Role::find(3)->users()->orderBy('name')->get();
                 $subject = "Nova encomenda à espera de amostra.";
-                $body = "Tem uma nova encomenda que está a aguarda a criação de uma amostra: 
+                $body = "Tem uma nova encomenda que está a aguarda a criação de uma amostra:
                         <br>Nome do Cliente: ". $addRow ."
                         <br>Identificador do Cliente: ". $request->client_identifier ."
                         <br>Data de entrega da encomenda: ". $request->delivery_date ."
                         <br>Descrição da encomenda: ". $request->description ."
                         <br><br>
-                        Para aceder à encomenda, dirija-se à plataforma, ou clique 
+                        Para aceder à encomenda, dirija-se à plataforma, ou clique
                         <a href='".url("/orders/edit/{$order->id}")."' target='_blank'>aqui</a>.";
                 foreach($users as $user) {
                     Mail::to($user->email)->send(new sendSimpleEmail($subject, $body));
@@ -181,13 +181,13 @@ class OrderController extends Controller
                 //Realizar amostra é necessária
                 $users = Role::find(7)->users()->orderBy('name')->get();
                 $subject = "Nova encomenda à espera de orçamentação.";
-                $body = "Tem uma nova encomenda que está a aguarda o envio de orçamentação: 
+                $body = "Tem uma nova encomenda que está a aguarda o envio de orçamentação:
                         <br>Nome do Cliente: ". $addRow ."
                         <br>Identificador do Cliente: ". $request->client_identifier ."
                         <br>Data de entrega da encomenda: ". $request->delivery_date ."
                         <br>Descrição da encomenda: ". $request->description ."
                         <br><br>
-                        Para aceder à encomenda, dirija-se à plataforma, ou clique 
+                        Para aceder à encomenda, dirija-se à plataforma, ou clique
                         <a href='".url("/orders/edit/{$order->id}")."' target='_blank'>aqui</a>.";
                 foreach($users as $user) {
                     Mail::to($user->email)->send(new sendSimpleEmail($subject, $body));
@@ -197,19 +197,19 @@ class OrderController extends Controller
                 //Encomenda enviada para produção
                 $users = Role::find(6)->users()->orderBy('name')->get();
                 $subject = "Nova encomenda entrou em produção.";
-                $body = "Tem uma nova encomenda que está pronta a ser produzida: 
+                $body = "Tem uma nova encomenda que está pronta a ser produzida:
                         <br>Nome do Cliente: ". $addRow ."
                         <br>Identificador do Cliente: ". $request->client_identifier ."
                         <br>Data de entrega da encomenda: ". $request->delivery_date ."
                         <br>Descrição da encomenda: ". $request->description ."
                         <br><br>
-                        Para aceder à encomenda, dirija-se à plataforma, ou clique 
+                        Para aceder à encomenda, dirija-se à plataforma, ou clique
                         <a href='".url("/orders/list/")."' target='_blank'>aqui</a>.";
                 foreach($users as $user) {
                     Mail::to($user->email)->send(new sendSimpleEmail($subject, $body));
                 }
                 break;
-        }
+        } */
         //Fim de envio de emails
 
         session_start();
@@ -343,18 +343,18 @@ class OrderController extends Controller
         //Enviar email para criadores de amostras para avisar que uma encomenda necessita de amostra - 2
         //Para avisar que uma encomenda necessita de orçamento - 3
         //Para avisar que uma encomenda está pronta para produção - 5
-        switch ($request->status_id) {
+        /*switch ($request->status_id) {
             case 2:
                 //Realizar amostra é necessária
                 $users = Role::find(3)->users()->orderBy('name')->get();
                 $subject = "Nova encomenda à espera de amostra.";
-                $body = "Tem uma nova encomenda que está a aguarda a criação de uma amostra: 
+                $body = "Tem uma nova encomenda que está a aguarda a criação de uma amostra:
                         <br>Nome do Cliente: ". $addRow ."
                         <br>Identificador do Cliente: ". $request->client_identifier ."
                         <br>Data de entrega da encomenda: ". $request->delivery_date ."
                         <br>Descrição da encomenda: ". $request->description ."
                         <br><br>
-                        Para aceder à encomenda, dirija-se à plataforma, ou clique 
+                        Para aceder à encomenda, dirija-se à plataforma, ou clique
                         <a href='".url("/orders/edit/{$order->id}")."' target='_blank'>aqui</a>.";
                 foreach($users as $user) {
                     Mail::to($user->email)->send(new sendSimpleEmail($subject, $body));
@@ -365,13 +365,13 @@ class OrderController extends Controller
                 //Realizar amostra é necessária
                 $users = Role::find(7)->users()->orderBy('name')->get();
                 $subject = "Nova encomenda à espera de orçamentação.";
-                $body = "Tem uma nova encomenda que está a aguarda o envio de orçamentação: 
+                $body = "Tem uma nova encomenda que está a aguarda o envio de orçamentação:
                         <br>Nome do Cliente: ". $addRow ."
                         <br>Identificador do Cliente: ". $request->client_identifier ."
                         <br>Data de entrega da encomenda: ". $request->delivery_date ."
                         <br>Descrição da encomenda: ". $request->description ."
                         <br><br>
-                        Para aceder à encomenda, dirija-se à plataforma, ou clique 
+                        Para aceder à encomenda, dirija-se à plataforma, ou clique
                         <a href='".url("/orders/edit/{$order->id}")."' target='_blank'>aqui</a>.";
                 foreach($users as $user) {
                     Mail::to($user->email)->send(new sendSimpleEmail($subject, $body));
@@ -381,19 +381,19 @@ class OrderController extends Controller
                 //Encomenda enviada para produção
                 $users = Role::find(6)->users()->orderBy('name')->get();
                 $subject = "Nova encomenda entrou em produção.";
-                $body = "Tem uma nova encomenda que está pronta a ser produzida: 
+                $body = "Tem uma nova encomenda que está pronta a ser produzida:
                         <br>Nome do Cliente: ". $addRow ."
                         <br>Identificador do Cliente: ". $request->client_identifier ."
                         <br>Data de entrega da encomenda: ". $request->delivery_date ."
                         <br>Descrição da encomenda: ". $request->description ."
                         <br><br>
-                        Para aceder à encomenda, dirija-se à plataforma, ou clique 
+                        Para aceder à encomenda, dirija-se à plataforma, ou clique
                         <a href='".url("/orders/list/")."' target='_blank'>aqui</a>.";
                 foreach($users as $user) {
                     Mail::to($user->email)->send(new sendSimpleEmail($subject, $body));
                 }
                 break;
-        }
+        }*/
         //fim de envio de emails
 
         session_start();

@@ -157,18 +157,18 @@ class SampleArticleController extends Controller
 
 
         //Enviar email para criadores de encomendas indicando que uma amostra acabou de ser criada
-        $users = Role::find(4)->users()->orderBy('name')->get();
+        /*$users = Role::find(4)->users()->orderBy('name')->get();
         $subject = "Nova amostra criada.";
-        $body = "Uma amostra de produto foi terminada e pode ser utilizada nas suas encomendas: 
+        $body = "Uma amostra de produto foi terminada e pode ser utilizada nas suas encomendas:
                         <br>Referência da Amostra INDMEI: ". $request->reference ."
                         <br>Descrição: ". $request->description ."
                         <br>Imagem: <br><img src='". url('storage/'.$sampleArticle->image_url) ."' style='width:300px'>
                         <br><br>
-                        Para aceder à encomenda, dirija-se à plataforma, ou clique 
+                        Para aceder à encomenda, dirija-se à plataforma, ou clique
                         <a href='".url("/orders/list/")."' target='_blank'>aqui</a>.";
         foreach($users as $user) {
             Mail::to($user->email)->send(new sendSimpleEmail($subject, $body));
-        }
+        } */
 
         flash('A Amostra de Artigo com a referência: "'. $sampleArticle->reference . '", e descrição: "'. $sampleArticle->description .'" foi criada com sucesso!')->success();
 
@@ -327,18 +327,18 @@ class SampleArticleController extends Controller
         }
 
         //Enviar email para criadores de encomendas indicando que uma amostra acabou de ser criada
-        $users = Role::find(4)->users()->orderBy('name')->get();
+        /*$users = Role::find(4)->users()->orderBy('name')->get();
         $subject = "Nova amostra criada.";
-        $body = "Uma amostra de produto foi terminada e pode ser utilizada nas suas encomendas: 
+        $body = "Uma amostra de produto foi terminada e pode ser utilizada nas suas encomendas:
                         <br>Referência da Amostra INDMEI: ". $request->reference ."
                         <br>Descrição: ". $request->description ."
                         <br>Imagem: <br><img src='". url('storage/'.$sampleArticle->image_url) ."' style='width:300px'>
                         <br><br>
-                        Para aceder à amostra, dirija-se à plataforma, ou clique 
+                        Para aceder à amostra, dirija-se à plataforma, ou clique
                         <a href='".url("/orders/list/")."' target='_blank'>aqui</a>.";
         foreach($users as $user) {
             Mail::to($user->email)->send(new sendSimpleEmail($subject, $body));
-        }
+        } */
 
         session_start();
         $_SESSION["update_warehouse"] = true;
