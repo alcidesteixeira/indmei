@@ -34,9 +34,11 @@ class OrderController extends Controller
 
         $orders = Order::where('status_id', '<>', 8)->where('status_id', '<>', 7)->get();
 
+        $deleted_orders = Order::where('status_id', 7)->get();
+
         $view = 'orders';
 
-        return view('orders.list', compact('orders', 'view'));
+        return view('orders.list', compact('orders', 'deleted_orders', 'view'));
     }
 
     /**
