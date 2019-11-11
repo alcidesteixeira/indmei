@@ -404,16 +404,52 @@ class SampleArticleController extends Controller
         $isDuplicate = 1;
         $sampleIdsAndDesc = SampleArticle::all('id', 'reference', 'description');
 
-        return view('samples.create', compact('sampleArticle', 'steps', 'warehouseProducts', 'guiafios', 'id', 'isDuplicate', 'sampleIdsAndDesc'));
 
+        $sample_wires = $sampleArticle->sampleArticleWires()->get();
 
-//        $sampleArticle = SampleArticle::find($id);
-//        $sampleArticleWires = $sampleArticle->sampleArticleWires;
-//        $sampleArticleColors = [];
-//        foreach($sampleArticleWires as $wire) {
-//            array_push($sampleArticleColors, $wire->wireColors);
-//        }
-//        return ([$sampleArticle, $sampleArticleWires, $sampleArticleColors]);
+        $sample_wire_ids_array =
+        $sample_guiafios_array =
+        $sample_steps_array =
+        $sample_grams_array =
+        $sample_wp_array =
+        $sample_wp_specs_array = [];
+
+        foreach($sample_wires as $key => $wire){
+            $sample_wire_ids_array[] = $wire->id;
+            $sample_guiafios_array[] = $wire->guiafios_id;
+            $sample_steps_array[] = $wire->step_id;
+            $sample_grams_array[] = $wire->grams;
+            $sample_wp_array[] = $wire->warehouse_product_id;
+        }
+
+        $warehouseProductSpecs = WarehouseProductSpec::all();
+        foreach($warehouseProductSpecs as $spec) {
+            $warehouseProductSpecsArray[$spec->warehouse_product_id][$spec->id] = $spec->color;
+        }
+
+        $warehouseProductSpecsColors = DB::table('sample_article_colors')
+            ->get()
+            ->toArray();
+
+        foreach($sample_wire_ids_array as $wire_key => $wire) {
+            foreach($warehouseProductSpecsColors as $color_key => $color) {
+                if($wire == $color->sample_articles_wire_id) {
+                    $sample_wp_specs_array[$wire_key][] = $color->warehouse_product_spec_id;
+                }
+            }
+        }
+        $steps = SampleArticleStep::all();
+
+        $warehouseProducts = WarehouseProduct::orderBy('reference', 'asc')->get();
+
+        $guiafios = SampleArticleGuiafio::pluck('description', 'id')->toArray();
+
+        return view('samples.create',
+            compact('sampleArticle', 'steps', 'sample_steps_array',
+                'warehouseProducts', 'guiafios', 'sample_guiafios_array', 'sample_grams_array',
+                'sample_wp_array', 'warehouseProductSpecsArray', 'sample_wp_specs_array', 'id',
+                'isDuplicate', 'sampleIdsAndDesc'));
+
     }
 
     /**

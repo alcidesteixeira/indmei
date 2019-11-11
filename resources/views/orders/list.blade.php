@@ -98,35 +98,37 @@
             </tfoot>
         </table>
 
-        <hr>
+        @if(isset($deleted_orders))
+            <hr>
 
-        <h2>Lista de Encomendas Terminadas</h2>
-        <table class="table table-striped thead-dark" role="table">
-            <thead role="rowgroup">
-            <tr role="row">
-                <th role="columnheader">Cliente</th>
-                <th role="columnheader">Nº Encomenda</th>
-                <th role="columnheader">Amostra INDMEI</th>
-                <th role="columnheader">Foto</th>
-                <th role="columnheader">Criado Em</th>
-                <th role="columnheader">Data de Entrega</th>
-                <th role="columnheader">Criado Por</th>
-            </tr>
-            </thead>
-            <tbody role="rowgroup">
-            @foreach($deleted_orders as $order)
+            <h2>Lista de Encomendas Terminadas</h2>
+            <table class="table table-striped thead-dark" role="table">
+                <thead role="rowgroup">
                 <tr role="row">
-                    <td role="columnheader" data-col1="Cliente">{{$order->client->client}}</td>
-                    <td role="columnheader" data-col2="Nº de Encomenda">{{$order->client_identifier_public !== '' ? $order->client_identifier_public : $order->client_identifier}}</td>
-                    <td role="columnheader" data-col3="Id da Amostra">{{@$order->sampleArticle->reference}}</td>
-                    <td role="columnheader" data-col4="Foto">@if(@$order->sampleArticle->image_url)<img width="60" src="../../storage/{{@$order->sampleArticle->image_url}}">@endif</td>
-                    <td role="columnheader" data-col5="Criado Em">{{substr($order->created_at, 0, 10)}}</td>
-                    <td role="columnheader" data-col6="Data de Entrega">{{$order->delivery_date}}</td>
-                    <td role="columnheader" data-col7="Criado Por">{{$order->user->name}}</td>
+                    <th role="columnheader">Cliente</th>
+                    <th role="columnheader">Nº Encomenda</th>
+                    <th role="columnheader">Amostra INDMEI</th>
+                    <th role="columnheader">Foto</th>
+                    <th role="columnheader">Criado Em</th>
+                    <th role="columnheader">Data de Entrega</th>
+                    <th role="columnheader">Criado Por</th>
                 </tr>
-            @endforeach
-            </tbody>
-        </table>
+                </thead>
+                <tbody role="rowgroup">
+                @foreach($deleted_orders as $order)
+                    <tr role="row">
+                        <td role="columnheader" data-col1="Cliente">{{$order->client->client}}</td>
+                        <td role="columnheader" data-col2="Nº de Encomenda">{{$order->client_identifier_public !== '' ? $order->client_identifier_public : $order->client_identifier}}</td>
+                        <td role="columnheader" data-col3="Id da Amostra">{{@$order->sampleArticle->reference}}</td>
+                        <td role="columnheader" data-col4="Foto">@if(@$order->sampleArticle->image_url)<img width="60" src="../../storage/{{@$order->sampleArticle->image_url}}">@endif</td>
+                        <td role="columnheader" data-col5="Criado Em">{{substr($order->created_at, 0, 10)}}</td>
+                        <td role="columnheader" data-col6="Data de Entrega">{{$order->delivery_date}}</td>
+                        <td role="columnheader" data-col7="Criado Por">{{$order->user->name}}</td>
+                    </tr>
+                @endforeach
+                </tbody>
+            </table>
+        @endif
 
     </div>
 
