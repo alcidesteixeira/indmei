@@ -254,10 +254,24 @@ class WarehouseProductController extends Controller
 
         $ref = $spec->product->reference;
 
-        $isUsedSamples = SampleArticleColor::where('warehouse_product_spec_id', $id)->first();
+        $wiresArray = SampleArticleColor::where('warehouse_product_spec_id', $id)->groupBy('sample_articles_wire_id')->pluck('sample_articles_wire_id')->toArray();
 
-        if($isUsedSamples) {
-            flash('O Artigo com a referência: '. $ref . ', e a descrição: '. $spec->description .' não foi eliminada por está a ser utilizada por alguma amostra!')->error();
+        $samplesArray = DB::table('sample_articles_wires')
+            ->select('reference', 'description')
+            ->leftJoin('sample_articles', 'sample_articles_wires.sample_article_id', '=', 'sample_articles.id')
+            ->whereIn('sample_articles_wires.id', array_values($wiresArray))
+            ->groupBy('sample_articles_wires.sample_article_id')
+            ->pluck('description', 'reference')
+            ->toArray();
+
+
+        if($samplesArray) {
+            $message = 'O Artigo com a referência: '. $ref . ', e a descrição: '. $spec->description .' não foi eliminada porque está a ser utilizada pela(s) amostra(s): <br><ul>';
+            foreach ($samplesArray as $key => $val) {
+                $message .= '<li>' . $key . ' - ' . $val . '</li>';
+            }
+            $message .= '</ul>';
+            flash( $message )->error();
             return redirect()->action('WarehouseProductController@index');
         }
 
