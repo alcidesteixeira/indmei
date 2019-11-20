@@ -444,6 +444,7 @@ class WarehouseProductController extends Controller
                 dump('---');
 
                 if($result_request < 0) {
+                    dump('insert');
                     DB::table('stock_request_history')
                         ->insert([
                             'warehouse_product_spec_id' => $warehouseProductSpec->id,
