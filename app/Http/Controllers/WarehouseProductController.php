@@ -427,7 +427,7 @@ class WarehouseProductController extends Controller
                 foreach($total_requested as $total) {
                     $total_req += intval($total->amount_requested);
                 }
-                $warehouse_in_history = DB::table('warehouse_products_history')
+                $warehouse_in_history = DB::table('warehouses_products_history')
                     ->where('warehouse_product_spec_id', $warehouseProductSpec->id)
                     ->where('inout', 'IN')
                     ->get();
@@ -438,7 +438,7 @@ class WarehouseProductController extends Controller
 
                 $result_request = $total_req - $total_in;
 
-//                dd($result_request, $total_req, $total_in);
+                dd($result_request, $total_req, $total_in);
 
                 if($result_request < 0) {
                     DB::table('stock_request_history')
