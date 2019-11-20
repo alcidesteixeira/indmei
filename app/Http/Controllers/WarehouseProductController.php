@@ -456,7 +456,7 @@ class WarehouseProductController extends Controller
 
         }
 
-        self::updateStockPedido($warehouseProductSpec);
+        self::updateStockPedido($warehouseProductSpec->id);
 
         flash('Stock corretamente inserido!')->success();
 
@@ -464,29 +464,25 @@ class WarehouseProductController extends Controller
     }
 
 
-    private function updateStockPedido($wh_obj) {
+    private function updateStockPedido($wh_id) {
 
         $stock_request_history = DB::table('stock_request_history')
-            ->orderBy('id', 'desc')
+            ->where('warehouse_product_spec_id', $wh_id)
             ->get();
 
         $stock_history = DB::table('warehouse_products_history')
+            ->where('warehouse_product_spec_id', $wh_id)
             ->where('inout', 'IN')
-            ->orderBy('id', 'desc')
             ->get();
 
         $total_stock_requested = 0;
         foreach($stock_request_history as $stock_request) {
-            if($wh_obj->id == $stock_request->warehouse_product_spec_id) {
-                $total_stock_requested += $stock_request->amount_requested;
-            }
+            $total_stock_requested += $stock_request->amount_requested;
         }
         $total_stock_in = 0;
         foreach($stock_history as $stock_in) {
-            if ($wh_obj->id == $stock_in->warehouse_product_spec_id) {
-                $weight = $stock_in->weight / 1000;
-                $total_stock_in += $weight;
-            }
+            $weight = $stock_in->weight / 1000;
+            $total_stock_in += $weight;
         }
 
         $stock_requested_differential = $total_stock_requested-$total_stock_in;
@@ -495,7 +491,7 @@ class WarehouseProductController extends Controller
 
         dd();
 
-        StockRequest::updateOrCreate(['warehouse_product_spec_id' => $wh_obj->id],
+        StockRequest::updateOrCreate(['warehouse_product_spec_id' => $wh_id],
             ['amount_requested' => $stock_requested_differential]);
 
     }
