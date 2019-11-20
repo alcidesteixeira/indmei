@@ -439,6 +439,9 @@ class WarehouseProductController extends Controller
                 $result_request = $total_req - $total_in;
 
                 dump($result_request, $total_req, $total_in);
+                dump('---');
+                dump(abs($result_request));
+                dump('---');
 
                 if($result_request < 0) {
                     DB::table('stock_request_history')
