@@ -481,8 +481,7 @@ class WarehouseProductController extends Controller
         }
         $total_stock_in = 0;
         foreach($stock_history as $stock_in) {
-            $weight = $stock_in->weight / 1000;
-            $total_stock_in += $weight;
+            $total_stock_in += intval($stock_in->weight) / 1000;
         }
 
         $stock_requested_differential = $total_stock_requested-$total_stock_in;
