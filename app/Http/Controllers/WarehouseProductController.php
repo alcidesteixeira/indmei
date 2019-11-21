@@ -425,7 +425,7 @@ class WarehouseProductController extends Controller
                     ->get();
                 $total_req = 0;
                 foreach($total_requested as $total) {
-                    $total_req += intval($total->amount_requested);
+                    $total_req += floatval($total->amount_requested);
                 }
                 $warehouse_in_history = DB::table('warehouse_products_history')
                     ->where('warehouse_product_spec_id', $warehouseProductSpec->id)
@@ -433,7 +433,7 @@ class WarehouseProductController extends Controller
                     ->get();
                 $total_in = 0;
                 foreach($warehouse_in_history as $in_history) {
-                    $total_in += intval($in_history->weight) / 1000;
+                    $total_in += floatval($in_history->weight) / 1000;
                 }
 
                 $result_request = $total_req - $total_in;
@@ -444,7 +444,7 @@ class WarehouseProductController extends Controller
 //                dump('---');
 
                 if($result_request < 0) {
-                    dump('insert');
+//                    dump('insert');
                     DB::table('stock_request_history')
                         ->insert([
                             'warehouse_product_spec_id' => $warehouseProductSpec->id,
@@ -483,11 +483,11 @@ class WarehouseProductController extends Controller
 
         $total_stock_requested = 0;
         foreach($stock_request_history as $stock_request) {
-            $total_stock_requested += intval($stock_request->amount_requested);
+            $total_stock_requested += floatval($stock_request->amount_requested);
         }
         $total_stock_in = 0;
         foreach($stock_history as $stock_in) {
-            $total_stock_in += intval($stock_in->weight) / 1000;
+            $total_stock_in += floatval($stock_in->weight) / 1000;
         }
 
         $stock_requested_differential = $total_stock_requested-$total_stock_in;
