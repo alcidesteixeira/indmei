@@ -492,7 +492,7 @@ class WarehouseProductController extends Controller
 
         dump($stock_requested_differential, $total_stock_requested, $total_stock_in);
 
-//        dd();
+        dd();
 
         StockRequest::updateOrCreate(['warehouse_product_spec_id' => $wh_id],
             ['amount_requested' => $stock_requested_differential]);
