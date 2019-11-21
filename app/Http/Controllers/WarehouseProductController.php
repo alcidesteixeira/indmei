@@ -483,7 +483,7 @@ class WarehouseProductController extends Controller
 
         $total_stock_requested = 0;
         foreach($stock_request_history as $stock_request) {
-            $total_stock_requested += $stock_request->amount_requested;
+            $total_stock_requested += intval($stock_request->amount_requested);
         }
         $total_stock_in = 0;
         foreach($stock_history as $stock_in) {
