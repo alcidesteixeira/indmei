@@ -450,6 +450,8 @@ class WarehouseProductController extends Controller
                             'warehouse_product_spec_id' => $warehouseProductSpec->id,
                             'amount_requested' => abs($result_request),
                             'email_sent' => 'adjust_entrada_stock_extra',
+                            'created_at' => now(),
+                            'updated_at' => now(),
                             ]);
                 }
             }
