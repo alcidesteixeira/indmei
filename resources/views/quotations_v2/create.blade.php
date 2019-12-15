@@ -29,7 +29,7 @@
             <div class="row">
                 <div class="form-group col-md-4">
                     <label for="reference">Referência:</label>
-                    <input type="text" class="form-control" name="reference" value="{{@$quotation->reference ?: $quotationId}}" readonly>
+                    <input type="text" class="form-control" name="reference" value="{{@$quotation->reference ?: $quotationId}}">
                 </div>
                 <div class="form-group col-md-4">
                     <label for="client">Cliente:</label>
@@ -128,8 +128,8 @@
             </div>
             <div class="row">
                 <div class="form-group col-md-4">
-                    <label for="company_cost">Custo para a Empresa (%):</label>
-                    <input type="number" class="form-control" name="company_cost" id="company_cost" value="{{@$quotation->company_cost_percentage ?: '0'}}" required>
+                    <label for="company_cost">Custo para a Empresa (€):</label>
+                    <input type="number" step="0.01" class="form-control" name="company_cost" id="company_cost" value="{{@$quotation->company_cost_percentage ?: '0'}}" required>
                 </div>
                 <div class="form-group col-md-4">
                     <label for="comission">Comissão (%):</label>
@@ -157,7 +157,7 @@
             <div class="row">
                 <div class="form-group col-md-6">
                     <label for="client_price">Preço para Cliente:</label>
-                    <input type="number" class="form-control" name="client_price" value="{{@$quotation->client_price ?: '0'}}" required>
+                    <input type="number" step="0.01" class="form-control" name="client_price" value="{{@$quotation->client_price ?: '0'}}" required>
                 </div>
             </div>
             <div class="row">
@@ -313,17 +313,20 @@
                 total += Number($(this).val());
             });
 
+            console.log(companyCost);
+
             //Valores sem percentage
             let totalOutrosValoresSemPercentage = 0;
+            totalOutrosValoresSemPercentage += companyCost;
             $(".kgs").each( function (k,v) {
-                console.log(k);
+                // console.log(k);
                 let price = $("#price-custom-" + k).val();
                 let totalPrice = $("#total" + k).val();
                 if (price !== '0' && totalPrice === '0.00') {
                     totalOutrosValoresSemPercentage += parseFloat(price);
                 }
             });
-            total = total + total * (companyCost + comission + transportation + extra1 + extra2) / 100 + parseFloat(totalOutrosValoresSemPercentage);
+            total = total + total * (comission + transportation + extra1 + extra2) / 100 + parseFloat(totalOutrosValoresSemPercentage);
             $("#total").val(total.toFixed(2));
         }
 

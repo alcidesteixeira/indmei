@@ -142,7 +142,7 @@
                             </select>
                         </td>
                         <td data-col3="Gramas">
-                            <input style="font-size: .9rem;line-height: 1.6;padding:0 12px !important;padding: 0 12px;" type="number" id="row-{{$i}}-grams"  class="form-control sum_grams" name="row-{{$i}}-grams" style="max-width:100px"
+                            <input style="font-size: .9rem;width: 80px;line-height: 1.6;padding:0 12px !important;padding: 0 12px;" type="number" id="row-{{$i}}-grams"  class="form-control sum_grams" name="row-{{$i}}-grams" style="max-width:100px"
                                    value="{{@$sampleArticle && $sample_grams_array[$i-1]
                             && $sample_steps_array[$i-1] !== '18' ?
                             $sample_grams_array[$i-1] : '0'}}">
