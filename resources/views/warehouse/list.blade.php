@@ -36,7 +36,7 @@
                     <td role="columnheader" data-col6="Entrega (dias)">{{$product->threshold}}</td>
                     <td role="columnheader" data-col7="Pedido (Kg)">{{$stock_requested}}</td>
                     <td role="columnheader" data-col8="Custo (€/Kg)">{{$product->cost}}</td>
-                    <td role="columnheader" data-col9="Atualizado Por">{{@$product->product->user->name}}</td>
+                    <td role="columnheader" data-col9="Atualizado Por">{{!empty($product->product->user->name) ? $product->product->user->name : "N/A"}}</td>
                     <td role="columnheader" data-col10="Última Atualização">{{$product->updated_at}}</td>
                     <td role="columnheader" data-col11="">
                         <form method="get" action="{{url('stock/edit/'.$product->id)}}" class="edit" enctype="multipart/form-data">

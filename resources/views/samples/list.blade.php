@@ -25,7 +25,7 @@
                     <td role="columnheader" data-col1="Referência">{{$sample->reference}}</td>
                     <td role="columnheader" data-col2="Descrição">{{$sample->description}}</td>
                     <td role="columnheader" data-col3="Imagem"><img src="../../storage/{{$sample->image_url}}" width="50"></td>
-                    <td role="columnheader" data-col4="Executante">{{@$sample->user->name}}</td>
+                    <td role="columnheader" data-col4="Executante">{{!empty($sample->user->name) ? $sample->user->name : "N/A"}}</td>
                     <td role="columnheader" data-col5="Última Atualização">{{$sample->updated_at}}</td>
                     <td role="columnheader" data-col7="">
                         <form method="get" action="{{url('samples/edit/'.$sample->id)}}" enctype="multipart/form-data">
